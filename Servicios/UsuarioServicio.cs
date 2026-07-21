@@ -26,7 +26,7 @@ namespace Servicios
 
                 2 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento),
                 
-                3 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social),
+                3 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social, dto.Cuit),
 
                 4 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId)
             };
@@ -60,6 +60,7 @@ namespace Servicios
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Razon_Social = usuario.Razon_Social,
+                Cuit = usuario.Cuit,
                 Fecha_Nacimiento = usuario.Fecha_Nacimiento
             };
         }
@@ -78,6 +79,7 @@ namespace Servicios
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Razon_Social = usuario.Razon_Social,
+                Cuit = usuario.Cuit,
                 Fecha_Nacimiento = usuario.Fecha_Nacimiento
             }).ToList();
         }
@@ -105,8 +107,7 @@ namespace Servicios
         }
         
         public async Task<IEnumerable<UsuarioDTO>> GetByCriteriaAsync(UsuarioCriteriaDTO criteriaDTO)
-        {
-            // Asumiendo que UsuarioCriteria recibe las propiedades correspondientes
+        {   
             var criteria = new UsuarioCriteria(criteriaDTO.Texto);
 
             var usuarios = await usuarioRepositorio.GetByCriteriaAsync(criteria);
@@ -132,6 +133,7 @@ namespace Servicios
                         break;
                     case 3:
                         dto.Razon_Social = usuario.Razon_Social;
+                        dto.Cuit = usuario.Cuit;
                         break;
                 }
 
