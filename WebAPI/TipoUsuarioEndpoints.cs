@@ -29,9 +29,9 @@ namespace WebAPI
             {
                 try
                 {
-                    TipoUsuarioDTO tipoUsarioDTO = await TipoUsuarioServicio.AddAsync(dto);
+                    TipoUsuarioDTO tipoUsuarioDTO = await TipoUsuarioServicio.AddAsync(dto);
 
-                    return Results.Created($"/tipos-usuario/{tipoUsarioDTO.Id}", tipoUsarioDTO);
+                    return Results.Created($"/tipos-usuario/{tipoUsuarioDTO.Id}", tipoUsuarioDTO);
                 }
                 catch (ArgumentException ex)
                 {
