@@ -68,7 +68,7 @@ namespace Modelo.Dominio
 
         public void SetId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
             Id = id;
         }
@@ -95,7 +95,7 @@ namespace Modelo.Dominio
 
         public void SetTipoUsuarioId(int tipoUsuarioId)
         {
-            if (tipoUsuarioId < 0)
+            if (tipoUsuarioId <= 0)
                 throw new ArgumentException("El tipo de usuario debe ser mayor que 0.", nameof(tipoUsuarioId));
             TipoUsuarioId = tipoUsuarioId;
         }
