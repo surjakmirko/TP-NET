@@ -9,6 +9,7 @@
         public string Nombre { get;  set; }
         public string Apellido { get;  set; }
         public string Razon_Social { get;  set; }
+        public string Cuit { get;  set; }
         public DateOnly Fecha_Nacimiento { get;  set; }
         public int TipoUsuarioId { get;  set; }
 
