@@ -86,14 +86,11 @@ namespace Servicios
 
         public async Task<bool> UpdateAsync(UsuarioDTO dto)
         {
-            if (await usuarioRepositorio.EmailExistsAsync(dto.Email, dto.Id))
+            if (await usuarioRepositorio.EmailExistsAsync(dto.Email))
             {
                 throw new ArgumentException($"Ya existe otro usuario con el Email '{dto.Email}'.");
             }
-
-            var existing = await usuarioRepositorio.GetAsync(dto.Id);
-            if (existing == null)
-                return false;
+   
 
             Usuario usuario = dto.TipoUsuarioId switch
             {
@@ -106,39 +103,39 @@ namespace Servicios
             return await usuarioRepositorio.UpdateAsync(usuario);
         }
         
-        public async Task<IEnumerable<UsuarioDTO>> GetByCriteriaAsync(UsuarioCriteriaDTO criteriaDTO)
-        {   
-            var criteria = new UsuarioCriteria(criteriaDTO.Texto);
+        //public async Task<IEnumerable<UsuarioDTO>> GetByCriteriaAsync(UsuarioCriteriaDTO criteriaDTO)
+        //{   
+        //    var criteria = new UsuarioCriteria(criteriaDTO.Texto);
 
-            var usuarios = await usuarioRepositorio.GetByCriteriaAsync(criteria);
+        //    var usuarios = await usuarioRepositorio.GetByCriteriaAsync(criteria);
 
-            return usuarios.Select(usuario => 
-            {
-                var dto = new UsuarioDTO
-                {
-                    Id = usuario.Id,
-                    Email = usuario.Email,
-                    Telefono = usuario.Telefono,
-                    Password = usuario.Password,
-                    TipoUsuarioId = usuario.TipoUsuarioId,
-                    TipoUsuarioNombre = usuario.TipoUsuario?.Descripcion
-                };
+        //    return usuarios.Select(usuario => 
+        //    {
+        //        var dto = new UsuarioDTO
+        //        {
+        //            Id = usuario.Id,
+        //            Email = usuario.Email,
+        //            Telefono = usuario.Telefono,
+        //            Password = usuario.Password,
+        //            TipoUsuarioId = usuario.TipoUsuarioId,
+        //            TipoUsuarioNombre = usuario.TipoUsuario?.Descripcion
+        //        };
 
-                switch (usuario.TipoUsuarioId)
-                {
-                    case 2:
-                        dto.Nombre = usuario.Nombre;
-                        dto.Apellido = usuario.Apellido;
-                        dto.Fecha_Nacimiento = usuario.Fecha_Nacimiento;
-                        break;
-                    case 3:
-                        dto.Razon_Social = usuario.Razon_Social;
-                        dto.Cuit = usuario.Cuit;
-                        break;
-                }
+        //        switch (usuario.TipoUsuarioId)
+        //        {
+        //            case 2:
+        //                dto.Nombre = usuario.Nombre;
+        //                dto.Apellido = usuario.Apellido;
+        //                dto.Fecha_Nacimiento = usuario.Fecha_Nacimiento;
+        //                break;
+        //            case 3:
+        //                dto.Razon_Social = usuario.Razon_Social;
+        //                dto.Cuit = usuario.Cuit;
+        //                break;
+        //        }
 
-                return dto;
-            }).ToList();
-        }
+        //        return dto;
+        //    }).ToList();
+        //}
     }
 }

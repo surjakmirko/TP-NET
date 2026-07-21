@@ -10,6 +10,6 @@ namespace Servicios
         Task<TipoUsuarioDTO?> GetAsync(int id);
         Task<IEnumerable<TipoUsuarioDTO>> GetAllAsync();
         Task<bool> UpdateAsync(TipoUsuarioDTO dto);
-        Task<IEnumerable<TipoUsuarioDTO>> GetByCriteriaAsync(TipoUsuarioCriteriaDTO criteriaDTO);
+        //Task<IEnumerable<TipoUsuarioDTO>> GetByCriteriaAsync(TipoUsuarioCriteriaDTO criteriaDTO);
     }
 }

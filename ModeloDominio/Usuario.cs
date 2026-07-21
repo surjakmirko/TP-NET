@@ -1,4 +1,5 @@
-﻿namespace Modelo.Dominio
+﻿
+namespace Modelo.Dominio
 {
     public class Usuario
     {
@@ -90,7 +91,8 @@
         }
         public void SetTipoUsuario(TipoUsuario tipoUsuario)
         {
-            ArgumentNullException.ThrowIfNull(tipoUsuario);
+            if(tipoUsuario == null)
+                ArgumentNullException.ThrowIfNull(tipoUsuario);
             _tipoUsuario = tipoUsuario;
             _tipoUsuarioId = tipoUsuario.Id;
         }

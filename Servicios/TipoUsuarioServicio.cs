@@ -64,20 +64,20 @@ namespace Servicios
             return await tipoUsuarioRepositorio.UpdateAsync(tipoUsuario);
         }
 
-        public async Task<IEnumerable<TipoUsuarioDTO>> GetByCriteriaAsync(TipoUsuarioCriteriaDTO criteriaDTO)
-        {
-            // Mapear DTO a Domain Model
-            var criteria = new TipoUsuarioCriteria(criteriaDTO.Texto);
+        //public async Task<IEnumerable<TipoUsuarioDTO>> GetByCriteriaAsync(TipoUsuarioCriteriaDTO criteriaDTO)
+        //{
+        //    // Mapear DTO a Domain Model
+        //    var criteria = new TipoUsuarioCriteria(criteriaDTO.Texto);
 
-            // Llamar al repositorio
-            var tiposUsuario = await tipoUsuarioRepositorio.GetByCriteriaAsync(criteria);
+        //    // Llamar al repositorio
+        //    var tiposUsuario = await tipoUsuarioRepositorio.GetByCriteriaAsync(criteria);
 
-            // Mapear Domain Model a DTO
-            return tiposUsuario.Select(tipoUsuario => new TipoUsuarioDTO
-            {
-                Id = tipoUsuario.Id,
-                Descripcion = tipoUsuario.Descripcion
-            });
-        }
+        //    // Mapear Domain Model a DTO
+        //    return tiposUsuario.Select(tipoUsuario => new TipoUsuarioDTO
+        //    {
+        //        Id = tipoUsuario.Id,
+        //        Descripcion = tipoUsuario.Descripcion
+        //    });
+        //}
     }
 }
