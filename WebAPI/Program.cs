@@ -5,7 +5,6 @@ using WebAPI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<ITipoUsuarioServicio, TipoUsuarioServicio>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -13,7 +12,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITipoUsuarioRepositorio, TipoUsuarioRepositorio>();
 builder.Services.AddScoped<ITipoUsuarioServicio, TipoUsuarioServicio>();
-
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 var app = builder.Build();
 
 app.UseSwagger();

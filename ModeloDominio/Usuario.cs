@@ -136,11 +136,5 @@ namespace Modelo.Dominio
                 throw new ArgumentException("El cuit del usuario no puede ser nula o vacía.", nameof(cuit));
             Cuit = cuit;
         }
-
-        public void SetTipoUsuario(Task<TipoUsuario> tipo)
-        {
-            throw new NotImplementedException();
-
-        }
     }
 }

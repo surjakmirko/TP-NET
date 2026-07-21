@@ -2,17 +2,17 @@
 
 namespace Data
 {
-    public  class TipoUsuarioRepositorio : ITipoUsuarioRepositorio
+    public class TipoUsuarioRepositorio : ITipoUsuarioRepositorio
     {
         private static readonly List<TipoUsuario> tiposUsuarios = new List<TipoUsuario>();
 
-        public  Task AddAsync(TipoUsuario tipousuario)
+        public Task AddAsync(TipoUsuario tipousuario)
         {
             tiposUsuarios.Add(tipousuario);
             return Task.CompletedTask;
         }
 
-        public Task<TipoUsuario> GetAsync(int id)
+        public Task<TipoUsuario?> GetAsync(int id)
         {
             var tipousuario = tiposUsuarios.FirstOrDefault(t => t.Id == id);
             return Task.FromResult(tipousuario);
@@ -23,7 +23,7 @@ namespace Data
             return Task.FromResult<IEnumerable<TipoUsuario>>(tiposUsuarios);
         }
 
-        public Task<bool> DeleteAsync (int id)
+        public Task<bool> DeleteAsync(int id)
         {
             var tipo = tiposUsuarios.FirstOrDefault(c => c.Id == id);
             if (tipo != null)

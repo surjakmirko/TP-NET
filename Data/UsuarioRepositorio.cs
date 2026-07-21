@@ -3,7 +3,7 @@ using Modelo.Dominio;
 
 namespace Data
 {
-    public class UsuarioRepositorio: IUsuarioRepositorio
+    public class UsuarioRepositorio : IUsuarioRepositorio
     {
         private static readonly List<Usuario> usuarios = new List<Usuario>();
         public static int ObtenerProximoId()
@@ -31,17 +31,16 @@ namespace Data
             return Task.FromResult(false);
         }
 
-        public Task AddAsync(Usuario usuario)
+        public async Task AddAsync(Usuario usuario)
         {
             int id = ObtenerProximoId();
             usuario.SetId(id);
 
             var tipousuario = new TipoUsuarioRepositorio();
-            var tipo = tipousuario.GetAsync(usuario.Id);
+            var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
             if (tipo != null)
                 usuario.SetTipoUsuario(tipo);
             usuarios.Add(usuario);
-            return Task.FromResult(true);
         }
 
         public Task<Usuario?> GetAsync(int id)
@@ -49,7 +48,7 @@ namespace Data
             return Task.FromResult(usuarios.FirstOrDefault(u => u.Id == id));
         }
 
-        public Task<bool> UpdateAsync(Usuario usuario)
+        public async Task<bool> UpdateAsync(Usuario usuario)
         {
             var existe = usuarios.FirstOrDefault(u => u.Id == usuario.Id);
             if (existe != null)
@@ -57,7 +56,7 @@ namespace Data
                 existe.SetEmail(usuario.Email);
                 existe.SetTelefono(usuario.Telefono);
                 existe.SetPassword(usuario.Password);
-                if(usuario.Id== 2)
+                if (usuario.Id == 2)
                 {
                     existe.SetNombre(usuario.Nombre);
                     existe.SetApellido(usuario.Apellido);
@@ -70,16 +69,16 @@ namespace Data
                 }
 
                 var tipousuario = new TipoUsuarioRepositorio();
-                var tipo = tipousuario.GetAsync(usuario.Id);
+                var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
                 if (tipo != null)
-                    usuario.SetTipoUsuario(tipo);
+                    existe.SetTipoUsuario(tipo);
 
-                return Task.FromResult(true);
+                return true;
             }
-            return Task.FromResult(false);
+            return false;
         }
 
-        public Task<bool> EmailExistsAsync (string email)
+        public Task<bool> EmailExistsAsync(string email)
         {
             bool existe = usuarios.Any(u => u.Email.ToLower() == email.ToLower());
             return Task.FromResult(existe);

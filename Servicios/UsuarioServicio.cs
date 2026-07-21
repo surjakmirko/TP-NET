@@ -22,13 +22,13 @@ namespace Servicios
 
             Usuario usuario = dto.TipoUsuarioId switch
             {
-                1 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId),
+                1 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId),
 
-                2 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento),
+                2 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento),
                 
-                3 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social, dto.Cuit),
+                3 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social, dto.Cuit),
 
-                4 => new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId)
+                4 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId)
             };
 
             await usuarioRepositorio.AddAsync(usuario);
