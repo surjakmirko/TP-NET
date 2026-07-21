@@ -6,7 +6,6 @@
         public string Direccion { get; private set; }
         public string Nombre { get; private set; }
 
-        //id dueno
         private int _dueñoId;
         private Usuario? _dueño;
 
@@ -24,11 +23,11 @@
                 _dueño = value;
                 if (value != null && _dueñoId != value.Id)
                 {
-                    _dueñoId = value.Id; // Sincronizar automáticamente
+                    _dueñoId = value.Id;
                 }
             }
         }
-        //id localidad
+
         private int _localidadId;
         private Localidad? _localidad;
 
@@ -51,7 +50,7 @@
                 }
             }
         }
-        ////id encargado
+
         private int _encargadoId;
         private Usuario? _encargado;
 
@@ -69,7 +68,7 @@
                 _encargado = value;
                 if (value != null && _encargadoId != value.Id)
                 {
-                    _encargadoId = value.Id; // Sincronizar automáticamente
+                    _encargadoId = value.Id; 
                 }
             }
         }
@@ -86,7 +85,7 @@
 
         public void SetId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
 
         }
@@ -101,28 +100,31 @@
         public void SetNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre del país no puede ser nulo o vacío.", nameof(nombre));
+                throw new ArgumentException("El nombre del complejo no puede ser nulo o vacío.", nameof(nombre));
             Nombre = Nombre;
         }
 
         public void SetDueñoId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
 
         }
+
         public void SetDueño(Usuario dueño)
         {
             ArgumentNullException.ThrowIfNull(dueño);
             _dueño = dueño;
             _dueñoId = dueño.Id;
         }
+
         public void SetEncargadoId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
 
         }
+
         public void SetEncargado(Usuario encargado)
         {
             ArgumentNullException.ThrowIfNull(encargado);
@@ -132,10 +134,11 @@
     
         public void SetLocalidadId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
 
         }
+
         public void SetLocalidad(Localidad localidad)
         {
             ArgumentNullException.ThrowIfNull(localidad);

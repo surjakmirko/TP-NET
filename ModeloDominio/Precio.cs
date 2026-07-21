@@ -41,6 +41,7 @@ namespace Modelo.Dominio
                 }
             }
         }
+
         public Precio(float precioBase, float precioAdicional, float precioSena, DateOnly fechaDesde, int complejoId, int canchaNro)
         {
             SetPrecioBase(precioBase);
@@ -49,6 +50,7 @@ namespace Modelo.Dominio
             SetFechaDesde(fechaDesde);
             SetCanchaId(complejoId, canchaNro);
         }
+
         public void SetCancha(Cancha cancha)
         {
             ArgumentNullException.ThrowIfNull(cancha);
@@ -56,28 +58,38 @@ namespace Modelo.Dominio
             _canchaNro = cancha.Nro;
             _complejoId = cancha.ComplejoId;
         }
+
         public void SetCanchaId(int complejoId, int canchaNro)
         {
-            if (complejoId < 0)
+            if (complejoId <= 0)
                 throw new ArgumentException("El ComplejoId debe ser mayor que 0.", nameof(complejoId));
+
+            if (canchaNro <= 0)
+                throw new ArgumentException("El CanchaNro debe ser mayor que 0.", nameof(canchaNro));
+
+            _cancha = null;
+
             _complejoId = complejoId;
             _canchaNro = canchaNro;
         }
+
         public void SetPrecioBase(float precioBase)
         {
-            if (precioBase < 0)
+            if (precioBase <= 0)
                 throw new ArgumentException("El precio base debe ser mayor que 0.", nameof(precioBase));
             PrecioBase = precioBase;
         }
+
         public void SetPrecioAdicional(float precioAdicional)
         {
-            if (precioAdicional < 0)
+            if (precioAdicional <= 0)
                 throw new ArgumentException("El precio adicional debe ser mayor que 0.", nameof(precioAdicional));
             PrecioAdicional = precioAdicional;
         }
+
         public void SetPrecioSena(float precioSena)
         {
-            if (precioSena < 0)
+            if (precioSena <= 0)
                 throw new ArgumentException("El precio de la seña debe ser mayor que 0.", nameof(precioSena));
             PrecioSena = precioSena;
         }

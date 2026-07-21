@@ -39,10 +39,11 @@
 
         public void SetComplejoId(int complejoId)
         {
-            if (complejoId < 0)
+            if (complejoId <= 0)
                 throw new ArgumentException("El Id del complejo debe ser mayor que 0.", nameof(complejoId));
             ComplejoId = complejoId;
         }
+
         public void SetComplejo(Complejo complejo)
         {
             ArgumentNullException.ThrowIfNull(complejo);
@@ -52,8 +53,8 @@
 
         public void SetNroDia(int nroDia)
         {
-            if (nroDia < 0 || nroDia > 8)
-                throw new ArgumentException("El número de día debe estar entre 0 y 6.", nameof(nroDia));
+            if (nroDia <= 0 || nroDia >= 9)
+                throw new ArgumentException("El número de día debe estar entre 1 y 8.", nameof(nroDia));
             NroDia = nroDia;
         }
 
@@ -67,9 +68,8 @@
         public void SetHoraCierre(TimeOnly horaCierre)
         {
             if (horaCierre < TimeOnly.MinValue || horaCierre > TimeOnly.MaxValue)
-                throw new ArgumentException("La hora de apertura debe estar entre 00:00 y 23:59.", nameof(horaCierre));
+                throw new ArgumentException("La hora de cierre debe estar entre 00:00 y 23:59.", nameof(horaCierre));
             HoraCierre = horaCierre;
         }
-
     }
 }
