@@ -1,5 +1,7 @@
 ﻿
 
+using System.Text.RegularExpressions;
+
 namespace Modelo.Dominio
 {
     public class Usuario
@@ -75,9 +77,16 @@ namespace Modelo.Dominio
         }
         public void SetEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("El email del usuario no puede ser nulo o vacío.", nameof(email));
+            if (!EsEmailValido(email))
+                throw new ArgumentException("El email no tiene un formato válido.", nameof(email));
             Email = email;
+        }
+
+        private static bool EsEmailValido(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
         public void SetTelefono(string telefono)
