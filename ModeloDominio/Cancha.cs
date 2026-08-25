@@ -2,7 +2,7 @@
 
 namespace Modelo.Dominio
 {
-    internal class Cancha
+    public class Cancha
     {
         public int Nro { get; private set; }
         public void SetNro(int nro)
