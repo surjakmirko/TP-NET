@@ -6,27 +6,9 @@
         public string Nombre { get; private set; }
         public string CodigoPostal { get; private set; }
 
-        private int _provinciaId;
-        private Provincia? _provincia;
+        public int ProvinciaId { get; private set; }
 
-        public int ProvinciaId
-        {
-            get => _provincia?.Id ?? _provinciaId;
-            private set => _provinciaId = value;
-        }
-
-        public Provincia? Provincia
-        {
-            get => _provincia;
-            private set
-            {
-                _provincia = value;
-                if (value != null && _provinciaId != value.Id)
-                {
-                    _provinciaId = value.Id;
-                }
-            }
-        }
+        public Provincia Provincia { get; set; } = null!;
 
         public Localidad(int id, string nombre, string codigoPostal, int provinciaId)
         {
@@ -46,29 +28,22 @@
         public void SetNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre del país no puede ser nulo o vacío.", nameof(nombre));
-            Nombre = Nombre;
+                throw new ArgumentException("El nombre de la localidad no puede ser nulo o vacío.", nameof(nombre));
+            Nombre = nombre;
         }
 
-        public void setCodigoPostal(string nombre)
+        public void setCodigoPostal(string codigopostal)
         {
-            if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre del país no puede ser nulo o vacío.", nameof(nombre));
-        Nombre = Nombre;
+            if (string.IsNullOrWhiteSpace(codigopostal))
+                throw new ArgumentException("El codigo postal no puede ser nulo o vacio", nameof(codigopostal));
+            CodigoPostal = codigopostal;
         }
 
         public void SetProvinciaId(int provinciaId)
         {
             if (provinciaId <= 0)
-                throw new ArgumentException("El email del usuario no puede ser nulo o vacío.", nameof(provinciaId));
+                throw new ArgumentException("El id de la provincia no puede ser nul o vacio", nameof(provinciaId));
             ProvinciaId = provinciaId;
-        }
-
-        public void SetProvincia(Provincia provincia)
-        {
-            ArgumentNullException.ThrowIfNull(provincia);
-            _provincia = provincia;
-            _provinciaId = provincia.Id;
         }
     }
 }
