@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Modelo.Dominio
 {
-    internal class TipoTurno
+    public class TipoTurno
     {
         public int Id { get; private set; }
         public string Nombre { get; private set; }

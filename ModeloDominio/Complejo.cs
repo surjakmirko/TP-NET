@@ -2,9 +2,9 @@
 {
     public class Complejo
     {
-        public int Id { get; private set; }
-        public string Direccion { get; private set; }
-        public string Nombre { get; private set; }
+        public int Id { get; set; }
+        public string Direccion { get; set; }
+        public string Nombre { get; set; }
 
         private int _dueñoId;
         private Usuario? _dueño;
