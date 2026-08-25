@@ -67,6 +67,167 @@ namespace WebAPI
 
                 return Results.NoContent();
             });
+
+            //HORARIOS
+
+            app.MapGet("/complejos/{idComplejo}/horarios", async (int idComplejo, IHorarioServicio horarioServicio) =>
+            {
+                var horarios = await horarioServicio.GetAllAsync(idComplejo);
+                return Results.Ok(horarios);
+            });
+
+            app.MapGet("/complejos/{idComplejo}/horarios/{numDia}", async (int idComplejo, int numDia, IHorarioServicio horarioServicio) =>
+            {
+                HorarioDTO? dto = await horarioServicio.GetAsync(idComplejo, numDia);
+
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(dto);
+            });
+
+            app.MapPost("/complejos/{idComplejo}/horarios", async (int idComplejo, HorarioDTO dto, IHorarioServicio horarioServicio) =>
+            {
+                try
+                {
+                    HorarioDTO horarioDTO = await horarioServicio.AddAsync(dto);
+                    return Results.Created($"/complejos/{idComplejo}/horarios/{horarioDTO.NroDia}", horarioDTO);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            app.MapPut("/complejos/{idComplejo}/horarios/{numDia}", async (int idComplejo, int numDia, HorarioDTO dto, IHorarioServicio horarioServicio) =>
+            {
+                try
+                {
+                    var encontrado = await horarioServicio.UpdateAsync(dto);
+
+                    if (!encontrado)
+                    {
+                        return Results.NotFound();
+                    }
+
+                    return Results.NoContent();
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            app.MapDelete("/complejos/{idComplejo}/horarios/{numDia}", async (int idComplejo, int numDia, IHorarioServicio horarioServicio) =>
+            {
+                var deleted = await horarioServicio.DeleteAsync(idComplejo, numDia);
+
+                if (!deleted)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.NoContent();
+            });
+
+            ///Canchas
+
+            app.MapGet("/complejos/{idComplejo}/canchas", async (int idComplejo, ICanchaServicio canchaServicio) =>
+            {
+                var canchas = await canchaServicio.GetAllAsync(idComplejo);
+                return Results.Ok(canchas);
+            });
+
+            app.MapGet("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, ICanchaServicio canchaServicio) =>
+            {
+                CanchaDTO? dto = await canchaServicio.GetAsync(idComplejo, nro);
+
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(dto);
+            });
+
+            app.MapPost("/complejos/{idComplejo}/canchas", async (int idComplejo, CanchaDTO dto, ICanchaServicio canchaServicio) =>
+            {
+                try
+                {
+                    CanchaDTO canchaDTO = await canchaServicio.AddAsync(dto);
+                    return Results.Created($"/complejos/{idComplejo}/canchas/{canchaDTO.Nro}", canchaDTO);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            app.MapPut("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, CanchaDTO dto, ICanchaServicio canchaServicio) =>
+            {
+                try
+                {
+                    var encontrado = await canchaServicio.UpdateAsync(dto);
+
+                    if (!encontrado)
+                    {
+                        return Results.NotFound();
+                    }
+
+                    return Results.NoContent();
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            app.MapDelete("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, ICanchaServicio canchaServicio) =>
+            {
+                var deleted = await canchaServicio.DeleteAsync(idComplejo, nro);
+
+                if (!deleted)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.NoContent();
+            });
+
+            //Precios
+
+            app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, IPrecioServicio precioServicio) =>
+            {
+                var precios = await precioServicio.GetAllAsync(idComplejo, nroCancha);
+                return Results.Ok(precios);
+            });
+
+            app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaDesde}", async (int idComplejo, int nroCancha, DateOnly fechaDesde, IPrecioServicio precioServicio) =>
+            {
+                PrecioDTO? dto = await precioServicio.GetAsync(idComplejo, nroCancha, fechaDesde);
+
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(dto);
+            });
+
+            app.MapPost("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, PrecioDTO dto, IPrecioServicio precioServicio) =>
+            {
+                try
+                {
+                    PrecioDTO precioDTO = await precioServicio.AddAsync(dto);
+                    return Results.Created($"/complejos/{idComplejo}/canchas/{nroCancha}/precios/{precioDTO.FechaDesde:yyyy-MM-dd}", precioDTO);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
         }
     }
 }
