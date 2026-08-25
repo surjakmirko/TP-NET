@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ModeloDominio
+{
+    public class PersonaJuridica
+    {
+        public string Razon_Social { get; private set; }
+        public string Cuit { get; private set; }
+        public PersonaJuridica(string cuit, string razonSocial)
+        {
+            SetCuit(cuit);
+            SetRazonSocial(razonSocial);
+        }
+        public void SetRazonSocial(string razonSocial)
+        {
+            if (string.IsNullOrWhiteSpace(razonSocial))
+                throw new ArgumentException("La razón social del usuario no puede ser nula o vacía.", nameof(razonSocial));
+            Razon_Social = razonSocial;
+        }
+        public void SetCuit(string cuit)
+        {
+            if (string.IsNullOrWhiteSpace(cuit))
+                throw new ArgumentException("El cuit del usuario no puede ser nula o vacía.", nameof(cuit));
+            Cuit = cuit;
+        }
+    }
+}
