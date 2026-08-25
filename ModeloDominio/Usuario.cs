@@ -1,5 +1,4 @@
-﻿
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace Modelo.Dominio
@@ -10,64 +9,33 @@ namespace Modelo.Dominio
         public string Email { get; private set; }
         public string Telefono { get; private set; }
         public string Password { get; private set; }
-        public string Nombre { get; private set; }
-        public string Apellido { get; private set; }
-        public string Razon_Social { get; private set; }
-        public string Cuit { get; private set; }
-        public DateOnly Fecha_Nacimiento { get; private set; }
 
-        private int _tipoUsuarioId;
-        private TipoUsuario? _tipoUsuario;
-        public int TipoUsuarioId
-        {
-            get => _tipoUsuario?.Id ?? _tipoUsuarioId;
-            private set => _tipoUsuarioId = value;
-        }
+        //foraing key
+        public int TipoUsuarioId { get; set; }
+        public TipoUsuario TipoUsuario { get; set; } = null!;
 
-        public TipoUsuario? TipoUsuario
-        {
-            get => _tipoUsuario;
-            private set
-            {
-                _tipoUsuario = value;
-                if (value != null)
-                {
-                    _tipoUsuarioId = value.Id;
-                }
-            }
-        }
+        public string? PersonaFisicaDni { get; set; }
 
-        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId)
+        public PersonaFisica? PersonaFisica { get; set; }
+
+        public string? PersonaJuridicaCuit { get; set; }
+
+        public PersonaJuridica? PersonaJuridica { get; set; }
+
+
+        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string personaFisicaDni,string personaJuridicaCuit)
         {
             SetId(id);
             SetEmail(email);
             SetTelefono(telefono);
             SetPassword(password);
             SetTipoUsuarioId(tipoUsuarioId);
+            SetPersonaFisicaDni(personaFisicaDni);
+            SetPersonaJuridicaCuit(personaJuridicaCuit);
+
+
         }
 
-        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string nombre, string apellido, DateOnly fechaNacimiento)
-        {
-            SetId(id);
-            SetEmail(email);
-            SetTelefono(telefono);
-            SetPassword(password);
-            SetTipoUsuarioId(tipoUsuarioId);
-            SetNombre(nombre);
-            SetApellido(apellido);
-            SetFechaNacimiento(fechaNacimiento);
-        }
-
-        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string razonSocial, string cuit)
-        {
-            SetId(id);
-            SetEmail(email);
-            SetTelefono(telefono);
-            SetPassword(password);
-            SetTipoUsuarioId(tipoUsuarioId);
-            SetRazonSocial(razonSocial);
-            SetCuit(cuit);
-        }
 
         public void SetId(int id)
         {
@@ -109,41 +77,17 @@ namespace Modelo.Dominio
                 throw new ArgumentException("El tipo de usuario debe ser mayor que 0.", nameof(tipoUsuarioId));
             TipoUsuarioId = tipoUsuarioId;
         }
-
-        public void SetTipoUsuario(TipoUsuario tipoUsuario)
+        public void SetPersonaFisicaDni(string personafisicadni)
         {
-            if(tipoUsuario == null)
-                ArgumentNullException.ThrowIfNull(tipoUsuario);
-            _tipoUsuario = tipoUsuario;
-            _tipoUsuarioId = tipoUsuario.Id;
+            if (personafisicadni.Length < 8)
+                throw new ArgumentException("La longitud del dni debe ser mayor a 8 caracteres", nameof(personafisicadni));
+            PersonaFisicaDni = personafisicadni;
         }
-        public void SetNombre(string nombre)
+        public void SetPersonaJuridicaCuit(string personajuridicacuit)
         {
-            if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre del usuario no puede ser nulo o vacío.", nameof(nombre));
-            Nombre = nombre;
-        }
-        public void SetApellido(string apellido)
-        {
-            if (string.IsNullOrWhiteSpace(apellido))
-                throw new ArgumentException("El apellido del usuario no puede ser nulo o vacío.", nameof(apellido));
-            Apellido = apellido;
-        }
-        public void SetRazonSocial(string razonSocial)
-        {
-            if (string.IsNullOrWhiteSpace(razonSocial))
-                throw new ArgumentException("La razón social del usuario no puede ser nula o vacía.", nameof(razonSocial));
-            Razon_Social = razonSocial;
-        }
-        public void SetFechaNacimiento(DateOnly fechaNacimiento)
-        {
-            Fecha_Nacimiento = fechaNacimiento;
-        }
-        public void SetCuit(string cuit)
-        {
-            if (string.IsNullOrWhiteSpace(cuit))
-                throw new ArgumentException("El cuit del usuario no puede ser nula o vacía.", nameof(cuit));
-            Cuit = cuit;
+            if (personajuridicacuit.Length <11)
+                throw new ArgumentException("La longitud del cuit debe ser mayor a 11 caracteres", nameof(personajuridicacuit));
+            PersonaJuridicaCuit = personajuridicacuit;
         }
     }
 }

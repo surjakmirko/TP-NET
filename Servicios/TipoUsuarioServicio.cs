@@ -13,21 +13,21 @@ namespace Servicios
             this.tipoUsuarioRepositorio = tipoUsuarioRepositorio;
         }
 
-        public async Task<TipoUsuarioDTO> AddAsync(TipoUsuarioDTO dto)
-        {
-            TipoUsuario tipoUsuario = new TipoUsuario(dto.Id, dto.Descripcion);
+        //public async Task<TipoUsuarioDTO> AddAsync(TipoUsuarioDTO dto)
+        //{
+        //    TipoUsuario tipoUsuario = new TipoUsuario(dto.Id, dto.Descripcion);
 
-            await tipoUsuarioRepositorio.AddAsync(tipoUsuario);
+        //    await tipoUsuarioRepositorio.AddAsync(tipoUsuario);
 
-            dto.Id = tipoUsuario.Id;
+        //    dto.Id = tipoUsuario.Id;
 
-            return dto;
-        }
+        //    return dto;
+        //}
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            return await tipoUsuarioRepositorio.DeleteAsync(id);
-        }
+        //public async Task<bool> DeleteAsync(int id)
+        //{
+        //    return await tipoUsuarioRepositorio.DeleteAsync(id);
+        //}
 
         public async Task<TipoUsuarioDTO?> GetAsync(int id)
         {
@@ -54,15 +54,15 @@ namespace Servicios
             }).ToList();
         }
 
-        public async Task<bool> UpdateAsync(TipoUsuarioDTO dto)
-        {
-            var existing = await tipoUsuarioRepositorio.GetAsync(dto.Id);
-            if (existing == null)
-                return false;
+        //public async Task<bool> UpdateAsync(TipoUsuarioDTO dto)
+        //{
+        //    var existing = await tipoUsuarioRepositorio.GetAsync(dto.Id);
+        //    if (existing == null)
+        //        return false;
 
-            TipoUsuario tipoUsuario = new TipoUsuario(dto.Id, dto.Descripcion);
-            return await tipoUsuarioRepositorio.UpdateAsync(tipoUsuario);
-        }
+        //    TipoUsuario tipoUsuario = new TipoUsuario(dto.Id, dto.Descripcion);
+        //    return await tipoUsuarioRepositorio.UpdateAsync(tipoUsuario);
+        //}
 
         //public async Task<IEnumerable<TipoUsuarioDTO>> GetByCriteriaAsync(TipoUsuarioCriteriaDTO criteriaDTO)
         //{

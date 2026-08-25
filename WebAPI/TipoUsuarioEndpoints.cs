@@ -24,49 +24,6 @@ namespace WebAPI
 
                 return Results.Ok(dto);
             });
-
-            app.MapPost("/tipos-usuario", async (TipoUsuarioDTO dto, ITipoUsuarioServicio TipoUsuarioServicio) =>
-            {
-                try
-                {
-                    TipoUsuarioDTO tipoUsuarioDTO = await TipoUsuarioServicio.AddAsync(dto);
-
-                    return Results.Created($"/tipos-usuario/{tipoUsuarioDTO.Id}", tipoUsuarioDTO);
-                }
-                catch (ArgumentException ex)
-                {
-                    return Results.BadRequest(new { error = ex.Message });
-                }
-            });
-            app.MapPut("/tipos-usuario", async (TipoUsuarioDTO dto, ITipoUsuarioServicio TipoUsuarioServicio) =>
-            {
-                try
-                {
-                    var encontrado = await TipoUsuarioServicio.UpdateAsync(dto);
-
-                    if (!encontrado)
-                    {
-                        return Results.NotFound();
-                    }
-
-                    return Results.NoContent();
-                }
-                catch (ArgumentException ex)
-                {
-                    return Results.BadRequest(new { error = ex.Message });
-                }
-            });
-            app.MapDelete("/tipos-usuario/{id}", async (int id, ITipoUsuarioServicio TipoUsuarioServicio) =>
-            {
-                var deleted = await TipoUsuarioServicio.DeleteAsync(id);
-
-                if (!deleted)
-                {
-                    return Results.NotFound();
-                }
-
-                return Results.NoContent();
-            });
         }
     }
 }

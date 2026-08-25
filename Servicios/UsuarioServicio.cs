@@ -19,17 +19,7 @@ namespace Servicios
             {
                 throw new ArgumentException($"Ya existe un usuario con el Email '{dto.Email}'.");
             }
-
-            Usuario usuario = dto.TipoUsuarioId switch
-            {
-                1 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId),
-
-                2 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento),
-                
-                3 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social, dto.Cuit),
-
-                4 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId)
-            };
+            Usuario usuario = new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
 
             await usuarioRepositorio.AddAsync(usuario);
 
@@ -57,11 +47,8 @@ namespace Servicios
                 Telefono = usuario.Telefono,
                 Password = usuario.Password,
                 TipoUsuarioId = usuario.TipoUsuarioId,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Razon_Social = usuario.Razon_Social,
-                Cuit = usuario.Cuit,
-                Fecha_Nacimiento = usuario.Fecha_Nacimiento
+                PersonaFisicaDni = usuario.PersonaFisicaDni,
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
             };
         }
 
@@ -76,11 +63,8 @@ namespace Servicios
                 Telefono = usuario.Telefono,
                 Password = usuario.Password, 
                 TipoUsuarioId = usuario.TipoUsuarioId,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Razon_Social = usuario.Razon_Social,
-                Cuit = usuario.Cuit,
-                Fecha_Nacimiento = usuario.Fecha_Nacimiento
+                PersonaFisicaDni = usuario.PersonaFisicaDni,
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
             }).ToList();
         }
 
@@ -90,52 +74,9 @@ namespace Servicios
             {
                 throw new ArgumentException($"Ya existe otro usuario con el Email '{dto.Email}'.");
             }
-   
-
-            Usuario usuario = dto.TipoUsuarioId switch
-            {
-                1 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId),
-                2 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento),
-                3 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.Razon_Social, dto.Cuit),
-                4 => new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId)
-            };
+            Usuario usuario = new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
 
             return await usuarioRepositorio.UpdateAsync(usuario);
         }
-        
-        //public async Task<IEnumerable<UsuarioDTO>> GetByCriteriaAsync(UsuarioCriteriaDTO criteriaDTO)
-        //{   
-        //    var criteria = new UsuarioCriteria(criteriaDTO.Texto);
-
-        //    var usuarios = await usuarioRepositorio.GetByCriteriaAsync(criteria);
-
-        //    return usuarios.Select(usuario => 
-        //    {
-        //        var dto = new UsuarioDTO
-        //        {
-        //            Id = usuario.Id,
-        //            Email = usuario.Email,
-        //            Telefono = usuario.Telefono,
-        //            Password = usuario.Password,
-        //            TipoUsuarioId = usuario.TipoUsuarioId,
-        //            TipoUsuarioNombre = usuario.TipoUsuario?.Descripcion
-        //        };
-
-        //        switch (usuario.TipoUsuarioId)
-        //        {
-        //            case 2:
-        //                dto.Nombre = usuario.Nombre;
-        //                dto.Apellido = usuario.Apellido;
-        //                dto.Fecha_Nacimiento = usuario.Fecha_Nacimiento;
-        //                break;
-        //            case 3:
-        //                dto.Razon_Social = usuario.Razon_Social;
-        //                dto.Cuit = usuario.Cuit;
-        //                break;
-        //        }
-
-        //        return dto;
-        //    }).ToList();
-        //}
     }
 }
