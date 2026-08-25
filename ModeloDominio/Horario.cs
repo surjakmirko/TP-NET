@@ -1,31 +1,11 @@
 ﻿namespace Modelo.Dominio
 {
-    internal class Horario
+    public class Horario
     {
-        private int _complejoId;
-        private Complejo? _complejo;
-
-        public int ComplejoId
-        {
-            get => _complejo?.Id ?? _complejoId;
-            private set => _complejoId = value;
-        }
-
-        public Complejo? Complejo
-        {
-            get => _complejo;
-            private set
-            {
-                _complejo = value;
-                if (value != null && _complejoId != value.Id)
-                {
-                    _complejoId = value.Id;
-                }
-            }
-        }
+        public int ComplejoId { get; private set; }
+        public Complejo Complejo { get; set; } = null!;
 
         public int NroDia { get; private set; }
-
         public TimeOnly HoraApertura { get; private set; }
         public TimeOnly HoraCierre { get; private set; }
 
@@ -44,12 +24,7 @@
             ComplejoId = complejoId;
         }
 
-        public void SetComplejo(Complejo complejo)
-        {
-            ArgumentNullException.ThrowIfNull(complejo);
-            _complejo = complejo;
-            _complejoId = complejo.Id;
-        }
+
 
         public void SetNroDia(int nroDia)
         {

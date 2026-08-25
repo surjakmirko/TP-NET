@@ -7,7 +7,6 @@
         public string CodigoPostal { get; private set; }
 
         public int ProvinciaId { get; private set; }
-
         public Provincia Provincia { get; set; } = null!;
 
         public Localidad(int id, string nombre, string codigoPostal, int provinciaId)
