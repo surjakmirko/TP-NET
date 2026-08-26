@@ -104,12 +104,20 @@ namespace Data
             modelBuilder.Entity<Turno>()
                 .HasKey(t => new { t.Id });
 
-            //falta turno
+            modelBuilder.Entity<Turno>()
+                .HasOne(t => t.Cliente)
+                .WithMany(u => u.Turnos)
+                .HasForeignKey(t => t.ClienteId);
 
+            modelBuilder.Entity<Turno>()
+                .HasOne(t => t.Cancha)
+                .WithMany(c => c.Turnos)
+                .HasForeignKey(t => new { t.ComplejoId, t.CanchaNro });
 
-
-
-
+            modelBuilder.Entity<Turno>()
+                .HasOne(t => t.TipoTurno)
+                .WithMany(tt => tt.Turnos)
+                .HasForeignKey(t => t.TipoTurnoId);
         }
     }
 }

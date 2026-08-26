@@ -16,7 +16,6 @@
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
 
-
         public Complejo(int id, string direccion, string nombre, int idDueño, int idEncargado, int idLocalidad)
         {
             SetId(id);

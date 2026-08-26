@@ -24,7 +24,10 @@ namespace Modelo.Dominio
         public ICollection<Complejo> Complejos { get; set; } = new List<Complejo>();
 
         // si un usuario (encargado) 
-        public Complejo Complejo { get; set; } 
+        public Complejo Complejo { get; set; }
+
+        // si un usuario (cliente)
+        public ICollection<Turno> Turnos { get; set; } = new List<Turno>();
 
 
 
