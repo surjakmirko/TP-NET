@@ -11,6 +11,8 @@ namespace Modelo.Dominio
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
 
+        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
+
         public TipoUsuario(int id, string descripcion)
         {
             SetId(id);

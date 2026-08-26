@@ -7,6 +7,8 @@ namespace Modelo.Dominio
         public int Id { get; private set; }
         public string Deporte { get; private set; }
 
+        public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
+
         public TipoCancha(int id, string deporte)
         {
             SetId(id);

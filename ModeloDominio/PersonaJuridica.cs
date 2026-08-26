@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModeloDominio
+namespace Modelo.Dominio
 {
     public class PersonaJuridica
     {
         public string Razon_Social { get; private set; }
         public string Cuit { get; private set; }
+
+        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
         public PersonaJuridica(string cuit, string razonSocial)
         {
             SetCuit(cuit);

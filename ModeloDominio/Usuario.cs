@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.RegularExpressions;
-
+﻿
 namespace Modelo.Dominio
 {
     public class Usuario
@@ -21,6 +19,13 @@ namespace Modelo.Dominio
         public string? PersonaJuridicaCuit { get; set; }
 
         public PersonaJuridica? PersonaJuridica { get; set; }
+
+        //si un usuario tiene varios complejos
+        public ICollection<Complejo> Complejos { get; set; } = new List<Complejo>();
+
+        // si un usuario (encargado) 
+        public Complejo Complejo { get; set; } 
+
 
 
         public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string personaFisicaDni,string personaJuridicaCuit)

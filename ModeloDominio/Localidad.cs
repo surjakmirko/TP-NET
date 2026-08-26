@@ -9,6 +9,8 @@
         public int ProvinciaId { get; private set; }
         public Provincia Provincia { get; set; } = null!;
 
+        public ICollection<Complejo> Complejos { get; set; } = new List<Complejo>();
+
         public Localidad(int id, string nombre, string codigoPostal, int provinciaId)
         {
             SetId(id);

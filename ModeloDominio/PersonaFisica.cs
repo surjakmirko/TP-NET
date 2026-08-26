@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModeloDominio
+namespace Modelo.Dominio
 {
     public class PersonaFisica
     {
@@ -12,6 +12,8 @@ namespace ModeloDominio
         public string Apellido { get; private set; }
         public string Dni { get; private set; }
         public DateOnly Fecha_Nacimiento { get; private set; }
+
+        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
         public PersonaFisica(string nombre, string apellido, string dni, DateOnly fechaNacimiento)
         {
             SetNombre(nombre);

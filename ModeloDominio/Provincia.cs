@@ -5,6 +5,8 @@
         public int Id { get; private set; }
         public string Nombre { get; private set; }
 
+        public ICollection<Localidad> Localidades { get; set; } = new List<Localidad>();
+
         public Provincia(int id, string nombre)
         {
             SetId(id);
