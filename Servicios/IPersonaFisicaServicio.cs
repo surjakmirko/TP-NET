@@ -10,8 +10,8 @@ namespace Servicios
     public interface IPersonaFisicaServicio
     {
         Task<PersonaFisicaDTO> AddAsync(PersonaFisicaDTO dto);
-        Task<bool> DeleteAsync(int dni);
-        Task<PersonaFisicaDTO?> GetAsync(int dni);
+        Task<bool> DeleteAsync(string dni);
+        Task<PersonaFisicaDTO?> GetAsync(string dni);
         Task<IEnumerable<PersonaFisicaDTO>> GetAllAsync();
         Task<bool> UpdateAsync(PersonaFisicaDTO dto);
     }

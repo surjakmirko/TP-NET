@@ -5,6 +5,22 @@ namespace Data
 {
     public class AplicacionDbContext:DbContext
     {
+        public AplicacionDbContext(DbContextOptions<AplicacionDbContext> options)
+            : base(options) { }
+
+        public DbSet<Usuario> Usuarios => Set<Usuario>();
+        public DbSet<TipoUsuario> TipoUsuarios => Set<TipoUsuario>();
+        public DbSet<PersonaFisica> PersonaFisicas => Set<PersonaFisica>();
+        public DbSet<PersonaJuridica> PersonaJuridicas => Set<PersonaJuridica>();
+        public DbSet<Complejo> Complejos => Set<Complejo>();
+        public DbSet<Cancha> Canchas => Set<Cancha>();
+        public DbSet<Horario> Horarios => Set<Horario>();
+        public DbSet<Precio> Precios => Set<Precio>();
+        public DbSet<TipoCancha> TipoCanchas => Set<TipoCancha>();
+        public DbSet<Provincia> Provincias => Set<Provincia>();
+        public DbSet<Localidad> Localidades => Set<Localidad>();
+        public DbSet<Turno> Turnos => Set<Turno>();
+        public DbSet<TipoTurno> TipoTurnos => Set<TipoTurno>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -96,7 +112,7 @@ namespace Data
             modelBuilder.Entity<Localidad>()
                 .HasOne(l => l.Provincia)
                 .WithMany(p => p.Localidades)
-                .HasForeignKey(l => l.Id);
+                .HasForeignKey(l => l.ProvinciaId);
 
             modelBuilder.Entity<TipoTurno>()
                 .HasKey(tt => new { tt.Id });
@@ -118,6 +134,12 @@ namespace Data
                 .HasOne(t => t.TipoTurno)
                 .WithMany(tt => tt.Turnos)
                 .HasForeignKey(t => t.TipoTurnoId);
+
+            modelBuilder.Entity<PersonaFisica>()
+                .HasKey(pf => new { pf.Dni });
+
+            modelBuilder.Entity<PersonaJuridica>()
+                .HasKey(pf => new { pf.Cuit });
         }
     }
 }

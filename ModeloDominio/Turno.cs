@@ -25,14 +25,14 @@ namespace Modelo.Dominio
         public DateOnly Fecha { get; private set; }
 
 
-        public Turno(int id, TimeOnly horaInicio, TimeOnly horaFin, int idCliente, int idTipoTurno, int complejoId, int canchaNro, DateOnly fecha)
+        public Turno(int id, TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
         {
             SetId(id);
             SetHoraInicio(horaInicio);
             SetHoraFin(horaFin);
             SetEstado("Reservado");
-            SetClienteId(idCliente);
-            SetTipoTurnoId(idTipoTurno);
+            SetClienteId(clienteId);
+            SetTipoTurnoId(tipoTurnoId);
             SetCanchaId(complejoId, canchaNro);
             SetFecha(fecha);
         }

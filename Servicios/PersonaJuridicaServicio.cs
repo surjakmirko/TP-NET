@@ -1,19 +1,14 @@
 ﻿using Data;
 using DTOs;
 using Modelo.Dominio;
-using ModeloDominio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Servicios
 {
-    public class PersonaJuridica : IPersonaJuridicaServicio
+    public class PersonaJuridicaServicio : IPersonaJuridicaServicio
     {
         private readonly IPersonaJuridicaRepositorio personaJuridicaRepositorio;
-        public PersonaJuridica(IPersonaJuridicaRepositorio personaJuridicaRepositorio)
+        public PersonaJuridicaServicio(IPersonaJuridicaRepositorio personaJuridicaRepositorio)
         {
             this.personaJuridicaRepositorio = personaJuridicaRepositorio;
         }
@@ -41,7 +36,7 @@ namespace Servicios
             return new PersonaJuridicaDTO
             {
                 Cuit = personaJuridica.Cuit,
-                Razon_Social = personaJuridica.Razon_Social
+                Razon_Social = personaJuridica.RazonSocial
             };
         }
         public async Task<IEnumerable<PersonaJuridicaDTO>> GetAllAsync()
@@ -51,7 +46,7 @@ namespace Servicios
             return personasJuridicas.Select(personaJuridica => new PersonaJuridicaDTO
             {
                 Cuit = personaJuridica.Cuit,
-                Razon_Social = personaJuridica.Razon_Social
+                Razon_Social = personaJuridica.RazonSocial
             }).ToList();
         }
         public async Task<bool> UpdateAsync(PersonaJuridicaDTO dto)

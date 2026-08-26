@@ -16,14 +16,14 @@
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
 
-        public Complejo(int id, string direccion, string nombre, int idDueño, int idEncargado, int idLocalidad)
+        public Complejo(int id, string direccion, string nombre, int dueñoId, int encargadoId, int localidadId)
         {
             SetId(id);
             SetDireccion(direccion);
             SetNombre(nombre);
-            SetDueñoId(idDueño);
-            SetEncargadoId(idEncargado);
-            SetLocalidadId(idLocalidad);
+            SetDueñoId(dueñoId);
+            SetEncargadoId(encargadoId);
+            SetLocalidadId(localidadId);
         }
 
         public void SetId(int id)

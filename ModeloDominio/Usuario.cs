@@ -1,4 +1,4 @@
-﻿
+﻿using System.Text.RegularExpressions;
 namespace Modelo.Dominio
 {
     public class Usuario

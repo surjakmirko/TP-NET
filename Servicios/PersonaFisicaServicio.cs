@@ -1,11 +1,7 @@
 ﻿using Data;
-using ModeloDominio;
+using Modelo.Dominio;
 using DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Servicios
 {
@@ -29,12 +25,12 @@ namespace Servicios
                 return dto;
             }
 
-            public async Task<bool> DeleteAsync(int dni)
+            public async Task<bool> DeleteAsync(string dni)
             {
                 return await personaFisicaRepositorio.DeleteAsync(dni);
             }
 
-            public async Task<PersonaFisicaDTO?> GetAsync(int dni)
+            public async Task<PersonaFisicaDTO?> GetAsync(string dni)
             {
                 PersonaFisica? personaFisica = await personaFisicaRepositorio.GetAsync(dni);
 
@@ -46,7 +42,7 @@ namespace Servicios
                     Dni = personaFisica.Dni,
                     Nombre = personaFisica.Nombre,
                     Apellido = personaFisica.Apellido,
-                    Fecha_Nacimiento = personaFisica.Fecha_Nacimiento
+                    Fecha_Nacimiento = personaFisica.FechaNacimiento
                 };
             }
 
@@ -59,7 +55,7 @@ namespace Servicios
                     Dni = persona.Dni,
                     Nombre = persona.Nombre,
                     Apellido = persona.Apellido,
-                    Fecha_Nacimiento = persona.Fecha_Nacimiento
+                    Fecha_Nacimiento = persona.FechaNacimiento
                 }).ToList();
             }
 

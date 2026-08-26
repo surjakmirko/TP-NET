@@ -8,7 +8,7 @@ namespace Modelo.Dominio
 {
     public class PersonaJuridica
     {
-        public string Razon_Social { get; private set; }
+        public string RazonSocial { get; private set; }
         public string Cuit { get; private set; }
 
         public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
@@ -21,7 +21,7 @@ namespace Modelo.Dominio
         {
             if (string.IsNullOrWhiteSpace(razonSocial))
                 throw new ArgumentException("La razón social del usuario no puede ser nula o vacía.", nameof(razonSocial));
-            Razon_Social = razonSocial;
+            RazonSocial = razonSocial;
         }
         public void SetCuit(string cuit)
         {

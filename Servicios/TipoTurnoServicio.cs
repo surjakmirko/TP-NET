@@ -1,17 +1,18 @@
 ﻿using Data;
 using DTOs;
 using Modelo.Dominio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ModeloDominio;
+
 
 namespace Servicios
 {
     public class TipoTurnoServicio : ITipoTurnoServicio
     {
+        private readonly ITipoTurnoRepositorio tipoTurnoRepositorio;
+
+        public TipoTurnoServicio(ITipoTurnoRepositorio tipoTurnoRepositorio)
+        {
+            this.tipoTurnoRepositorio = tipoTurnoRepositorio;
+        }
         public async Task<TipoTurnoDTO?> GetAsync(int id)
         {
             TipoTurno? tipoTurno = await tipoTurnoRepositorio.GetAsync(id);

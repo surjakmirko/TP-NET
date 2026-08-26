@@ -11,7 +11,7 @@ namespace Modelo.Dominio
         public string Nombre { get; private set; }
         public string Apellido { get; private set; }
         public string Dni { get; private set; }
-        public DateOnly Fecha_Nacimiento { get; private set; }
+        public DateOnly FechaNacimiento { get; private set; }
 
         public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
         public PersonaFisica(string nombre, string apellido, string dni, DateOnly fechaNacimiento)
@@ -41,7 +41,7 @@ namespace Modelo.Dominio
         }
         public void SetFechaNacimiento(DateOnly fechaNacimiento)
         {
-            Fecha_Nacimiento = fechaNacimiento;
+            FechaNacimiento = fechaNacimiento;
         }
     }
 }

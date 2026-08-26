@@ -1,9 +1,5 @@
 ﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Data;
 using Modelo.Dominio;
 
 namespace Servicios
@@ -23,13 +19,13 @@ namespace Servicios
             dto.FechaDesde = precio.FechaDesde;
             return dto;
         }
-        public async Task<bool> DeleteAsync(DateOnly FechaDesde)
+        public async Task<bool> DeleteAsync(int id,int nro,DateOnly FechaDesde)
         {
-            return await precioRepositorio.DeleteAsync(FechaDesde);
+            return await precioRepositorio.DeleteAsync(id,nro,FechaDesde);
         }
-        public async Task<PrecioDTO?> GetAsync(DateOnly FechaDesde)
+        public async Task<PrecioDTO?> GetAsync(int id, int nro, DateOnly FechaDesde)
         {
-            Precio? precio = await precioRepositorio.GetAsync(FechaDesde);
+            Precio? precio = await precioRepositorio.GetAsync(id,nro,FechaDesde);
 
             if (precio == null)
                 return null;
@@ -44,9 +40,9 @@ namespace Servicios
                 CanchaNro = precio.CanchaNro
             };  
         }
-        public async Task<IEnumerable<PrecioDTO>> GetAllAsync()
+        public async Task<IEnumerable<PrecioDTO>> GetAllAsync(int id,int nro)
         {
-            var precios = await precioRepositorio.GetAllAsync();
+            var precios = await precioRepositorio.GetAllAsync(id,nro);
 
             return precios.Select(precio => new PrecioDTO
             {

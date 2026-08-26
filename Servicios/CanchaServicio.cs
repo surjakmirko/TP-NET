@@ -7,7 +7,7 @@ namespace Servicios
 {
     public class CanchaServicio: ICanchaServicio
     {
-        private readonly ICanchaRepositio canchaRepositorio;
+        private readonly ICanchaRepositorio canchaRepositorio;
 
         public CanchaServicio(IHorarioRepositorio horarioRepositorio)
         {

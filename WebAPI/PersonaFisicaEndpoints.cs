@@ -13,7 +13,7 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapGet("/personasfisicas/{dni}", async (int dni, IPersonaFisicaServicio personaFisicaServicio) =>
+            app.MapGet("/personasfisicas/{dni}", async (string dni, IPersonaFisicaServicio personaFisicaServicio) =>
             {
                 PersonaFisicaDTO? dto = await personaFisicaServicio.GetAsync(dni);
 
@@ -54,7 +54,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = ex.Message });
                 }
             });
-            app.MapDelete("/personasfisicas/{dni}", async (int dni, IPersonaFisicaServicio personaFisicaServicio) =>
+            app.MapDelete("/personasfisicas/{dni}", async (string dni, IPersonaFisicaServicio personaFisicaServicio) =>
             {
                 var deleted = await personaFisicaServicio.DeleteAsync(dni);
 

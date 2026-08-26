@@ -2,15 +2,15 @@
 using Modelo.Dominio;
 using Data;
 using DTOs;
-using System.Xml;
+
 
 namespace Servicios
 {
     public class TurnoServicio: ITurnoServicio
     {
-        private readonly ITurnoRepositio turnoRepositorio;
+        private readonly ITurnoRepositorio turnoRepositorio;
 
-        public TurnoServicio(IHorarioRepositorio turnoRepositorio)
+        public TurnoServicio(ITurnoRepositorio turnoRepositorio)
         {
             this.turnoRepositorio = turnoRepositorio;
         }

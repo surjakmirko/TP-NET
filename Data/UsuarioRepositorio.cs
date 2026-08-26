@@ -31,52 +31,55 @@ namespace Data
             return Task.FromResult(false);
         }
 
-        public async Task AddAsync(Usuario usuario)
-        {
-            int id = ObtenerProximoId();
-            usuario.SetId(id);
+        public async Task AddAsync(Usuario usuario) { }
+        //{
+        //    int id = ObtenerProximoId();
+        //    usuario.SetId(id);
 
-            var tipousuario = new TipoUsuarioRepositorio();
-            var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
-            if (tipo != null)
-                usuario.SetTipoUsuario(tipo);
-            usuarios.Add(usuario);
-        }
+        //    var tipousuario = new TipoUsuarioRepositorio();
+        //    var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
+        //    if (tipo != null)
+        //        usuario.SetTipoUsuario(tipo);
+        //    usuarios.Add(usuario);
+        
 
         public Task<Usuario?> GetAsync(int id)
         {
             return Task.FromResult(usuarios.FirstOrDefault(u => u.Id == id));
         }
 
-        public async Task<bool> UpdateAsync(Usuario usuario)
-        {
-            var existe = usuarios.FirstOrDefault(u => u.Id == usuario.Id);
-            if (existe != null)
-            {
-                existe.SetEmail(usuario.Email);
-                existe.SetTelefono(usuario.Telefono);
-                existe.SetPassword(usuario.Password);
-                if (usuario.Id == 2)
-                {
-                    existe.SetNombre(usuario.Nombre);
-                    existe.SetApellido(usuario.Apellido);
-                    existe.SetFechaNacimiento(usuario.Fecha_Nacimiento);
-                }
-                if (usuario.Id == 3)
-                {
-                    existe.SetRazonSocial(usuario.Razon_Social);
-                    existe.SetCuit(usuario.Cuit);
+        public async Task<bool> UpdateAsync(Usuario usuario) {
+            return true;
                 }
 
-                var tipousuario = new TipoUsuarioRepositorio();
-                var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
-                if (tipo != null)
-                    existe.SetTipoUsuario(tipo);
+        //{
+        //    var existe = usuarios.FirstOrDefault(u => u.Id == usuario.Id);
+        //    if (existe != null)
+        //    {
+        //        existe.SetEmail(usuario.Email);
+        //        existe.SetTelefono(usuario.Telefono);
+        //        existe.SetPassword(usuario.Password);
+        //        if (usuario.Id == 2)
+        //        {
+        //            existe.SetNombre(usuario.Nombre);
+        //            existe.SetApellido(usuario.Apellido);
+        //            existe.SetFechaNacimiento(usuario.Fecha_Nacimiento);
+        //        }
+        //        if (usuario.Id == 3)
+        //        {
+        //            existe.SetRazonSocial(usuario.Razon_Social);
+        //            existe.SetCuit(usuario.Cuit);
+        //        }
 
-                return true;
-            }
-            return false;
-        }
+        //        var tipousuario = new TipoUsuarioRepositorio();
+        //        var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
+        //        if (tipo != null)
+        //            existe.SetTipoUsuario(tipo);
+
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         public Task<bool> EmailExistsAsync(string email)
         {
