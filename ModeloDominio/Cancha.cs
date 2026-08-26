@@ -18,6 +18,8 @@ namespace Modelo.Dominio
         public int ComplejoId { get; private set; }
         public Complejo Complejo { get; set; } = null!;
         public ICollection<Turno> Turnos { get; set; } = new List<Turno>();
+        public ICollection<Precio> Precios { get; set; } = new List<Precio>();
+
 
         public Cancha(int nro, int tipoCanchaId, int complejoId)
         {
