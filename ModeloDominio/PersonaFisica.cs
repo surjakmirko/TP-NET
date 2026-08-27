@@ -35,8 +35,8 @@ namespace Modelo.Dominio
         }
         public void SetDni(string dni)
         {
-            if (dni.Length < 7)
-                throw new ArgumentException("El dni del usuario no puede ser menor a 8", nameof(dni));
+            //if (dni.Length < 7)
+            //    throw new ArgumentException("El dni del usuario no puede ser menor a 8", nameof(dni));
             Dni = dni;
         }
         public void SetFechaNacimiento(DateOnly fechaNacimiento)

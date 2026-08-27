@@ -25,7 +25,7 @@ namespace Modelo.Dominio
         }
         public void SetCuit(string cuit)
         {
-            if (string.IsNullOrWhiteSpace(cuit))
+            if (cuit.Length < 11)
                 throw new ArgumentException("El cuit del usuario no puede ser nula o vacía.", nameof(cuit));
             Cuit = cuit;
         }
