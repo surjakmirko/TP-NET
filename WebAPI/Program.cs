@@ -25,8 +25,8 @@ builder.Services.AddScoped<IPersonaFisicaRepositorio, PersonaFisicaRepositorio>(
 builder.Services.AddScoped<IPersonaFisicaServicio, PersonaFisicaServicio>();
 builder.Services.AddScoped<IPersonaJuridicaRepositorio, PersonaJuridicaRepositorio>();
 builder.Services.AddScoped<IPersonaJuridicaServicio, PersonaJuridicaServicio>();
-builder.Services.AddScoped<IComplejoRepositorio, ComplejoRepositorio>();
-builder.Services.AddScoped<IComplejoServicio, ComplejoServicio>();
+//builder.Services.AddScoped<IComplejoRepositorio, ComplejoRepositorio>();
+//builder.Services.AddScoped<IComplejoServicio, ComplejoServicio>();
 builder.Services.AddScoped<IHorarioRepositorio, HorarioRepositorio>();
 builder.Services.AddScoped<IHorarioServicio, HorarioServicio>();
 var app = builder.Build();
