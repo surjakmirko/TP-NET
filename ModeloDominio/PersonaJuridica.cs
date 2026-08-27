@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,6 @@ namespace Modelo.Dominio
     {
         public string RazonSocial { get; private set; }
         public string Cuit { get; private set; }
-
         public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
         public PersonaJuridica(string cuit, string razonSocial)
         {
@@ -25,8 +25,8 @@ namespace Modelo.Dominio
         }
         public void SetCuit(string cuit)
         {
-            if (string.IsNullOrWhiteSpace(cuit))
-                throw new ArgumentException("El cuit del usuario no puede ser nula o vacía.", nameof(cuit));
+            if (cuit.Length < 11)
+                throw new ArgumentException("El cuit del usuario no puede ser menor a 11", nameof(cuit));
             Cuit = cuit;
         }
     }

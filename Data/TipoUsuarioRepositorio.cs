@@ -1,48 +1,31 @@
-﻿using Modelo.Dominio;
+﻿using Microsoft.EntityFrameworkCore;
+using Modelo.Dominio;
 
 namespace Data
 {
     public class TipoUsuarioRepositorio : ITipoUsuarioRepositorio
     {
-        private static readonly List<TipoUsuario> tiposUsuarios = new List<TipoUsuario>();
+        private readonly AplicacionDbContext _context;
 
-        public Task AddAsync(TipoUsuario tipousuario)
+        public TipoUsuarioRepositorio(AplicacionDbContext context)
         {
-            tiposUsuarios.Add(tipousuario);
-            return Task.CompletedTask;
-        }
-
-        public Task<TipoUsuario?> GetAsync(int id)
-        {
-            var tipousuario = tiposUsuarios.FirstOrDefault(t => t.Id == id);
-            return Task.FromResult(tipousuario);
+            _context = context;
         }
 
-        public Task<IEnumerable<TipoUsuario>> GetAllAsync()
+
+
+        public async Task<TipoUsuario?> GetAsync(int id)
         {
-            return Task.FromResult<IEnumerable<TipoUsuario>>(tiposUsuarios);
+            return await _context.TipoUsuarios.FindAsync(id);
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<IEnumerable<TipoUsuario>> GetAllAsync()
         {
-            var tipo = tiposUsuarios.FirstOrDefault(c => c.Id == id);
-            if (tipo != null)
-            {
-                tiposUsuarios.Remove(tipo);
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
+            return await _context.TipoUsuarios.ToListAsync();
         }
-        public Task<bool> UpdateAsync(TipoUsuario tipo)
-        {
-            var existe = tiposUsuarios.FirstOrDefault(t => t.Id == tipo.Id);
-            if (existe != null)
-            {
-                existe.SetDescripcion(tipo.Descripcion);
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
-        }
+        
+
+
     }
 
 }
