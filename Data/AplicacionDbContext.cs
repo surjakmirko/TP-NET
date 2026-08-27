@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modelo.Dominio;
 
+
 namespace Data
 {
     public class AplicacionDbContext : DbContext

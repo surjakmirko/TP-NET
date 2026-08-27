@@ -3,7 +3,7 @@
 
 namespace Data
 {
-    public interface IPersonaFisicaRepositorio
+    public interface IPersonaFisica
     {
         Task AddAsync(PersonaFisica personafisica);
         Task<bool> DeleteAsync(string dni);
