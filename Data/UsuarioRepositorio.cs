@@ -1,91 +1,70 @@
 ﻿
 using Modelo.Dominio;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        private static readonly List<Usuario> usuarios = new List<Usuario>();
-        public static int ObtenerProximoId()
+        private readonly AplicacionDbContext _context;  
+
+        public UsuarioRepositorio(AplicacionDbContext context)
         {
-            if (usuarios.Count() == 0)
+            _context = context;
+        }
+
+        public async Task<Usuario?> GetAsync(int id)
+        {
+            return await _context.Usuarios
+                .Include(u => u.TipoUsuario)
+                .Include(u => u.PersonaFisica)
+                .Include(u => u.PersonaJuridica)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<IEnumerable<Usuario>> GetAllAsync()
+        {
+            return await _context.Usuarios
+                .Include(u => u.TipoUsuario)
+                .Include(u => u.PersonaFisica)
+                .Include(u => u.PersonaJuridica)
+                .ToListAsync();
+        }
+
+        public async Task AddAsync(Usuario usuario)
+        {
+            await _context.Usuarios.AddAsync(usuario);
+            await _context.SaveChangesAsync(); 
+        }
+
+        public async Task<bool> UpdateAsync(Usuario usuario)
+        {
+            var existingUsuario = await _context.Usuarios.FindAsync(usuario.Id);
+            if (existingUsuario == null)
             {
-                return 1;
+                return false;
             }
-            else
-                return (usuarios.Max(x => x.Id) + 1);
-        }
-        public Task<IEnumerable<Usuario>> GetAllAsync()
-        {
-            return Task.FromResult<IEnumerable<Usuario>>(usuarios.ToList());
+            _context.Usuarios.Update(usuario);
+            int filasAfectadas = await _context.SaveChangesAsync();
+            return filasAfectadas > 0;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var usuario = usuarios.FirstOrDefault(u => u.Id == id);
-            if (usuario != null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
             {
-                usuarios.Remove(usuario);
-                return Task.FromResult(true);
+                return false;
             }
-            return Task.FromResult(false);
-        }
 
-        public async Task AddAsync(Usuario usuario) { }
-        //{
-        //    int id = ObtenerProximoId();
-        //    usuario.SetId(id);
-
-        //    var tipousuario = new TipoUsuarioRepositorio();
-        //    var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
-        //    if (tipo != null)
-        //        usuario.SetTipoUsuario(tipo);
-        //    usuarios.Add(usuario);
-        
-
-        public Task<Usuario?> GetAsync(int id)
-        {
-            return Task.FromResult(usuarios.FirstOrDefault(u => u.Id == id));
-        }
-
-        public async Task<bool> UpdateAsync(Usuario usuario) {
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
             return true;
-                }
-
-        //{
-        //    var existe = usuarios.FirstOrDefault(u => u.Id == usuario.Id);
-        //    if (existe != null)
-        //    {
-        //        existe.SetEmail(usuario.Email);
-        //        existe.SetTelefono(usuario.Telefono);
-        //        existe.SetPassword(usuario.Password);
-        //        if (usuario.Id == 2)
-        //        {
-        //            existe.SetNombre(usuario.Nombre);
-        //            existe.SetApellido(usuario.Apellido);
-        //            existe.SetFechaNacimiento(usuario.Fecha_Nacimiento);
-        //        }
-        //        if (usuario.Id == 3)
-        //        {
-        //            existe.SetRazonSocial(usuario.Razon_Social);
-        //            existe.SetCuit(usuario.Cuit);
-        //        }
-
-        //        var tipousuario = new TipoUsuarioRepositorio();
-        //        var tipo = await tipousuario.GetAsync(usuario.TipoUsuarioId);
-        //        if (tipo != null)
-        //            existe.SetTipoUsuario(tipo);
-
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        public Task<bool> EmailExistsAsync(string email)
-        {
-            bool existe = usuarios.Any(u => u.Email.ToLower() == email.ToLower());
-            return Task.FromResult(existe);
         }
-
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _context.Usuarios
+                .AnyAsync(u => u.Email.ToLower() == email.ToLower());
+        }
     }
 }
