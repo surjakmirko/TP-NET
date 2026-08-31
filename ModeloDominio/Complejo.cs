@@ -16,9 +16,11 @@
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
 
-        public Complejo(int id, string direccion, string nombre, int dueñoId, int encargadoId, int localidadId)
+
+
+
+        public Complejo(string direccion, string nombre, int dueñoId, int encargadoId, int localidadId)
         {
-            SetId(id);
             SetDireccion(direccion);
             SetNombre(nombre);
             SetDueñoId(dueñoId);
@@ -26,9 +28,14 @@
             SetLocalidadId(localidadId);
         }
 
+        public Complejo(int id,string direccion, string nombre, int dueñoId, int encargadoId, int localidadId):this(direccion,nombre, dueñoId, encargadoId, localidadId)
+        {
+            SetId(id);
+        }
+
         public void SetId(int id)
         {
-            if (id <= 0)
+            if (id < 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
             Id = id;
 

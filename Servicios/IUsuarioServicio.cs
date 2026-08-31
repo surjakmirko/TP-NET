@@ -5,7 +5,7 @@ namespace Servicios
 {
     public interface IUsuarioServicio
     {
-        Task<UsuarioDTO> AddAsync(UsuarioDTO dto);
+        Task<UsuarioDTO> AddAsync(UsuarioCrearDTO dto);
         Task<bool> DeleteAsync(int id);
         Task<UsuarioDTO?> GetAsync(int id);
         Task<IEnumerable<UsuarioDTO>> GetAllAsync();

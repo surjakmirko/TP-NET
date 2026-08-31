@@ -10,14 +10,14 @@ namespace Modelo.Dominio
         public string Password { get; private set; }
 
         //foraing key
-        public int TipoUsuarioId { get; set; }
+        public int TipoUsuarioId { get; private set; }
         public TipoUsuario TipoUsuario { get; set; } = null!;
 
-        public string? PersonaFisicaDni { get; set; }
-
+        public string? PersonaFisicaDni { get;private set; }
+         
         public PersonaFisica? PersonaFisica { get; set; }
 
-        public string? PersonaJuridicaCuit { get; set; }
+        public string? PersonaJuridicaCuit { get; private set; }
 
         public PersonaJuridica? PersonaJuridica { get; set; }
 

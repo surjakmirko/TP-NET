@@ -12,16 +12,22 @@ namespace Servicios
         {
             this.complejoRepositorio = complejoRepositorio;
         }
-        public async Task<ComplejoDTO> AddAsync(ComplejoDTO dto)
+        public async Task<ComplejoDTO> AddAsync(ComplejoCrearDTO dto)
         {
             
-            Complejo complejo = new Complejo(dto.Id, dto.Direccion, dto.Nombre, dto.EncargadoId, dto.DueñoId, dto.LocalidadId);
+            Complejo complejo = new Complejo(0, dto.Direccion, dto.Nombre, dto.EncargadoId, dto.DueñoId, dto.LocalidadId);
 
             await complejoRepositorio.AddAsync(complejo);
 
-            dto.Id = complejo.Id;
-
-            return dto;
+            return new ComplejoDTO
+            {
+                Id = complejo.Id,
+                Direccion = complejo.Direccion,
+                Nombre = complejo.Nombre,
+                EncargadoId = complejo.EncargadoId,
+                LocalidadId = complejo.LocalidadId,
+                DueñoId = complejo.DueñoId
+            };
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -63,8 +69,8 @@ namespace Servicios
         }
 
         public async Task<bool> UpdateAsync(ComplejoDTO dto)
-        {
-
+        {   
+        
             Complejo complejo = new Complejo(dto.Id, dto.Direccion, dto.Nombre, dto.EncargadoId, dto.DueñoId, dto.LocalidadId);
 
             return await complejoRepositorio.UpdateAsync(complejo);

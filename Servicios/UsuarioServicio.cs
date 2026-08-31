@@ -13,19 +13,26 @@ namespace Servicios
             this.usuarioRepositorio = usuarioRepositorio;
         }
 
-        public async Task<UsuarioDTO> AddAsync(UsuarioDTO dto)
+        public async Task<UsuarioDTO> AddAsync(UsuarioCrearDTO dto)
         {
             if (await usuarioRepositorio.EmailExistsAsync(dto.Email))
             {
                 throw new ArgumentException($"Ya existe un usuario con el Email '{dto.Email}'.");
             }
-            Usuario usuario = new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
+            Usuario usuario = new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
 
             await usuarioRepositorio.AddAsync(usuario);
 
-            dto.Id = usuario.Id;
-
-            return dto;
+            return new UsuarioDTO
+            {
+                Id = usuario.Id, 
+                Email = usuario.Email,
+                Telefono = usuario.Telefono,
+                Password = usuario.Password,
+                TipoUsuarioId = usuario.TipoUsuarioId,
+                PersonaFisicaDni = usuario.PersonaFisicaDni,
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
+            };
         }
 
         public async Task<bool> DeleteAsync(int id)

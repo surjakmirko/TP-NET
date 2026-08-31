@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modelo.Dominio;
 
+
 namespace Data
 {
     public class ComplejoRepositorio:IComplejoRepositorio
@@ -35,7 +36,12 @@ namespace Data
             {
                 return false;
             }
-            _context.Complejos.Update(complejoBuscado);
+            complejoBuscado.SetDireccion(complejo.Direccion);
+            complejoBuscado.SetNombre(complejo.Nombre);
+            complejoBuscado.SetDueñoId(complejo.DueñoId);
+            complejoBuscado.SetEncargadoId(complejo.EncargadoId);
+            complejoBuscado.SetLocalidadId(complejo.LocalidadId);
+
             await _context.SaveChangesAsync();
             return true;
         }

@@ -25,7 +25,7 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/usuarios", async (UsuarioDTO dto, IUsuarioServicio usuarioServicio) =>
+            app.MapPost("/usuarios", async (UsuarioCrearDTO dto, IUsuarioServicio usuarioServicio) =>
             {
                 try
                 {
