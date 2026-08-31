@@ -25,20 +25,26 @@ namespace Modelo.Dominio
         public DateOnly Fecha { get; private set; }
 
 
-        public Turno(int id, TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
+        public Turno(TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
         {
-            SetId(id);
             SetHoraInicio(horaInicio);
             SetHoraFin(horaFin);
             SetEstado("Reservado");
             SetClienteId(clienteId);
-            SetTipoTurnoId(tipoTurnoId);
-            SetCanchaId(complejoId, canchaNro);
+            SetTipoTurnoId(tipoTurnoId);      
+            SetCanchaId(complejoId, canchaNro); 
             SetFecha(fecha);
+        }
+
+ 
+        public Turno(int id, TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
+            : this(horaInicio, horaFin, clienteId, tipoTurnoId, complejoId, canchaNro, fecha)
+        {
+            SetId(id);
         }
         public void SetId(int id)
         {
-            if (id <= 0)
+            if (id < 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
             Id = id;
         }
@@ -49,7 +55,8 @@ namespace Modelo.Dominio
 
             if (canchaNro <= 0)
                 throw new ArgumentException("El CanchaNro debe ser mayor que 0.", nameof(canchaNro));
-
+            ComplejoId = complejoId;
+            CanchaNro = canchaNro;
         }
 
         public void SetHoraInicio(TimeOnly horaInicio)
@@ -83,6 +90,7 @@ namespace Modelo.Dominio
         {
             if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
+            TipoTurnoId = id;
 
         }
 

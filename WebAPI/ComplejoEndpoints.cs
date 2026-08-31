@@ -88,11 +88,11 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/complejos/{idComplejo}/horarios", async (int idComplejo, HorarioDTO dto, IHorarioServicio horarioServicio) =>
+            app.MapPost("/complejos/{idComplejo}/horarios", async (int idComplejo, HorarioCrearDTO dto, IHorarioServicio horarioServicio) =>
             {
                 try
                 {
-                    HorarioDTO horarioDTO = await horarioServicio.AddAsync(dto);
+                    HorarioDTO horarioDTO = await horarioServicio.AddAsync(dto,idComplejo);
                     return Results.Created($"/complejos/{idComplejo}/horarios/{horarioDTO.NroDia}", horarioDTO);
                 }
                 catch (ArgumentException ex)
@@ -101,11 +101,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/complejos/{idComplejo}/horarios/{numDia}", async (int idComplejo, int numDia, HorarioDTO dto, IHorarioServicio horarioServicio) =>
+            app.MapPut("/complejos/{idComplejo}/horarios/{numDia}", async (int idComplejo, int numDia, HorarioEditarDTO dto, IHorarioServicio horarioServicio) =>
             {
                 try
                 {
-                    var encontrado = await horarioServicio.UpdateAsync(dto);
+                    var encontrado = await horarioServicio.UpdateAsync(dto,idComplejo,numDia);
 
                     if (!encontrado)
                     {
@@ -152,11 +152,11 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/complejos/{idComplejo}/canchas", async (int idComplejo, CanchaDTO dto, ICanchaServicio canchaServicio) =>
+            app.MapPost("/complejos/{idComplejo}/canchas", async (int idComplejo, CanchaCrearDTO dto, ICanchaServicio canchaServicio) =>
             {
                 try
                 {
-                    CanchaDTO canchaDTO = await canchaServicio.AddAsync(dto);
+                    CanchaDTO canchaDTO = await canchaServicio.AddAsync(dto,idComplejo);
                     return Results.Created($"/complejos/{idComplejo}/canchas/{canchaDTO.Nro}", canchaDTO);
                 }
                 catch (ArgumentException ex)
@@ -165,11 +165,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, CanchaDTO dto, ICanchaServicio canchaServicio) =>
+            app.MapPut("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, CanchaCrearDTO dto, ICanchaServicio canchaServicio) =>
             {
                 try
                 {
-                    var encontrado = await canchaServicio.UpdateAsync(dto);
+                    var encontrado = await canchaServicio.UpdateAsync(dto, idComplejo,nro);
 
                     if (!encontrado)
                     {
@@ -216,11 +216,11 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, PrecioDTO dto, IPrecioServicio precioServicio) =>
+            app.MapPost("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, PrecioCrearDTO dto, IPrecioServicio precioServicio) =>
             {
                 try
                 {
-                    PrecioDTO precioDTO = await precioServicio.AddAsync(dto);
+                    PrecioDTO precioDTO = await precioServicio.AddAsync(dto, idComplejo,nroCancha);
                     return Results.Created($"/complejos/{idComplejo}/canchas/{nroCancha}/precios/{precioDTO.FechaDesde:yyyy-MM-dd}", precioDTO);
                 }
                 catch (ArgumentException ex)

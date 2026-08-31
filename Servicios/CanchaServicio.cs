@@ -9,18 +9,23 @@ namespace Servicios
     {
         private readonly ICanchaRepositorio canchaRepositorio;
 
-        public CanchaServicio(IHorarioRepositorio horarioRepositorio)
+        public CanchaServicio(ICanchaRepositorio canchaRepositorio)
         {
             this.canchaRepositorio = canchaRepositorio;
         }
-        public async Task<CanchaDTO> AddAsync(CanchaDTO dto)
+        public async Task<CanchaDTO> AddAsync(CanchaCrearDTO dto, int complejoId)
         {
 
-            Cancha cancha = new Cancha(dto.ComplejoId, dto.Nro, dto.TipoCanchaId);
+            Cancha cancha = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId);
 
             await canchaRepositorio.AddAsync(cancha);
 
-            return dto;
+            return new CanchaDTO
+            {
+                ComplejoId = complejoId,
+                Nro = dto.Nro,
+                TipoCanchaId = dto.TipoCanchaId
+            };
         }
 
         public async Task<bool> DeleteAsync(int id, int nro)
@@ -55,10 +60,10 @@ namespace Servicios
             }).ToList();
         }
 
-        public async Task<bool> UpdateAsync(CanchaDTO dto)
+        public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nro)
         {
 
-            Cancha cancha = new Cancha(dto.ComplejoId, dto.Nro, dto.TipoCanchaId);
+            Cancha cancha = new Cancha(complejoId, nro, dto.TipoCanchaId);
 
             return await canchaRepositorio.UpdateAsync(cancha);
         }

@@ -35,7 +35,14 @@ namespace Data
             {
                 return false;
             }
-            _context.Turnos.Update(turno);
+            existingTurno.SetHoraFin(turno.HoraFin);
+            existingTurno.SetHoraInicio(turno.HoraInicio);
+            existingTurno.SetEstado(turno.Estado);
+            existingTurno.SetFecha(turno.Fecha);
+            existingTurno.SetCanchaId(turno.ComplejoId, turno.CanchaNro);
+            existingTurno.SetClienteId(turno.Id);
+            existingTurno.SetMotivoCancelacion(turno.MotivoCancelacion);
+            existingTurno.SetTipoTurnoId(turno.TipoTurnoId);
             await _context.SaveChangesAsync();
             return true;
         }
