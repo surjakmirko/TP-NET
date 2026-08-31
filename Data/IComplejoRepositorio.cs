@@ -14,5 +14,6 @@ namespace Data
         Task<Complejo?> GetAsync(int id);
         Task<IEnumerable<Complejo>> GetAllAsync();
         Task<bool> UpdateAsync(Complejo complejo);
+        Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno);
     }
 }

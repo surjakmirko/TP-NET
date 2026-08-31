@@ -115,6 +115,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "LoginForm";
+            Load += LoginForm_Load_1;
             ResumeLayout(false);
             PerformLayout();
 

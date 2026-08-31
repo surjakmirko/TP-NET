@@ -21,11 +21,14 @@ namespace WindowsForms
             {
                 string usuario = usuarioCaja.Text;
                 string contraseña = contraseñaCaja.Text;
-                // Aquí puedes agregar la lógica para validar el usuario y la contraseña
-                if (await UsuarioRepositorioProvider.Instance.IniciarSesion(usuario, contraseña) != 0)
+                int idBuscado = await UsuarioRepositorioProvider.Instance.IniciarSesion(usuario, contraseña);
+                if (idBuscado != 0)
                 {
+                    this.Hide();
                     MessageBox.Show("Inicio de sesión exitoso");
-                    // Aquí puedes abrir el formulario principal de la aplicación
+                    SeleccionarComplejo formSeleccion = new SeleccionarComplejo(idBuscado);
+                    formSeleccion.Show();
+                    this.Close();
                 }
                 else
                 {
@@ -36,6 +39,11 @@ namespace WindowsForms
             {
                 MessageBox.Show($"Ocurrió un error: {ex.Message}");
             }
+        }
+
+        private void LoginForm_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

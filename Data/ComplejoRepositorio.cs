@@ -57,5 +57,9 @@ namespace Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno)
+        {
+            return await _context.Complejos.Where(c => c.DueñoId == idDueno).ToListAsync();
+        }
     }
 }

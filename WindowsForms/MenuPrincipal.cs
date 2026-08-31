@@ -12,9 +12,13 @@ namespace WindowsForms
 {
     public partial class MenuPrincipal : Form
     {
-        public MenuPrincipal()
+        private int _idComplejoSeleccionado;
+        private string _nombreComplejo;
+        public MenuPrincipal(int idComplejoSeleccionado, string nombreComplejo)
         {
             InitializeComponent();
+            _idComplejoSeleccionado = idComplejoSeleccionado;
+            _nombreComplejo = nombreComplejo;
         }
 
         private void MenuPrincipal_Load(object sender, EventArgs e)
