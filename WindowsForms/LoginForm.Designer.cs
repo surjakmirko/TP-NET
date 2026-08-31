@@ -112,6 +112,8 @@
             Controls.Add(contraseña);
             Controls.Add(usuarioCaja);
             Controls.Add(usuario);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "LoginForm";
             ResumeLayout(false);
             PerformLayout();
