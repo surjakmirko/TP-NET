@@ -11,4 +11,14 @@ namespace DTOs
         public int DueñoId {  get; set; }
         
     }
+
+    public class ComplejoCrearDTO
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public int EncargadoId { get; set; }
+        public int LocalidadId { get; set; }
+        public int DueñoId { get; set; }
+
+    }
 }

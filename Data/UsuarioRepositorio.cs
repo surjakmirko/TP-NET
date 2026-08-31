@@ -44,9 +44,16 @@ namespace Data
             {
                 return false;
             }
-            _context.Usuarios.Update(usuario);
-            int filasAfectadas = await _context.SaveChangesAsync();
-            return filasAfectadas > 0;
+            existingUsuario.SetEmail(usuario.Email);
+            existingUsuario.SetTelefono(usuario.Telefono);
+            existingUsuario.SetPassword(usuario.Password);
+            existingUsuario.SetTipoUsuarioId(usuario.TipoUsuarioId);
+            existingUsuario.SetPersonaFisicaDni(usuario.PersonaFisicaDni);
+            existingUsuario.SetPersonaJuridicaCuit(usuario.PersonaJuridicaCuit);
+
+            await _context.SaveChangesAsync();
+            return true;
+            
         }
 
         public async Task<bool> DeleteAsync(int id)

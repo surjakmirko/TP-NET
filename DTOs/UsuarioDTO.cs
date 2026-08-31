@@ -11,4 +11,15 @@
         public int TipoUsuarioId { get; set; }
 
     }
+
+    public class UsuarioCrearDTO
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty; 
+        public string Password { get; set; } = string.Empty;
+        public string? PersonaFisicaDni { get; set; } = string.Empty;
+        public string? PersonaJuridicaCuit { get; set; } = string.Empty;
+        public int TipoUsuarioId { get; set; }
+
+    }
 }

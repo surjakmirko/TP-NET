@@ -25,7 +25,7 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/complejos", async (ComplejoDTO dto, IComplejoServicio complejoServicio) =>
+            app.MapPost("/complejos", async (ComplejoCrearDTO dto, IComplejoServicio complejoServicio) =>
             {
                 try
                 {
