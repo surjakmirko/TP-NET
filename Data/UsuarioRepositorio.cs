@@ -66,5 +66,11 @@ namespace Data
             return await _context.Usuarios
                 .AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
+        public async Task<int> IniciarSesion(string email, string password)
+        {
+            Usuario? usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Password == password);
+            return usuario?.Id ?? 0;
+        }
     }
 }

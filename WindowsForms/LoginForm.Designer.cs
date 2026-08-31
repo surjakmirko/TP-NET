@@ -28,66 +28,90 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            label2 = new Label();
-            button1 = new Button();
+            usuario = new Label();
+            usuarioCaja = new TextBox();
+            contraseñaCaja = new TextBox();
+            contraseña = new Label();
+            iniciarSesión = new Button();
+            titulo = new Label();
+            olvideContraseña = new LinkLabel();
             SuspendLayout();
             // 
-            // label1
+            // usuario
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(75, 49);
-            label1.Name = "label1";
-            label1.Size = new Size(47, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Usuario";
-            label1.Click += label1_Click;
+            usuario.AutoSize = true;
+            usuario.Location = new Point(169, 132);
+            usuario.Name = "usuario";
+            usuario.Size = new Size(47, 15);
+            usuario.TabIndex = 0;
+            usuario.Text = "Usuario";
             // 
-            // textBox1
+            // usuarioCaja
             // 
-            textBox1.Location = new Point(75, 67);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(134, 23);
-            textBox1.TabIndex = 1;
+            usuarioCaja.Location = new Point(169, 150);
+            usuarioCaja.Name = "usuarioCaja";
+            usuarioCaja.Size = new Size(134, 23);
+            usuarioCaja.TabIndex = 1;
             // 
-            // textBox2
+            // contraseñaCaja
             // 
-            textBox2.Location = new Point(75, 135);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(134, 23);
-            textBox2.TabIndex = 3;
-            textBox2.TextChanged += textBox2_TextChanged;
+            contraseñaCaja.Location = new Point(169, 218);
+            contraseñaCaja.Name = "contraseñaCaja";
+            contraseñaCaja.Size = new Size(134, 23);
+            contraseñaCaja.TabIndex = 3;
+            contraseñaCaja.UseSystemPasswordChar = true;
             // 
-            // label2
+            // contraseña
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(75, 117);
-            label2.Name = "label2";
-            label2.Size = new Size(67, 15);
-            label2.TabIndex = 2;
-            label2.Text = "Contraseña";
-            label2.Click += this.label2_Click;
+            contraseña.AutoSize = true;
+            contraseña.Location = new Point(169, 200);
+            contraseña.Name = "contraseña";
+            contraseña.Size = new Size(67, 15);
+            contraseña.TabIndex = 2;
+            contraseña.Text = "Contraseña";
             // 
-            // button1
+            // iniciarSesión
             // 
-            button1.Location = new Point(112, 189);
-            button1.Name = "button1";
-            button1.Size = new Size(97, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Iniciar Sesión";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            iniciarSesión.Location = new Point(231, 298);
+            iniciarSesión.Name = "iniciarSesión";
+            iniciarSesión.Size = new Size(97, 23);
+            iniciarSesión.TabIndex = 4;
+            iniciarSesión.Text = "Iniciar Sesión";
+            iniciarSesión.UseVisualStyleBackColor = true;
+            iniciarSesión.Click += IniciarSesion_Click;
+            // 
+            // titulo
+            // 
+            titulo.AutoSize = true;
+            titulo.Font = new Font("Segoe UI", 13F);
+            titulo.Location = new Point(136, 81);
+            titulo.Name = "titulo";
+            titulo.Size = new Size(207, 25);
+            titulo.TabIndex = 5;
+            titulo.Text = "Bienvenido a TurnoLibre!";
+            titulo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // olvideContraseña
+            // 
+            olvideContraseña.AutoSize = true;
+            olvideContraseña.LinkColor = Color.Black;
+            olvideContraseña.Location = new Point(169, 244);
+            olvideContraseña.Name = "olvideContraseña";
+            olvideContraseña.Size = new Size(119, 15);
+            olvideContraseña.TabIndex = 6;
+            olvideContraseña.TabStop = true;
+            olvideContraseña.Text = "Olvidé mi contraseña";
             // 
             // LoginForm
             // 
-            ClientSize = new Size(284, 261);
-            Controls.Add(button1);
-            Controls.Add(textBox2);
-            Controls.Add(label2);
-            Controls.Add(textBox1);
-            Controls.Add(label1);
+            ClientSize = new Size(478, 403);
+            Controls.Add(olvideContraseña);
+            Controls.Add(titulo);
+            Controls.Add(iniciarSesión);
+            Controls.Add(contraseñaCaja);
+            Controls.Add(contraseña);
+            Controls.Add(usuarioCaja);
+            Controls.Add(usuario);
             Name = "LoginForm";
             ResumeLayout(false);
             PerformLayout();
@@ -97,10 +121,12 @@
         #endregion
 
 
-        private Label label1;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private Label label2;
-        private Button button1;
+        private Label usuario;
+        private TextBox usuarioCaja;
+        private TextBox contraseñaCaja;
+        private Label contraseña;
+        private Button iniciarSesión;
+        private Label titulo;
+        private LinkLabel olvideContraseña;
     }
 }

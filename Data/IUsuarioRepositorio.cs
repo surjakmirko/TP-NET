@@ -10,6 +10,6 @@ namespace Data
         Task<IEnumerable<Usuario>> GetAllAsync();
         Task<bool> UpdateAsync(Usuario cliente);
         Task<bool> EmailExistsAsync(string email);
-        //Task<IEnumerable<Cliente>> GetByCriteriaAsync(ClienteCriteria criteria);
+        Task<int> IniciarSesion(string email, string password);
     }
 }

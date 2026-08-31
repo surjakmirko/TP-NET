@@ -87,13 +87,13 @@ namespace Modelo.Dominio
         }
         public void SetPersonaFisicaDni(string personafisicadni)
         {
-            if (personafisicadni.Length < 8)
+            if (personafisicadni != null && personafisicadni.Length < 8)
                 throw new ArgumentException("La longitud del dni debe ser mayor a 8 caracteres", nameof(personafisicadni));
             PersonaFisicaDni = personafisicadni;
         }
         public void SetPersonaJuridicaCuit(string personajuridicacuit)
         {
-            if (personajuridicacuit.Length <11)
+            if (personajuridicacuit != null && personajuridicacuit.Length < 11)
                 throw new ArgumentException("La longitud del cuit debe ser mayor a 11 caracteres", nameof(personajuridicacuit));
             PersonaJuridicaCuit = personajuridicacuit;
         }
