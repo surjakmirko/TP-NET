@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Modelo.Dominio
 {
     public class Usuario
@@ -31,24 +32,29 @@ namespace Modelo.Dominio
 
 
 
-        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string personaFisicaDni,string personaJuridicaCuit)
+        // Constructor para CREAR nuevos usuarios (Sin ID, SQL Server asigna el autoincremental)
+        public Usuario(string email, string telefono, string password, int tipoUsuarioId, string? personaFisicaDni = null, string? personaJuridicaCuit = null)
         {
-            SetId(id);
             SetEmail(email);
             SetTelefono(telefono);
             SetPassword(password);
             SetTipoUsuarioId(tipoUsuarioId);
             SetPersonaFisicaDni(personaFisicaDni);
             SetPersonaJuridicaCuit(personaJuridicaCuit);
-
-
         }
 
+        // Constructor completo para RECONSTRUIR usuarios existentes (por ejemplo, desde DTOs o tests)
+        public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string? personaFisicaDni = null, string? personaJuridicaCuit = null)
+            : this(email, telefono, password, tipoUsuarioId, personaFisicaDni, personaJuridicaCuit)
+        {
+            SetId(id);
+        }
 
         public void SetId(int id)
         {
-            if (id <= 0)
-                throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
+ 
+            if (id < 0)
+                throw new ArgumentException("El Id no puede ser negativo.", nameof(id));
             Id = id;
         }
         public void SetEmail(string email)

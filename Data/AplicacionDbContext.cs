@@ -53,6 +53,44 @@ namespace Data
                 .WithMany(pj => pj.Usuarios)
                 .HasForeignKey(u => u.PersonaJuridicaCuit);
 
+            modelBuilder.Entity<TipoUsuario>()
+                .HasKey(tp => tp.Id);
+
+            modelBuilder.Entity<TipoUsuario>().HasData(
+                new TipoUsuario(1, "Administrador"),
+                new TipoUsuario(2, "Encargado"),
+                new TipoUsuario(3, "Cliente")
+            );
+
+            modelBuilder.Entity<TipoCancha>()
+                .HasKey(tc => tc.Id);
+
+            modelBuilder.Entity<TipoCancha>().HasData(
+                new TipoCancha(1, "Futbol 11"),
+                new TipoCancha(2, "Futbol 5"),
+                new TipoCancha(3, "Futbol 7"),
+                new TipoCancha(4, "Futsal"),
+                new TipoCancha(5, "Padel"),
+                new TipoCancha(6, "Tenis"),
+                new TipoCancha(7, "Ping Pong"),
+                new TipoCancha(8, "Hockey"),
+                new TipoCancha(9, "Basket"),
+                new TipoCancha(10, "Voley")
+            );
+
+            modelBuilder.Entity<TipoTurno>()
+                .HasKey(tt => tt.Id);
+
+            modelBuilder.Entity<TipoTurno>().HasData(
+                new TipoTurno(1,"Normal","Turno basico"),
+                new TipoTurno(2, "Fijo", "Turno reservado periodicamente"),
+                new TipoTurno(3, "Evento", "Turno reservado para un evento en particular")
+
+            );
+
+
+
+
             //COMPLEJO
             modelBuilder.Entity<Complejo>()
                 .HasKey(c => c.Id);

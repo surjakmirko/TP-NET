@@ -8,8 +8,7 @@
         public string Password { get;  set; }
         public string? PersonaFisicaDni { get;  set; }
         public string? PersonaJuridicaCuit { get;  set; }
-        public int TipoUsuarioId { get;  set; }
-        public string? TipoUsuarioNombre { get;  set; }
+        public int TipoUsuarioId { get; set; }
 
     }
 }

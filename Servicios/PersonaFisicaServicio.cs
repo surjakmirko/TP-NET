@@ -16,11 +16,9 @@ namespace Servicios
 
             public async Task<PersonaFisicaDTO> AddAsync(PersonaFisicaDTO dto)
             {
-                PersonaFisica personaFisica = new PersonaFisica(dto.Dni, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento);
+                PersonaFisica personaFisica = new PersonaFisica(dto.Nombre, dto.Apellido, dto.Dni, dto.Fecha_Nacimiento);
 
                 await personaFisicaRepositorio.AddAsync(personaFisica);
-
-                dto.Dni = personaFisica.Dni;
 
                 return dto;
             }

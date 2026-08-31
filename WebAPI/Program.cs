@@ -11,9 +11,11 @@ builder.Services.AddSwaggerGen();
 
 
 
-// 1. REGISTRAR EL DBCONTEXT EN EL CONTENEDOR (OBLIGATORIO)
+// Lee la conexión del appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AplicacionDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 // Add Dependency Injection
 

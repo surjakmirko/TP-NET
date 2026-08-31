@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AplicacionDbContext))]
-    partial class AplicacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260831144810_SeedTipoUsuario")]
+    partial class SeedTipoUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,58 +223,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoCanchas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Deporte = "Futbol 11"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Deporte = "Futbol 5"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Deporte = "Futbol 7"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Deporte = "Futsal"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Deporte = "Padel"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Deporte = "Tenis"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Deporte = "Ping Pong"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Deporte = "Hockey"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Deporte = "Basket"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Deporte = "Voley"
-                        });
                 });
 
             modelBuilder.Entity("Modelo.Dominio.TipoTurno", b =>
@@ -293,26 +244,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoTurnos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descripcion = "Turno basico",
-                            Nombre = "Normal"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Descripcion = "Turno reservado periodicamente",
-                            Nombre = "Fijo"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Descripcion = "Turno reservado para un evento en particular",
-                            Nombre = "Evento"
-                        });
                 });
 
             modelBuilder.Entity("Modelo.Dominio.TipoUsuario", b =>
