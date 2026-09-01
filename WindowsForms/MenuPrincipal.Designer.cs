@@ -71,7 +71,7 @@
             btnModificarComplejo.TabIndex = 3;
             btnModificarComplejo.Text = "Modificar";
             btnModificarComplejo.UseVisualStyleBackColor = true;
-            btnModificarComplejo.Click += button1_Click;
+            btnModificarComplejo.Click += btnModificarComplejo_Click;
             // 
             // btnVerComplejo
             // 

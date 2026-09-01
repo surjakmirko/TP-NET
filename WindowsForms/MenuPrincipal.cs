@@ -26,9 +26,8 @@ namespace WindowsForms
             bienvenido.Text = $"¡Bienvenido a {_nombreComplejo}!";
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
+        private void btnModificarComplejo_Click(object sender, EventArgs e)
+        {   
             ModificarComplejo formModificar = new ModificarComplejo(_idComplejoSeleccionado);
             formModificar.ShowDialog();
         }
@@ -45,7 +44,8 @@ namespace WindowsForms
 
         private void btnVerComplejo_Click(object sender, EventArgs e)
         {
-
+            VerComplejo formVerComplejo = new VerComplejo(_idComplejoSeleccionado);
+            formVerComplejo.ShowDialog();
         }
     }
 }

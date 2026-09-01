@@ -61,6 +61,11 @@ namespace WindowsForms
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
+        private void btnCerrarSesión_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
 
