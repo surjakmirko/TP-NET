@@ -1,6 +1,7 @@
 ﻿using Modelo.Dominio;
 using Data;
 using DTOs;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace Servicios
@@ -13,14 +14,20 @@ namespace Servicios
         {
             this.horarioRepositorio = horarioRepositorio;
         }
-        public async Task<HorarioDTO> AddAsync(HorarioDTO dto)
+        public async Task<HorarioDTO> AddAsync(HorarioCrearDTO dto, int idComplejo)
         {
 
-            Horario horario = new Horario(dto.ComplejoId, dto.NroDia, dto.HoraApertura, dto.HoraCierre);
+            Horario horario = new Horario(idComplejo, dto.NroDia, dto.HoraApertura, dto.HoraCierre);
 
             await horarioRepositorio.AddAsync(horario);
 
-            return dto;
+            return new HorarioDTO {
+                ComplejoId = horario.ComplejoId,
+                NroDia = horario.NroDia,
+                HoraApertura = horario.HoraApertura,
+                HoraCierre = horario.HoraCierre
+            }
+            ;
         }
 
         public async Task<bool> DeleteAsync(int id,int dia)
@@ -57,10 +64,10 @@ namespace Servicios
             }).ToList();
         }
 
-        public async Task<bool> UpdateAsync(HorarioDTO dto)
+        public async Task<bool> UpdateAsync(HorarioEditarDTO dto,int complejoId, int numDia)
         {
 
-            Horario horario = new Horario(dto.ComplejoId, dto.NroDia, dto.HoraApertura, dto.HoraCierre);
+            Horario horario = new Horario(complejoId, numDia, dto.HoraApertura, dto.HoraCierre);
 
             return await horarioRepositorio.UpdateAsync(horario);
         }

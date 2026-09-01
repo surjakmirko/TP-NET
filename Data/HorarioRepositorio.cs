@@ -36,7 +36,11 @@ namespace Data
             {
                 return false;
             }
-            _context.Horarios.Update(horarioBuscado);
+            horarioBuscado.SetNroDia(horario.NroDia);
+            horarioBuscado.SetHoraApertura(horario.HoraApertura);
+            horarioBuscado.SetHoraCierre(horario.HoraCierre);
+
+
             await _context.SaveChangesAsync();
             return true;
         }

@@ -10,10 +10,10 @@ namespace Data
     public interface IPrecioRepositorio
     {
         Task AddAsync(Precio precio);
-        Task<bool> DeleteAsync(int id, int nro, DateOnly fechaDesde);
-        Task<Precio?> GetAsync(int id, int nro, DateOnly fechaDesde);
+       
+        Task<Precio?> GetAsync(int comjplejoId, int nro, DateOnly fechaDesde);
         Task<IEnumerable<Precio>> GetAllAsync(int id, int nro);
-        Task<bool> UpdateAsync(Precio precio);
+       
         Task<bool> FechaDesdeExistsAsync(DateOnly fechaDesde);
     }
 }

@@ -8,4 +8,20 @@ namespace DTOs
         public TimeOnly HoraApertura { get; set; }
         public TimeOnly HoraCierre { get; set; }
     }
+
+    public class HorarioCrearDTO
+    {
+        
+        public int NroDia { get; set; }
+        public TimeOnly HoraApertura { get; set; }
+        public TimeOnly HoraCierre { get; set; }
+    }
+
+
+    public class HorarioEditarDTO
+    {
+
+        public TimeOnly HoraApertura { get; set; }
+        public TimeOnly HoraCierre { get; set; }
+    }
 }

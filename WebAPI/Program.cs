@@ -62,8 +62,8 @@ app.MapComplejoEndpoints();
 app.MapTipoCanchaEndpoints();
 app.MapTipoTurnoEndpoints();
 app.MapProvinciaEndpoints();
-app.MapLocalidadEndpoints();   
-
+app.MapLocalidadEndpoints();
+app.MapTurnoEndpoints();
 
 
 app.Run();

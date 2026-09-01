@@ -4,7 +4,6 @@ namespace Modelo.Dominio
 {
     public class Precio
     {
-        public int Id { get; private set; }
         public decimal PrecioBase { get; private set; }
         public decimal PrecioAdicional { get; private set; }
         public decimal PrecioSena { get; private set; }

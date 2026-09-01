@@ -14,16 +14,27 @@ namespace Servicios
         {
             this.turnoRepositorio = turnoRepositorio;
         }
-        public async Task<TurnoDTO> AddAsync(TurnoDTO dto)
+        public async Task<TurnoDTO> AddAsync(TurnoCrearDTO dto)
         {
 
-            Turno turno = new Turno(dto.Id, dto.HoraInicio, dto.HoraFin,dto.ClienteId,dto.TipoTurnoId,dto.ComplejoId,dto.CanchaNro,dto.Fecha);
+            Turno turno = new Turno(dto.HoraInicio, dto.HoraFin,dto.ClienteId,dto.TipoTurnoId,dto.ComplejoId,dto.CanchaNro,dto.Fecha);
 
-            dto.Id = turno.Id;
 
             await turnoRepositorio.AddAsync(turno);
 
-            return dto;
+            return new TurnoDTO
+            {
+                Id = turno.Id,
+                HoraInicio = turno.HoraInicio,
+                HoraFin = turno.HoraFin,
+                ClienteId = turno.ClienteId,
+                TipoTurnoId = turno.TipoTurnoId,
+                ComplejoId = turno.ComplejoId,
+                CanchaNro = turno.CanchaNro,
+                Fecha = turno.Fecha,
+                Estado = turno.Estado,
+                MotivoCancelacion = turno.MotivoCancelacion
+            };
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -47,7 +58,9 @@ namespace Servicios
                 TipoTurnoId=turno.TipoTurnoId,
                 ComplejoId=turno.ComplejoId,
                 CanchaNro=turno.CanchaNro,
-                Fecha=turno.Fecha
+                Fecha=turno.Fecha,
+                Estado = turno.Estado,
+                MotivoCancelacion = turno.MotivoCancelacion
 
             };
         }
@@ -65,7 +78,9 @@ namespace Servicios
                 TipoTurnoId = turno.TipoTurnoId,
                 ComplejoId = turno.ComplejoId,
                 CanchaNro = turno.CanchaNro,
-                Fecha = turno.Fecha
+                Fecha = turno.Fecha,
+                Estado = turno.Estado,
+                MotivoCancelacion = turno.MotivoCancelacion
             }).ToList();
         }
 
