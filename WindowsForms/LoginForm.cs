@@ -4,7 +4,6 @@ namespace WindowsForms
 {
     public partial class LoginForm : Form
     {
-        private readonly UsuarioRepositorio usuarioRepositorio;
         public LoginForm()
         {
             InitializeComponent();
@@ -27,7 +26,7 @@ namespace WindowsForms
                     this.Hide();
                     MessageBox.Show("Inicio de sesión exitoso");
                     SeleccionarComplejo formSeleccion = new SeleccionarComplejo(idBuscado);
-                    formSeleccion.Show();
+                    formSeleccion.ShowDialog();
                     this.Close();
                 }
                 else

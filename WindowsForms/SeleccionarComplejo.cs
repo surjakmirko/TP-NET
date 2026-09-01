@@ -15,7 +15,6 @@ namespace WindowsForms
     public partial class SeleccionarComplejo : Form
     {
         private int _idDueno;
-        private readonly ComplejoRepositorio complejoRepositorio;
         public SeleccionarComplejo(int idDueno)
         {
             InitializeComponent();
@@ -30,15 +29,14 @@ namespace WindowsForms
         {
             try
             {
-                var listaComplejos = await complejoRepositorio.GetComplejosByIdDueno(_idDueno);
+                var listaComplejos = await ComplejoRepositorioProvider.Instance.GetComplejosByIdDueno(_idDueno);
                 foreach (var complejo in listaComplejos)
                 {
                     Button btn = new Button();
                     btn.Text = complejo.Nombre;
                     btn.Tag = complejo.Id;
                     btn.Size = new Size(180, 80);
-                    btn.Font = new Font("Arial", 11, FontStyle.Bold);
-                    btn.BackColor = Color.LightSteelBlue;
+                    btn.TextAlign = ContentAlignment.MiddleCenter;
                     btn.Click += BotonComplejo_Click;
                     flowLayoutPanelComplejos.Controls.Add(btn);
                 }
@@ -55,14 +53,13 @@ namespace WindowsForms
         private void BotonComplejo_Click(object sender, EventArgs e)
         {
             Button botonPresionado = (Button)sender;
-                int idComplejoSeleccionado = (int)botonPresionado.Tag;
-                string nombreComplejo = botonPresionado.Text;
-
-                MenuPrincipal formMenu = new MenuPrincipal(idComplejoSeleccionado, nombreComplejo);
-                this.Hide();
-                formMenu.ShowDialog();
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+            int idComplejoSeleccionado = (int)botonPresionado.Tag;
+            string nombreComplejo = botonPresionado.Text;
+            MenuPrincipal formMenu = new MenuPrincipal(idComplejoSeleccionado, nombreComplejo);
+            this.Hide();
+            formMenu.ShowDialog();
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

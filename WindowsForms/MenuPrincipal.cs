@@ -23,12 +23,14 @@ namespace WindowsForms
 
         private void MenuPrincipal_Load(object sender, EventArgs e)
         {
-
+            bienvenido.Text = $"¡Bienvenido a {_nombreComplejo}!";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            this.Close();
+            ModificarComplejo formModificar = new ModificarComplejo(_idComplejoSeleccionado);
+            formModificar.ShowDialog();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -37,6 +39,11 @@ namespace WindowsForms
         }
 
         private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnVerComplejo_Click(object sender, EventArgs e)
         {
 
         }
