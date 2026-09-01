@@ -35,16 +35,16 @@
             // flowLayoutPanelComplejos
             // 
             flowLayoutPanelComplejos.Dock = DockStyle.Bottom;
-            flowLayoutPanelComplejos.Location = new Point(0, 79);
+            flowLayoutPanelComplejos.Location = new Point(0, 60);
             flowLayoutPanelComplejos.Name = "flowLayoutPanelComplejos";
-            flowLayoutPanelComplejos.Size = new Size(674, 371);
+            flowLayoutPanelComplejos.Size = new Size(674, 391);
             flowLayoutPanelComplejos.TabIndex = 0;
             // 
             // seleccionarComplejoTitulo
             // 
             seleccionarComplejoTitulo.AutoSize = true;
             seleccionarComplejoTitulo.Font = new Font("Segoe UI", 18F);
-            seleccionarComplejoTitulo.Location = new Point(215, 28);
+            seleccionarComplejoTitulo.Location = new Point(213, 9);
             seleccionarComplejoTitulo.Name = "seleccionarComplejoTitulo";
             seleccionarComplejoTitulo.Size = new Size(245, 32);
             seleccionarComplejoTitulo.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(674, 450);
+            ClientSize = new Size(674, 451);
             Controls.Add(seleccionarComplejoTitulo);
             Controls.Add(flowLayoutPanelComplejos);
             Name = "SeleccionarComplejo";

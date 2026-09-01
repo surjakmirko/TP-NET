@@ -7,6 +7,7 @@ namespace WindowsForms
         public LoginForm()
         {
             InitializeComponent();
+            this.AcceptButton = iniciarSesión;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -20,7 +21,18 @@ namespace WindowsForms
             {
                 string usuario = usuarioCaja.Text;
                 string contraseña = contraseñaCaja.Text;
-                int idBuscado = await UsuarioRepositorioProvider.Instance.IniciarSesion(usuario, contraseña);
+
+                if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contraseña))
+                {
+                    MessageBox.Show(
+                        "Por favor, completá ambos campos para iniciar sesión.",
+                        "Campos incompletos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+                    int idBuscado = await UsuarioRepositorioProvider.Instance.IniciarSesion(usuario, contraseña);
                 if (idBuscado != 0)
                 {
                     this.Hide();
@@ -43,6 +55,23 @@ namespace WindowsForms
         private void LoginForm_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void botonCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private bool _mostrarContrasena = false;
+
+        private void mostrarPassword_Click(object sender, EventArgs e)
+        {
+            _mostrarContrasena = !_mostrarContrasena;
+
+            // Si es true, muestra los caracteres; si es false, los oculta como asteriscos/puntos
+            contraseñaCaja.UseSystemPasswordChar = !_mostrarContrasena;
+
+            
         }
     }
 }
