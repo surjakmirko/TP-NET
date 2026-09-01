@@ -45,7 +45,7 @@
             // 
             // botonCancelar
             // 
-            botonCancelar.Location = new Point(267, 258);
+            botonCancelar.Location = new Point(233, 264);
             botonCancelar.Name = "botonCancelar";
             botonCancelar.Size = new Size(75, 23);
             botonCancelar.TabIndex = 8;
@@ -56,7 +56,7 @@
             // usuario
             // 
             usuario.AutoSize = true;
-            usuario.Location = new Point(169, 132);
+            usuario.Location = new Point(135, 138);
             usuario.Name = "usuario";
             usuario.Size = new Size(47, 15);
             usuario.TabIndex = 0;
@@ -64,14 +64,14 @@
             // 
             // usuarioCaja
             // 
-            usuarioCaja.Location = new Point(169, 150);
+            usuarioCaja.Location = new Point(135, 156);
             usuarioCaja.Name = "usuarioCaja";
             usuarioCaja.Size = new Size(175, 23);
             usuarioCaja.TabIndex = 1;
             // 
             // contraseñaCaja
             // 
-            contraseñaCaja.Location = new Point(169, 218);
+            contraseñaCaja.Location = new Point(135, 224);
             contraseñaCaja.Name = "contraseñaCaja";
             contraseñaCaja.Size = new Size(173, 23);
             contraseñaCaja.TabIndex = 3;
@@ -80,7 +80,7 @@
             // contraseña
             // 
             contraseña.AutoSize = true;
-            contraseña.Location = new Point(169, 200);
+            contraseña.Location = new Point(135, 206);
             contraseña.Name = "contraseña";
             contraseña.Size = new Size(67, 15);
             contraseña.TabIndex = 2;
@@ -88,7 +88,7 @@
             // 
             // iniciarSesión
             // 
-            iniciarSesión.Location = new Point(164, 258);
+            iniciarSesión.Location = new Point(130, 264);
             iniciarSesión.Name = "iniciarSesión";
             iniciarSesión.Size = new Size(97, 23);
             iniciarSesión.TabIndex = 4;
@@ -99,10 +99,10 @@
             // titulo
             // 
             titulo.AutoSize = true;
-            titulo.Font = new Font("Segoe UI", 13F);
-            titulo.Location = new Point(139, 69);
+            titulo.Font = new Font("Segoe UI", 16F);
+            titulo.Location = new Point(110, 48);
             titulo.Name = "titulo";
-            titulo.Size = new Size(207, 25);
+            titulo.Size = new Size(255, 30);
             titulo.TabIndex = 5;
             titulo.Text = "Bienvenido a TurnoLibre!";
             titulo.TextAlign = ContentAlignment.MiddleCenter;
@@ -110,7 +110,7 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(73, 59);
+            pictureBox1.Location = new Point(44, 38);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(60, 60);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -120,16 +120,17 @@
             // subtitulo
             // 
             subtitulo.AutoSize = true;
-            subtitulo.Location = new Point(187, 104);
+            subtitulo.Font = new Font("Segoe UI", 11F);
+            subtitulo.Location = new Point(130, 107);
             subtitulo.Name = "subtitulo";
-            subtitulo.Size = new Size(133, 15);
+            subtitulo.Size = new Size(170, 20);
             subtitulo.TabIndex = 9;
-            subtitulo.Text = "Ingrese sus credenciales";
+            subtitulo.Text = "Ingrese sus credenciales:";
             subtitulo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // mostrarPassword
             // 
-            mostrarPassword.Location = new Point(348, 218);
+            mostrarPassword.Location = new Point(314, 224);
             mostrarPassword.Name = "mostrarPassword";
             mostrarPassword.Size = new Size(35, 23);
             mostrarPassword.TabIndex = 10;
