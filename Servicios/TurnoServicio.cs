@@ -32,6 +32,7 @@ namespace Servicios
                 ComplejoId = turno.ComplejoId,
                 CanchaNro = turno.CanchaNro,
                 Fecha = turno.Fecha,
+                Estado = turno.Estado,
                 MotivoCancelacion = turno.MotivoCancelacion
             };
         }
@@ -58,6 +59,7 @@ namespace Servicios
                 ComplejoId=turno.ComplejoId,
                 CanchaNro=turno.CanchaNro,
                 Fecha=turno.Fecha,
+                Estado = turno.Estado,
                 MotivoCancelacion = turno.MotivoCancelacion
 
             };
@@ -77,6 +79,7 @@ namespace Servicios
                 ComplejoId = turno.ComplejoId,
                 CanchaNro = turno.CanchaNro,
                 Fecha = turno.Fecha,
+                Estado = turno.Estado,
                 MotivoCancelacion = turno.MotivoCancelacion
             }).ToList();
         }

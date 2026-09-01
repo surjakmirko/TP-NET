@@ -40,7 +40,7 @@ namespace Data
             existingTurno.SetEstado(turno.Estado);
             existingTurno.SetFecha(turno.Fecha);
             existingTurno.SetCanchaId(turno.ComplejoId, turno.CanchaNro);
-            existingTurno.SetClienteId(turno.Id);
+            existingTurno.SetClienteId(turno.ClienteId);
             existingTurno.SetMotivoCancelacion(turno.MotivoCancelacion);
             existingTurno.SetTipoTurnoId(turno.TipoTurnoId);
             await _context.SaveChangesAsync();
