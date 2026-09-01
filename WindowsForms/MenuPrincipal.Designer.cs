@@ -33,11 +33,10 @@
             btnModificarComplejo = new Button();
             btnVerComplejo = new Button();
             btnVerCancha = new Button();
-            btnModificarCancha = new Button();
             btnDarDeAltaCancha = new Button();
             label1 = new Label();
-            btnBorrarCancha = new Button();
             btnCerrarSesion = new Button();
+            cambiarComplejoBoton = new Button();
             SuspendLayout();
             // 
             // bienvenido
@@ -87,28 +86,18 @@
             // btnVerCancha
             // 
             btnVerCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnVerCancha.Location = new Point(360, 242);
+            btnVerCancha.Location = new Point(329, 244);
             btnVerCancha.Name = "btnVerCancha";
             btnVerCancha.Size = new Size(188, 33);
             btnVerCancha.TabIndex = 8;
             btnVerCancha.Text = "Ver";
             btnVerCancha.UseVisualStyleBackColor = true;
-            // 
-            // btnModificarCancha
-            // 
-            btnModificarCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnModificarCancha.Location = new Point(360, 300);
-            btnModificarCancha.Name = "btnModificarCancha";
-            btnModificarCancha.Size = new Size(188, 33);
-            btnModificarCancha.TabIndex = 7;
-            btnModificarCancha.Text = "Modificar";
-            btnModificarCancha.UseVisualStyleBackColor = true;
-            btnModificarCancha.Click += button2_Click;
+            btnVerCancha.Click += btnVerCancha_Click;
             // 
             // btnDarDeAltaCancha
             // 
             btnDarDeAltaCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnDarDeAltaCancha.Location = new Point(360, 186);
+            btnDarDeAltaCancha.Location = new Point(329, 186);
             btnDarDeAltaCancha.Name = "btnDarDeAltaCancha";
             btnDarDeAltaCancha.Size = new Size(188, 33);
             btnDarDeAltaCancha.TabIndex = 6;
@@ -126,16 +115,6 @@
             label1.TabIndex = 5;
             label1.Text = "Mis Canchas";
             // 
-            // btnBorrarCancha
-            // 
-            btnBorrarCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnBorrarCancha.Location = new Point(360, 361);
-            btnBorrarCancha.Name = "btnBorrarCancha";
-            btnBorrarCancha.Size = new Size(188, 33);
-            btnBorrarCancha.TabIndex = 9;
-            btnBorrarCancha.Text = "Borrar";
-            btnBorrarCancha.UseVisualStyleBackColor = true;
-            // 
             // btnCerrarSesion
             // 
             btnCerrarSesion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -145,17 +124,26 @@
             btnCerrarSesion.TabIndex = 10;
             btnCerrarSesion.Text = "Cerrar Sesion";
             btnCerrarSesion.UseVisualStyleBackColor = true;
-            btnCerrarSesion.Click += button4_Click;
+            btnCerrarSesion.Click += btnCerrarSesion_Click;
+            // 
+            // cambiarComplejoBoton
+            // 
+            cambiarComplejoBoton.Location = new Point(12, 488);
+            cambiarComplejoBoton.Name = "cambiarComplejoBoton";
+            cambiarComplejoBoton.Size = new Size(188, 33);
+            cambiarComplejoBoton.TabIndex = 11;
+            cambiarComplejoBoton.Text = "Cambiar Complejo";
+            cambiarComplejoBoton.UseVisualStyleBackColor = true;
+            cambiarComplejoBoton.Click += cambiarComplejoBoton_Click;
             // 
             // MenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(606, 533);
+            Controls.Add(cambiarComplejoBoton);
             Controls.Add(btnCerrarSesion);
-            Controls.Add(btnBorrarCancha);
             Controls.Add(btnVerCancha);
-            Controls.Add(btnModificarCancha);
             Controls.Add(btnDarDeAltaCancha);
             Controls.Add(label1);
             Controls.Add(btnVerComplejo);
@@ -178,10 +166,9 @@
         private Button btnModificarComplejo;
         private Button btnVerComplejo;
         private Button btnVerCancha;
-        private Button btnModificarCancha;
         private Button btnDarDeAltaCancha;
         private Label label1;
-        private Button btnBorrarCancha;
         private Button btnCerrarSesion;
+        private Button cambiarComplejoBoton;
     }
 }
