@@ -47,5 +47,13 @@ namespace WindowsForms
         {
 
         }
+
+        private void btnDarDeAltaCancha_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            AltaCancha formAltaCancha = new AltaCancha(_idComplejoSeleccionado);
+            formAltaCancha.ShowDialog();
+            this.Show();
+        }
     }
 }

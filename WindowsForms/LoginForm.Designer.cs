@@ -42,7 +42,7 @@
             usuario.AutoSize = true;
             usuario.Location = new Point(169, 132);
             usuario.Name = "usuario";
-            usuario.Size = new Size(47, 15);
+            usuario.Size = new Size(59, 20);
             usuario.TabIndex = 0;
             usuario.Text = "Usuario";
             // 
@@ -50,14 +50,14 @@
             // 
             usuarioCaja.Location = new Point(169, 150);
             usuarioCaja.Name = "usuarioCaja";
-            usuarioCaja.Size = new Size(134, 23);
+            usuarioCaja.Size = new Size(134, 27);
             usuarioCaja.TabIndex = 1;
             // 
             // contraseñaCaja
             // 
             contraseñaCaja.Location = new Point(169, 218);
             contraseñaCaja.Name = "contraseñaCaja";
-            contraseñaCaja.Size = new Size(134, 23);
+            contraseñaCaja.Size = new Size(134, 27);
             contraseñaCaja.TabIndex = 3;
             contraseñaCaja.UseSystemPasswordChar = true;
             // 
@@ -66,7 +66,7 @@
             contraseña.AutoSize = true;
             contraseña.Location = new Point(169, 200);
             contraseña.Name = "contraseña";
-            contraseña.Size = new Size(67, 15);
+            contraseña.Size = new Size(83, 20);
             contraseña.TabIndex = 2;
             contraseña.Text = "Contraseña";
             // 
@@ -86,7 +86,7 @@
             titulo.Font = new Font("Segoe UI", 13F);
             titulo.Location = new Point(136, 81);
             titulo.Name = "titulo";
-            titulo.Size = new Size(207, 25);
+            titulo.Size = new Size(255, 30);
             titulo.TabIndex = 5;
             titulo.Text = "Bienvenido a TurnoLibre!";
             titulo.TextAlign = ContentAlignment.MiddleCenter;
@@ -97,7 +97,7 @@
             olvideContraseña.LinkColor = Color.Black;
             olvideContraseña.Location = new Point(169, 244);
             olvideContraseña.Name = "olvideContraseña";
-            olvideContraseña.Size = new Size(119, 15);
+            olvideContraseña.Size = new Size(149, 20);
             olvideContraseña.TabIndex = 6;
             olvideContraseña.TabStop = true;
             olvideContraseña.Text = "Olvidé mi contraseña";
