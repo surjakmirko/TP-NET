@@ -43,15 +43,25 @@ namespace WindowsForms
                 if (resultadoLogin != null)
                 {
                     int idBuscado = resultadoLogin.Id;
+                    int tipoUsuarioId = resultadoLogin.TipoUsuarioId;
                     this.Hide();
                     MessageBox.Show("Inicio de sesión exitoso", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    SeleccionarComplejo formSeleccion = new SeleccionarComplejo(idBuscado);
-                    formSeleccion.ShowDialog();
+                    if (tipoUsuarioId == 1)
+                    {
+                        MenuAdmin menuAdmin = new MenuAdmin();
+                        menuAdmin.ShowDialog();
+                    }
+                    else if (tipoUsuarioId == 4)
+                    {
+                        SeleccionarComplejo formSeleccion = new SeleccionarComplejo(idBuscado);
+                        formSeleccion.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tipo de usuario no autorizado para este sistema.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
                     this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Usuario o contraseña incorrectos", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
