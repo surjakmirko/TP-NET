@@ -2,13 +2,13 @@
 using Modelo.Dominio;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
-using DTOs;
+
 
 namespace Data
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        private readonly AplicacionDbContext _context;  
+        private readonly AplicacionDbContext _context;
 
         public UsuarioRepositorio(AplicacionDbContext context)
         {
@@ -23,6 +23,14 @@ namespace Data
                 .Include(u => u.PersonaJuridica)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
+        public async Task<Usuario?> GetByEmailAsync(string email)
+        {
+            return await _context.Usuarios
+                .Include(u => u.TipoUsuario)
+                .Include(u => u.PersonaFisica)
+                .Include(u => u.PersonaJuridica)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
 
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
@@ -36,7 +44,7 @@ namespace Data
         public async Task AddAsync(Usuario usuario)
         {
             await _context.Usuarios.AddAsync(usuario);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> UpdateAsync(Usuario usuario)
@@ -55,7 +63,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
             return true;
-            
+
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -90,6 +98,7 @@ namespace Data
             bool validacion = BCrypt.Net.BCrypt.Verify(password, usuario.Password);
 
             return validacion ? usuario.Id : 0;
-            
+
+        }
     }
 }

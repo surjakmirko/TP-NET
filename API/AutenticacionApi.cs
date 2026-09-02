@@ -1,25 +1,33 @@
 ﻿using DTOs;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 
 namespace API
 {
     public class AutenticacionApi: BaseApiClient
     {
-        public async Task<UsuarioDTO?> LoginAsync(LoginDTO loginDto)
+        public async Task<LoginResponseDTO?> LoginAsync(LoginDTO request)
         {
-            using var client = await CreateHttpClientAsync();
+            using var httpClient = await CreateHttpClientAsync();
 
-            // Petición POST al endpoint de login
-            var response = await client.PostAsJsonAsync("login", loginDto);
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (!response.IsSuccessStatusCode)
+            var response = await httpClient.PostAsync("/auth/login", content);
+
+            if (response.IsSuccessStatusCode)
             {
-                return null; // Credenciales inválidas o error de usuario no encontrado
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<LoginResponseDTO>(responseContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
             }
 
-            // Retorna los datos del usuario logueado en caso de éxito
-            return await response.Content.ReadFromJsonAsync<UsuarioDTO>();
+            // Si no es successful, devolver null (credenciales incorrectas)
+            return null;
         }
     }
 }
