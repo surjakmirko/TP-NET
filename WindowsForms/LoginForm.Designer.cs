@@ -58,7 +58,7 @@
             usuario.AutoSize = true;
             usuario.Location = new Point(135, 138);
             usuario.Name = "usuario";
-            usuario.Size = new Size(47, 15);
+            usuario.Size = new Size(59, 20);
             usuario.TabIndex = 0;
             usuario.Text = "Usuario";
             // 
@@ -82,7 +82,7 @@
             contraseña.AutoSize = true;
             contraseña.Location = new Point(135, 206);
             contraseña.Name = "contraseña";
-            contraseña.Size = new Size(67, 15);
+            contraseña.Size = new Size(83, 20);
             contraseña.TabIndex = 2;
             contraseña.Text = "Contraseña";
             // 

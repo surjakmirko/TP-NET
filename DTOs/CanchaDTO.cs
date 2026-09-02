@@ -12,6 +12,7 @@ namespace DTOs
     public class CanchaCrearDTO
     {
         public int Nro { get; set; }
+        public int? ComplejoId { get; set; } = null;
         public int TipoCanchaId { get; set; }
     }
 

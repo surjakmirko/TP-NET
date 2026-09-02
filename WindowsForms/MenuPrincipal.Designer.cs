@@ -43,9 +43,10 @@
             // 
             bienvenido.Anchor = AnchorStyles.Top;
             bienvenido.Font = new Font("Segoe UI", 18F);
-            bienvenido.Location = new Point(12, 53);
+            bienvenido.Location = new Point(15, 66);
+            bienvenido.Margin = new Padding(4, 0, 4, 0);
             bienvenido.Name = "bienvenido";
-            bienvenido.Size = new Size(582, 32);
+            bienvenido.Size = new Size(728, 40);
             bienvenido.TabIndex = 0;
             bienvenido.Text = "Bienvenido!";
             bienvenido.TextAlign = ContentAlignment.MiddleCenter;
@@ -55,18 +56,20 @@
             miComplejo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             miComplejo.AutoSize = true;
             miComplejo.Font = new Font("Segoe UI", 15F);
-            miComplejo.Location = new Point(59, 138);
+            miComplejo.Location = new Point(74, 172);
+            miComplejo.Margin = new Padding(4, 0, 4, 0);
             miComplejo.Name = "miComplejo";
-            miComplejo.Size = new Size(125, 28);
+            miComplejo.Size = new Size(157, 35);
             miComplejo.TabIndex = 1;
             miComplejo.Text = "Mi Complejo";
             // 
             // btnModificarComplejo
             // 
             btnModificarComplejo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnModificarComplejo.Location = new Point(59, 244);
+            btnModificarComplejo.Location = new Point(74, 305);
+            btnModificarComplejo.Margin = new Padding(4, 4, 4, 4);
             btnModificarComplejo.Name = "btnModificarComplejo";
-            btnModificarComplejo.Size = new Size(188, 33);
+            btnModificarComplejo.Size = new Size(235, 41);
             btnModificarComplejo.TabIndex = 3;
             btnModificarComplejo.Text = "Modificar";
             btnModificarComplejo.UseVisualStyleBackColor = true;
@@ -75,9 +78,10 @@
             // btnVerComplejo
             // 
             btnVerComplejo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnVerComplejo.Location = new Point(59, 186);
+            btnVerComplejo.Location = new Point(74, 232);
+            btnVerComplejo.Margin = new Padding(4, 4, 4, 4);
             btnVerComplejo.Name = "btnVerComplejo";
-            btnVerComplejo.Size = new Size(188, 33);
+            btnVerComplejo.Size = new Size(235, 41);
             btnVerComplejo.TabIndex = 4;
             btnVerComplejo.Text = "Ver";
             btnVerComplejo.UseVisualStyleBackColor = true;
@@ -88,7 +92,7 @@
             btnVerCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnVerCancha.Location = new Point(329, 244);
             btnVerCancha.Name = "btnVerCancha";
-            btnVerCancha.Size = new Size(188, 33);
+            btnVerCancha.Size = new Size(235, 41);
             btnVerCancha.TabIndex = 8;
             btnVerCancha.Text = "Ver";
             btnVerCancha.UseVisualStyleBackColor = true;
@@ -99,28 +103,31 @@
             btnDarDeAltaCancha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnDarDeAltaCancha.Location = new Point(329, 186);
             btnDarDeAltaCancha.Name = "btnDarDeAltaCancha";
-            btnDarDeAltaCancha.Size = new Size(188, 33);
+            btnDarDeAltaCancha.Size = new Size(235, 41);
             btnDarDeAltaCancha.TabIndex = 6;
             btnDarDeAltaCancha.Text = "Dar de Alta";
             btnDarDeAltaCancha.UseVisualStyleBackColor = true;
+            btnDarDeAltaCancha.Click += btnDarDeAltaCancha_Click;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15F);
-            label1.Location = new Point(360, 138);
+            label1.Location = new Point(450, 172);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(119, 28);
+            label1.Size = new Size(153, 35);
             label1.TabIndex = 5;
             label1.Text = "Mis Canchas";
             // 
             // btnCerrarSesion
             // 
             btnCerrarSesion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnCerrarSesion.Location = new Point(406, 488);
+            btnCerrarSesion.Location = new Point(508, 610);
+            btnCerrarSesion.Margin = new Padding(4, 4, 4, 4);
             btnCerrarSesion.Name = "btnCerrarSesion";
-            btnCerrarSesion.Size = new Size(188, 33);
+            btnCerrarSesion.Size = new Size(235, 41);
             btnCerrarSesion.TabIndex = 10;
             btnCerrarSesion.Text = "Cerrar Sesion";
             btnCerrarSesion.UseVisualStyleBackColor = true;
@@ -138,7 +145,7 @@
             // 
             // MenuPrincipal
             // 
-            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(606, 533);
             Controls.Add(cambiarComplejoBoton);
@@ -151,6 +158,7 @@
             Controls.Add(miComplejo);
             Controls.Add(bienvenido);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(4, 4, 4, 4);
             MaximizeBox = false;
             Name = "MenuPrincipal";
             Text = "MenuPrincipal";
