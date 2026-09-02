@@ -23,11 +23,8 @@ namespace WindowsForms
         {
             try
             {
-                // 1. Obtener los datos desde tu servicio o BD
                 var listaDuenos = UsuarioApiClient.GetAllDueno();
-
-                // 2. Asignar la lista al DataGridView
-                dgvDuenos.DataSource = null; // Limpia si ya tenía datos
+                dgvDuenos.DataSource = null;
                 dgvDuenos.DataSource = listaDuenos;
             }
             catch (Exception ex)
@@ -36,7 +33,7 @@ namespace WindowsForms
             }
         }
 
-        private void dgvDuenos_CellClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvDuenos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
@@ -53,7 +50,7 @@ namespace WindowsForms
 
                 if (result == DialogResult.Yes)
                 {
-                    // dueñoService.Eliminar(idDueño);
+                    await UsuarioApiClient.EliminarUsuarioAsync(idDueno);
                 }
             }
         }
@@ -61,6 +58,20 @@ namespace WindowsForms
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnAgregarDueno_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            using (AgregarDueno agregarDueno = new AgregarDueno())
+            {
+                var result = agregarDueno.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    CargarDuenos();
+                }
+            }
+
         }
     }
 }

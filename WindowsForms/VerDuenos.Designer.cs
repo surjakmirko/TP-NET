@@ -76,6 +76,7 @@
             btnAgregarDueno.TabIndex = 3;
             btnAgregarDueno.Text = "Agregar Dueño";
             btnAgregarDueno.UseVisualStyleBackColor = true;
+            btnAgregarDueno.Click += btnAgregarDueno_Click;
             // 
             // VerDuenos
             // 
