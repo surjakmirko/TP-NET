@@ -25,7 +25,7 @@ namespace API
 
         private static string GetBaseUrlFromConfig()
         {
-            return "http://localhost:5183/";
+            return "http://localhost:5262/";
         }
 
         protected static async Task<T?> GetAsync<T>(string endpoint)

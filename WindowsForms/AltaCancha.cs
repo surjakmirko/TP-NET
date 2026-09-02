@@ -53,7 +53,7 @@ namespace WindowsForms
 
             try
             {
-                await CanchaApiClient.CrearCanchaAsync(nuevaCancha);
+                await ComplejoApiClient.CrearCanchaAsync(_idComplejoSeleccionado, nuevaCancha);
 
                 MessageBox.Show($"¡La cancha número {nuevaCancha.Nro} se creó con éxito!", "Cancha Creada", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;

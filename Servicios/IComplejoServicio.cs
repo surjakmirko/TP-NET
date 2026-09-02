@@ -11,5 +11,7 @@ namespace Servicios
         Task<IEnumerable<ComplejoDTO>> GetAllAsync();
         Task<bool> UpdateAsync(ComplejoDTO dto);
 
+        Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno);
+
     }
 }

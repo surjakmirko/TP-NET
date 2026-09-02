@@ -8,7 +8,7 @@ namespace API
     {
         public static async Task<List<TipoCanchaDTO>?> ObtenerTodosAsync()
         {
-            return await GetAsync<List<TipoCanchaDTO>>("tipocancha");
+            return await GetAsync<List<TipoCanchaDTO>>("tipos-cancha");
         }
     }
 }

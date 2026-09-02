@@ -13,6 +13,6 @@ namespace Data
         Task<bool> DeleteAsync(int id,int nro);
         Task<Cancha?> GetAsync(int id,int nro);
         Task<IEnumerable<Cancha>> GetAllAsync(int id);
-        Task<bool> UpdateAsync(Cancha cancha);
+        Task<bool> UpdateAsync(Cancha cancha, int nro);
     }
 }

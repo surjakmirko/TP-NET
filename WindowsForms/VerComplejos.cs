@@ -1,4 +1,5 @@
-﻿using DTOs;
+﻿using API;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,8 +31,8 @@ namespace WindowsForms
         {
             try
             {
-                var listaComplejos = await ComplejoRepositorioProvider.Instance.GetAllAsync();
-                var listaTipos = await TipoCanchaRepositorioProvider.Instance.GetAllAsync();
+                var listaComplejos = await ComplejoApiClient.ObtenerTodosAsync();
+                var listaTipos = await TipoCanchaApiClient.ObtenerTodosAsync();
 
                 // 3. Cruzamos los datos vinculando el ID con el Nombre
                 var listaParaGrilla = listaComplejos.Select(c => new ComplejoDTO
@@ -85,7 +86,7 @@ namespace WindowsForms
         {
             try
             {
-                await ComplejoRepositorioProvider.Instance.DeleteAsync(id);
+                await ComplejoApiClient.EliminarComplejoAsync(id);
                 MessageBox.Show($"El Complejo N° {id} fue eliminado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarComplejos();

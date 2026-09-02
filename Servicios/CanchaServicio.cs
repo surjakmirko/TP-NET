@@ -60,12 +60,13 @@ namespace Servicios
             }).ToList();
         }
 
-        public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nro)
+        public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nroOriginal)
         {
+            // Construimos la entidad Cancha con el NUEVO número que viene en dto.Nro
+            Cancha canchaNueva = new Cancha(complejoId, dto.Nro, dto.TipoCanchaId);
 
-            Cancha cancha = new Cancha(complejoId, nro, dto.TipoCanchaId);
-
-            return await canchaRepositorio.UpdateAsync(cancha);
+            // Le pasamos al repositorio la cancha con el nuevo número Y el número original para buscarla
+            return await canchaRepositorio.UpdateAsync(canchaNueva, nroOriginal);
         }
     }
 }

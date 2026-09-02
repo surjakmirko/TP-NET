@@ -28,7 +28,7 @@ namespace WindowsForms
             try
             {
                 // 1. Obtenemos las canchas y los tipos de cancha a través de la API
-                var listaCanchas = await CanchaApiClient.ObtenerPorComplejoAsync(_idComplejo);
+                var listaCanchas = await ComplejoApiClient.ObtenerCanchasAsync(_idComplejo);
                 var listaTipos = await TipoCanchaApiClient.ObtenerTodosAsync();
 
                 if (listaCanchas != null && listaTipos != null)
@@ -99,7 +99,7 @@ namespace WindowsForms
         {
             try
             {
-                await CanchaApiClient.EliminarCanchaAsync(_idComplejo, nroCancha);
+                await ComplejoApiClient.EliminarCanchaAsync(_idComplejo, nroCancha);
                 MessageBox.Show($"La Cancha N° {nroCancha} fue eliminada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 await CargarCanchasPorComplejoAsync();

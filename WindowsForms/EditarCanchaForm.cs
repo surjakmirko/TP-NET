@@ -48,7 +48,7 @@ namespace WindowsForms
         {
             try
             {
-                _canchaActual = await CanchaApiClient.ObtenerCanchaAsync(_idComplejo, _nroCancha);
+                _canchaActual = await ComplejoApiClient.ObtenerCanchaPorNroAsync(_idComplejo, _nroCancha);
 
                 if (_canchaActual != null)
                 {
@@ -82,23 +82,27 @@ namespace WindowsForms
                     MessageBox.Show("Por favor, selecciona un tipo de cancha.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                _canchaActual.TipoCanchaId = Convert.ToInt32(cmbTipoCancha.SelectedValue);
-                _canchaActual.Nro = nuevoNroCancha;
-                await CanchaApiClient.ActualizarCanchaAsync(_canchaActual);
+
+                
+                int nroCanchaOriginal = _canchaActual.Nro;
+
+                
+                CanchaCrearDTO nuevaCancha = new CanchaCrearDTO
+                {
+                    Nro = nuevoNroCancha,
+                    TipoCanchaId = Convert.ToInt32(cmbTipoCancha.SelectedValue)
+                };
+
+                
+                await ComplejoApiClient.ActualizarCanchaAsync(_idComplejo, nroCanchaOriginal, nuevaCancha);
+
                 MessageBox.Show("Cancha actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("duplicado") || ex.Message.Contains("ya existe"))
-                {
-                    MessageBox.Show($"Ya existe una cancha con ese número", "Número duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show($"Error al guardar los cambios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show($"Error al guardar los cambios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

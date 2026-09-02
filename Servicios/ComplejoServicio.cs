@@ -53,6 +53,20 @@ namespace Servicios
             };
         }
 
+        public async Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno)
+        {
+            var complejos = await complejoRepositorio.GetComplejosByIdDueno(idDueno);
+            return complejos.Select(complejo => new ComplejoDTO
+            {
+                Id = complejo.Id,
+                Direccion = complejo.Direccion,
+                Nombre = complejo.Nombre,
+                LocalidadId = complejo.LocalidadId,
+                DueñoId = complejo.DueñoId,
+                EncargadoId = complejo.EncargadoId
+            }).ToList();
+        }
+
         public async Task<IEnumerable<ComplejoDTO>> GetAllAsync()
         {
             var complejos = await complejoRepositorio.GetAllAsync();

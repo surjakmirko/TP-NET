@@ -31,7 +31,7 @@ namespace WindowsForms
                 return;
             }
 
-            ComplejoDTO nuevoComplejo = new ComplejoDTO
+            ComplejoCrearDTO nuevoComplejo = new ComplejoCrearDTO
             {
                 Nombre = txtNombre.Text.Trim(),
                 Direccion = txtDireccion.Text.Trim(),

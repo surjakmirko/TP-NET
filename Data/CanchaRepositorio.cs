@@ -37,16 +37,32 @@ namespace Data
         }
         public async Task<IEnumerable<Cancha>> GetAllAsync(int id)
         {
-            return await _context.Canchas.ToListAsync();
+            return await _context.Canchas
+                .Where(c => c.ComplejoId == id) 
+                .ToListAsync();
         }
-        public async Task<bool> UpdateAsync(Cancha cancha)
+        public async Task<bool> UpdateAsync(Cancha cancha, int nroOriginal)
         {
-            var existingCancha = await _context.Canchas.FindAsync(cancha.ComplejoId, cancha.Nro);
+            // Buscamos la cancha existente por su clave primaria compuesta original (ComplejoId, nroOriginal)
+            var existingCancha = await _context.Canchas.FindAsync(cancha.ComplejoId, nroOriginal);
+
             if (existingCancha == null)
             {
                 return false;
             }
-            _context.Canchas.Update(cancha);
+
+            // Si el número de cancha cambió, en EF Core con PK compuesta eliminamos el registro viejo y agregamos el nuevo
+            if (nroOriginal != cancha.Nro)
+            {
+                _context.Canchas.Remove(existingCancha);
+                await _context.Canchas.AddAsync(cancha);
+            }
+            else
+            {
+                // Si el número no cambió, solo actualizamos los demás atributos
+                existingCancha.SetTipoCanchaId(cancha.TipoCanchaId);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }

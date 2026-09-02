@@ -1,5 +1,6 @@
-﻿using Servicios;
-using DTOs;
+﻿using DTOs;
+using Modelo.Dominio;
+using Servicios;
 
 namespace WebAPI
 {
@@ -22,6 +23,16 @@ namespace WebAPI
                     return Results.NotFound();
                 }
 
+                return Results.Ok(dto);
+            });
+
+            app.MapGet("/complejos/dueno/{idDueno}", async (int idDueno, IComplejoServicio complejoServicio) =>
+            {
+                var dto = await complejoServicio.GetByDuenoAsync(idDueno);
+                if (dto == null || dto.Count() == 0)
+                {
+                    return Results.NotFound();
+                }
                 return Results.Ok(dto);
             });
 
@@ -169,7 +180,8 @@ namespace WebAPI
             {
                 try
                 {
-                    var encontrado = await canchaServicio.UpdateAsync(dto, idComplejo,nro);
+                    // Llamamos al servicio enviando el DTO, el ID del complejo y el número original de la URL
+                    var encontrado = await canchaServicio.UpdateAsync(dto, idComplejo, nro);
 
                     if (!encontrado)
                     {

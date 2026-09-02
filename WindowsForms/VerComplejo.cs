@@ -38,11 +38,12 @@ namespace WindowsForms
                     var localidad = await LocalidadApiClient.ObtenerPorIdAsync(complejo.LocalidadId);
                     lblLocalidad.Text = $"Localidad: {localidad?.Nombre ?? "Desconocida"}";
 
+                    var horarios = await ComplejoApiClient.ObtenerHorariosAsync(complejo.Id);
                     // 3. Respetando tu estructura original de horarios y días
                     StringBuilder sbHorarios = new StringBuilder();
-                    if (complejo.Horarios != null && complejo.Horarios.Count > 0)
+                    if(horarios != null && horarios.Count > 0)
                     {
-                        foreach (var h in complejo.Horarios)
+                        foreach (var h in horarios)
                         {
                             string nombreDia = h.NroDia switch
                             {

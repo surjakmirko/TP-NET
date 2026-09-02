@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API;
+using System;
 using System.Windows.Forms;
 
 namespace WindowsForms
@@ -23,11 +24,11 @@ namespace WindowsForms
             try
             {
                 // 1. Obtener los datos desde tu servicio o BD
-                // var listaDuenos = _duenoService.ObtenerTodos();
+                var listaDuenos = UsuarioApiClient.GetAllDueno();
 
                 // 2. Asignar la lista al DataGridView
-                // dgvDuenos.DataSource = null; // Limpia si ya tenía datos
-                // dgvDuenos.DataSource = listaDuenos;
+                dgvDuenos.DataSource = null; // Limpia si ya tenía datos
+                dgvDuenos.DataSource = listaDuenos;
             }
             catch (Exception ex)
             {
