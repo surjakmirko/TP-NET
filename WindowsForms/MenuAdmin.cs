@@ -21,5 +21,25 @@ namespace WindowsForms
         {
             this.Close();
         }
+
+        private void btnVerComplejos_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            using (VerComplejos verComplejos = new VerComplejos())
+            {
+                verComplejos.ShowDialog();
+            }
+            this.Show();
+        }
+
+        private void btnVerDuenos_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            using (VerDuenos verDuenos = new VerDuenos())
+            {
+                verDuenos.ShowDialog();
+            }
+            this.Show();
+        }
     }
 }

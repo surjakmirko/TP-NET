@@ -27,31 +27,29 @@ namespace WindowsForms
         }
 
         private void btnModificarComplejo_Click(object sender, EventArgs e)
-        {   
+        {
+            this.Hide();
             ModificarComplejo formModificar = new ModificarComplejo(_idComplejoSeleccionado);
             formModificar.ShowDialog();
+            this.Show();
         }
         private void btnVerComplejo_Click(object sender, EventArgs e)
         {
+            this.Hide();
             VerComplejo formVerComplejo = new VerComplejo(_idComplejoSeleccionado);
             formVerComplejo.ShowDialog();
+            this.Show();
         }
 
         private void btnVerCancha_Click(object sender, EventArgs e)
 
         {
-
             this.Hide();
-
             using (VerCanchas verCanchas = new VerCanchas(_idComplejoSeleccionado))
             {
                 verCanchas.ShowDialog();
             }
-
             this.Show();
-
-
-
         }
 
         private void btnCerrarSesion_Click(object sender, EventArgs e)

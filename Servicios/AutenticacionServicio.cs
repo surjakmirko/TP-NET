@@ -7,14 +7,14 @@ namespace Servicios
 {
     public class AutenticacionServicio 
     {
-        private readonly IUsuarioRepositorio usuarioRepositorio;
+        private readonly UsuarioRepositorio usuarioRepositorio;
        
-        //private readonly IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
-        public AutenticacionServicio(IUsuarioRepositorio usuarioRepositorio)
+        public AutenticacionServicio(IConfiguration configuration)
         {
-            this.usuarioRepositorio = usuarioRepositorio;
-            //this.configuration = configuration;
+            //usuarioRepositorio = new UsuarioRepositorio();
+            this.configuration = configuration;
         }
 
         public async Task<LoginResponseDTO?> LoginAsync(LoginDTO login)

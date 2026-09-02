@@ -29,12 +29,10 @@
         private void InitializeComponent()
         {
             tituloMenuAdmin = new Label();
-            btnDarAltaComplejo = new Button();
+            btnVerComplejos = new Button();
             complejoTitulo = new Label();
-            btnEliminarComplejo = new Button();
-            btnEliminarDueno = new Button();
             duenoTitulo = new Label();
-            btnDarAltaDueno = new Button();
+            btnVerDuenos = new Button();
             btnCerrarSesion = new Button();
             SuspendLayout();
             // 
@@ -48,42 +46,25 @@
             tituloMenuAdmin.TabIndex = 0;
             tituloMenuAdmin.Text = "Menu Admin";
             // 
-            // btnDarAltaComplejo
+            // btnVerComplejos
             // 
-            btnDarAltaComplejo.Location = new Point(31, 123);
-            btnDarAltaComplejo.Name = "btnDarAltaComplejo";
-            btnDarAltaComplejo.Size = new Size(115, 35);
-            btnDarAltaComplejo.TabIndex = 1;
-            btnDarAltaComplejo.Text = "Dar de Alta";
-            btnDarAltaComplejo.UseVisualStyleBackColor = true;
+            btnVerComplejos.Location = new Point(31, 123);
+            btnVerComplejos.Name = "btnVerComplejos";
+            btnVerComplejos.Size = new Size(115, 35);
+            btnVerComplejos.TabIndex = 1;
+            btnVerComplejos.Text = "Ver Complejos";
+            btnVerComplejos.UseVisualStyleBackColor = true;
+            btnVerComplejos.Click += btnVerComplejos_Click;
             // 
             // complejoTitulo
             // 
             complejoTitulo.AutoSize = true;
             complejoTitulo.Font = new Font("Segoe UI", 15F);
-            complejoTitulo.Location = new Point(12, 68);
+            complejoTitulo.Location = new Point(40, 68);
             complejoTitulo.Name = "complejoTitulo";
-            complejoTitulo.Size = new Size(152, 28);
+            complejoTitulo.Size = new Size(97, 28);
             complejoTitulo.TabIndex = 2;
-            complejoTitulo.Text = "Complejo Titulo";
-            // 
-            // btnEliminarComplejo
-            // 
-            btnEliminarComplejo.Location = new Point(31, 187);
-            btnEliminarComplejo.Name = "btnEliminarComplejo";
-            btnEliminarComplejo.Size = new Size(115, 35);
-            btnEliminarComplejo.TabIndex = 3;
-            btnEliminarComplejo.Text = "Eliminar";
-            btnEliminarComplejo.UseVisualStyleBackColor = true;
-            // 
-            // btnEliminarDueno
-            // 
-            btnEliminarDueno.Location = new Point(221, 187);
-            btnEliminarDueno.Name = "btnEliminarDueno";
-            btnEliminarDueno.Size = new Size(115, 35);
-            btnEliminarDueno.TabIndex = 6;
-            btnEliminarDueno.Text = "Eliminar";
-            btnEliminarDueno.UseVisualStyleBackColor = true;
+            complejoTitulo.Text = "Complejo";
             // 
             // duenoTitulo
             // 
@@ -95,14 +76,15 @@
             duenoTitulo.TabIndex = 5;
             duenoTitulo.Text = "Dueño";
             // 
-            // btnDarAltaDueno
+            // btnVerDuenos
             // 
-            btnDarAltaDueno.Location = new Point(221, 123);
-            btnDarAltaDueno.Name = "btnDarAltaDueno";
-            btnDarAltaDueno.Size = new Size(115, 35);
-            btnDarAltaDueno.TabIndex = 4;
-            btnDarAltaDueno.Text = "Dar de Alta";
-            btnDarAltaDueno.UseVisualStyleBackColor = true;
+            btnVerDuenos.Location = new Point(221, 123);
+            btnVerDuenos.Name = "btnVerDuenos";
+            btnVerDuenos.Size = new Size(115, 35);
+            btnVerDuenos.TabIndex = 4;
+            btnVerDuenos.Text = "Ver Dueños";
+            btnVerDuenos.UseVisualStyleBackColor = true;
+            btnVerDuenos.Click += btnVerDuenos_Click;
             // 
             // btnCerrarSesion
             // 
@@ -120,12 +102,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(363, 332);
             Controls.Add(btnCerrarSesion);
-            Controls.Add(btnEliminarDueno);
             Controls.Add(duenoTitulo);
-            Controls.Add(btnDarAltaDueno);
-            Controls.Add(btnEliminarComplejo);
+            Controls.Add(btnVerDuenos);
             Controls.Add(complejoTitulo);
-            Controls.Add(btnDarAltaComplejo);
+            Controls.Add(btnVerComplejos);
             Controls.Add(tituloMenuAdmin);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -138,12 +118,10 @@
         #endregion
 
         private Label tituloMenuAdmin;
-        private Button btnDarAltaComplejo;
+        private Button btnVerComplejos;
         private Label complejoTitulo;
-        private Button btnEliminarComplejo;
-        private Button btnEliminarDueno;
         private Label duenoTitulo;
-        private Button btnDarAltaDueno;
+        private Button btnVerDuenos;
         private Button btnCerrarSesion;
     }
 }
