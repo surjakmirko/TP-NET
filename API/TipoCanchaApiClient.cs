@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DTOs; // Asegúrate de tener un TipoCanchaDTO con Id y Deporte
+using DTOs;
 
 namespace API
 {

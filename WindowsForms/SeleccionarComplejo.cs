@@ -1,20 +1,18 @@
-﻿using Data;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using API;
+using DTOs;
 
 namespace WindowsForms
 {
     public partial class SeleccionarComplejo : Form
     {
         private int _idDueno;
+
         public SeleccionarComplejo(int idDueno)
         {
             InitializeComponent();
@@ -23,66 +21,69 @@ namespace WindowsForms
 
         private void SeleccionarComplejo_Load(object sender, EventArgs e)
         {
-            CargarComplejosDelDueno();
+            _ = CargarComplejosDelDuenoAsync();
         }
-        private async void CargarComplejosDelDueno()
+
+        private async Task CargarComplejosDelDuenoAsync()
         {
             try
             {
-                var listaComplejos = await ComplejoRepositorioProvider.Instance.GetComplejosByIdDueno(_idDueno);
-                foreach (var complejo in listaComplejos)
+                var listaComplejos = await ComplejoApiClient.ObtenerPorDuenoAsync(_idDueno);
+
+                flowLayoutPanelComplejos.Controls.Clear();
+
+                if (listaComplejos != null && listaComplejos.Any())
                 {
-                    Button btn = new Button();
-                    btn.Text = complejo.Nombre;
-                    btn.Tag = complejo.Id;
-                    btn.Size = new Size(180, 80);
-                    btn.TextAlign = ContentAlignment.MiddleCenter;
-                    btn.Click += BotonComplejo_Click;
-                    flowLayoutPanelComplejos.Controls.Add(btn);
+                    foreach (var complejo in listaComplejos)
+                    {
+                        Button btn = new Button
+                        {
+                            Text = complejo.Nombre,
+                            Tag = complejo.Id,
+                            Size = new Size(180, 80),
+                            TextAlign = ContentAlignment.MiddleCenter
+                        };
+                        btn.Click += BotonComplejo_Click;
+                        flowLayoutPanelComplejos.Controls.Add(btn);
+                    }
                 }
-                if (listaComplejos.Count() == 0)
+                else
                 {
-                    MessageBox.Show("No se encontraron complejos asociados a este dueño.");
+                    MessageBox.Show("No se encontraron complejos asociados a este dueño.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+                MessageBox.Show($"Ocurrió un error al cargar los complejos: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void BotonComplejo_Click(object sender, EventArgs e)
         {
             Button botonPresionado = (Button)sender;
             int idComplejoSeleccionado = (int)botonPresionado.Tag;
             string nombreComplejo = botonPresionado.Text;
 
-
             this.Hide();
 
-            using (MenuPrincipal menu = new MenuPrincipal(idComplejoSeleccionado,nombreComplejo))
+            using (MenuPrincipal menu = new MenuPrincipal(idComplejoSeleccionado, nombreComplejo))
             {
                 DialogResult res = menu.ShowDialog();
 
-                
                 if (res == DialogResult.OK)
                 {
-                    this.Show(); 
+                    this.Show();
                 }
                 else
                 {
-                    
                     this.Close();
                 }
             }
-
-
         }
-
         private void btnCerrarSesión_Click(object sender, EventArgs e)
         {
             this.Close();
         }
     }
 }
-

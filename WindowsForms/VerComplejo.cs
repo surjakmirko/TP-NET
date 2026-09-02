@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using API;
+using DTOs;
 
 namespace WindowsForms
 {
@@ -22,26 +19,31 @@ namespace WindowsForms
 
         private void VerComplejo_Load(object sender, EventArgs e)
         {
-            CargarDetallesDelComplejo();
+            _ = CargarDetallesDelComplejoAsync();
         }
 
-        private async void CargarDetallesDelComplejo()
+        private async Task CargarDetallesDelComplejoAsync()
         {
             try
             {
-                var complejo = await ComplejoRepositorioProvider.Instance.GetAsync(_idComplejoSeleccionado);
+                // 1. Obtenemos el complejo a través de la WebAPI
+                var complejo = await ComplejoApiClient.ObtenerPorIdAsync(_idComplejoSeleccionado);
+
                 if (complejo != null)
                 {
                     lblNombre.Text = $"Nombre: {complejo.Nombre}";
                     lblDireccion.Text = $"Dirección: {complejo.Direccion}";
-                    var localidad = await LocalidadRepositorioProvider.Instance.GetAsync(complejo.LocalidadId);
-                    lblLocalidad.Text = $"Localidad: {localidad.Nombre}";
+
+                    // 2. Obtenemos la localidad mediante su API Client
+                    var localidad = await LocalidadApiClient.ObtenerPorIdAsync(complejo.LocalidadId);
+                    lblLocalidad.Text = $"Localidad: {localidad?.Nombre ?? "Desconocida"}";
+
+                    // 3. Respetando tu estructura original de horarios y días
                     StringBuilder sbHorarios = new StringBuilder();
                     if (complejo.Horarios != null && complejo.Horarios.Count > 0)
                     {
                         foreach (var h in complejo.Horarios)
                         {
-                            // Ejemplo de lo que se agrega: "Lunes: 08:00 a 22:00 hs" o "Feriados: 10:00 a 20:00 hs"
                             string nombreDia = h.NroDia switch
                             {
                                 1 => "Lunes",
