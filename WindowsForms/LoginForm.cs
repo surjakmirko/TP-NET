@@ -68,7 +68,7 @@ namespace WindowsForms
         {
             _mostrarContrasena = !_mostrarContrasena;
 
-            // Si es true, muestra los caracteres; si es false, los oculta como asteriscos/puntos
+            
             contraseñaCaja.UseSystemPasswordChar = !_mostrarContrasena;
 
             

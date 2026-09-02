@@ -16,7 +16,7 @@ namespace WindowsForms
 
         private void VerCanchas_Load(object sender, EventArgs e)
         {
-            // Ajuste clave por código para asegurar que los botones reciban el clic
+            
             dgvCanchas.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvCanchas.ReadOnly = false;
 
@@ -28,9 +28,19 @@ namespace WindowsForms
             try
             {
                 var listaCanchas = await CanchaRepositorioProvider.Instance.GetAllAsync(_idComplejo);
+                var listaTipos = await TipoCanchaRepositorioProvider.Instance.GetAllAsync();
+
+                // 3. Cruzamos los datos vinculando el ID con el Nombre
+                var listaParaGrilla = listaCanchas.Select(c => new CanchaMostrarDTO
+                {
+                    Nro = c.Nro,
+                    TipoCanchaId = c.TipoCanchaId,
+                    // Buscamos el nombre del tipo correspondiente; si no existe, mostramos "Desconocido"
+                    NombreTipoCancha = listaTipos.FirstOrDefault(t => t.Id == c.TipoCanchaId)?.Deporte ?? "Desconocido"
+                }).ToList();
                 dgvCanchas.AutoGenerateColumns = false;
                 dgvCanchas.DataSource = null;
-                dgvCanchas.DataSource = listaCanchas;
+                dgvCanchas.DataSource = listaParaGrilla;
             }
             catch (Exception ex)
             {
@@ -49,7 +59,7 @@ namespace WindowsForms
             var row = dgvCanchas.Rows[e.RowIndex];
             int nroCancha = 0;
 
-            if (row.DataBoundItem is CanchaDTO cancha)
+            if (row.DataBoundItem is CanchaMostrarDTO cancha)
             {
                 nroCancha = cancha.Nro;
             }

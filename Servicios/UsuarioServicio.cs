@@ -1,6 +1,7 @@
 ﻿using Modelo.Dominio;
 using Data;       
 using DTOs;
+using BCrypt.Net;
 
 namespace Servicios
 {
@@ -19,7 +20,10 @@ namespace Servicios
             {
                 throw new ArgumentException($"Ya existe un usuario con el Email '{dto.Email}'.");
             }
-            Usuario usuario = new Usuario(0, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            Usuario usuario = new Usuario(0, dto.Email, dto.Telefono, passwordHash, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
 
             await usuarioRepositorio.AddAsync(usuario);
 
@@ -28,7 +32,6 @@ namespace Servicios
                 Id = usuario.Id, 
                 Email = usuario.Email,
                 Telefono = usuario.Telefono,
-                Password = usuario.Password,
                 TipoUsuarioId = usuario.TipoUsuarioId,
                 PersonaFisicaDni = usuario.PersonaFisicaDni,
                 PersonaJuridicaCuit = usuario.PersonaJuridicaCuit

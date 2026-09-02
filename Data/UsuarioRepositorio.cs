@@ -1,6 +1,8 @@
 ﻿
 using Modelo.Dominio;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+using DTOs;
 
 namespace Data
 {
@@ -75,9 +77,19 @@ namespace Data
         }
         public async Task<int> IniciarSesion(string email, string password)
         {
-            Usuario? usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Password == password);
-            return usuario?.Id ?? 0;
-        }
+            //PREVIO A HASH DE CONTRASEÑA
+            //Usuario? usuario = await _context.Usuarios
+            //    .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Password == password);
+            //return usuario?.Id ?? 0;
+
+            Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            if (usuario == null)
+            {
+                return 0;
+            }
+            bool validacion = BCrypt.Net.BCrypt.Verify(password, usuario.Password);
+
+            return validacion ? usuario.Id : 0;
+            
     }
 }

@@ -62,7 +62,7 @@
             // 
             // colTipoDeporte
             // 
-            colTipoDeporte.DataPropertyName = "TipoCanchaId"; // Nombre de la propiedad en CanchaDTO
+            colTipoDeporte.DataPropertyName = "NombreTipoCancha"; // Nombre de la propiedad en CanchaDTO
             colTipoDeporte.HeaderText = "Tipo Deporte";
             colTipoDeporte.Name = "colTipoDeporte";
             colTipoDeporte.ReadOnly = true;
