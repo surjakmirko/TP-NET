@@ -43,6 +43,7 @@ namespace WindowsForms
                 if (listaComplejos.Count() == 0)
                 {
                     MessageBox.Show("No se encontraron complejos asociados a este dueño.");
+                    this.Close();
                 }
             }
             catch (Exception ex)
@@ -55,10 +56,31 @@ namespace WindowsForms
             Button botonPresionado = (Button)sender;
             int idComplejoSeleccionado = (int)botonPresionado.Tag;
             string nombreComplejo = botonPresionado.Text;
-            MenuPrincipal formMenu = new MenuPrincipal(idComplejoSeleccionado, nombreComplejo);
+
+
             this.Hide();
-            formMenu.ShowDialog();
-            this.DialogResult = DialogResult.OK;
+
+            using (MenuPrincipal menu = new MenuPrincipal(idComplejoSeleccionado,nombreComplejo))
+            {
+                DialogResult res = menu.ShowDialog();
+
+                
+                if (res == DialogResult.OK)
+                {
+                    this.Show(); 
+                }
+                else
+                {
+                    
+                    this.Close();
+                }
+            }
+
+
+        }
+
+        private void btnCerrarSesión_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
     }

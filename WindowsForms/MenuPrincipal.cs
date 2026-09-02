@@ -26,26 +26,43 @@ namespace WindowsForms
             bienvenido.Text = $"¡Bienvenido a {_nombreComplejo}!";
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
+        private void btnModificarComplejo_Click(object sender, EventArgs e)
+        {   
             ModificarComplejo formModificar = new ModificarComplejo(_idComplejoSeleccionado);
             formModificar.ShowDialog();
         }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnVerComplejo_Click(object sender, EventArgs e)
         {
+            VerComplejo formVerComplejo = new VerComplejo(_idComplejoSeleccionado);
+            formVerComplejo.ShowDialog();
+        }
 
+        private void btnVerCancha_Click(object sender, EventArgs e)
+
+        {
+
+            this.Hide();
+
+            using (VerCanchas verCanchas = new VerCanchas(_idComplejoSeleccionado))
+            {
+                verCanchas.ShowDialog();
+            }
+
+            this.Show();
+
+
+
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void cambiarComplejoBoton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK; 
+            this.Close();
         }
 
         private void btnDarDeAltaCancha_Click(object sender, EventArgs e)

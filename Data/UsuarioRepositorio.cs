@@ -1,12 +1,14 @@
 ﻿
 using Modelo.Dominio;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+
 
 namespace Data
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        private readonly AplicacionDbContext _context;  
+        private readonly AplicacionDbContext _context;
 
         public UsuarioRepositorio(AplicacionDbContext context)
         {
@@ -21,6 +23,14 @@ namespace Data
                 .Include(u => u.PersonaJuridica)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
+        public async Task<Usuario?> GetByEmailAsync(string email)
+        {
+            return await _context.Usuarios
+                .Include(u => u.TipoUsuario)
+                .Include(u => u.PersonaFisica)
+                .Include(u => u.PersonaJuridica)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
 
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
@@ -34,7 +44,7 @@ namespace Data
         public async Task AddAsync(Usuario usuario)
         {
             await _context.Usuarios.AddAsync(usuario);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> UpdateAsync(Usuario usuario)
@@ -53,7 +63,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
             return true;
-            
+
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -75,9 +85,20 @@ namespace Data
         }
         public async Task<int> IniciarSesion(string email, string password)
         {
-            Usuario? usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Password == password);
-            return usuario?.Id ?? 0;
+            //PREVIO A HASH DE CONTRASEÑA
+            //Usuario? usuario = await _context.Usuarios
+            //    .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Password == password);
+            //return usuario?.Id ?? 0;
+
+            Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            if (usuario == null)
+            {
+                return 0;
+            }
+            bool validacion = BCrypt.Net.BCrypt.Verify(password, usuario.Password);
+
+            return validacion ? usuario.Id : 0;
+
         }
     }
 }
