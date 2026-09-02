@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using DTOs;
 using Servicios;
 
 namespace WebAPI
@@ -7,24 +7,16 @@ namespace WebAPI
     {
         public static void MapAuthEndpoints(this WebApplication app)
         {
-            app.MapPost("/auth/login", async (LoginRequest request, IConfiguration configuration) =>
+            app.MapPost("/auth/login", async (LoginDTO request, AutenticacionServicio authServicio) =>
             {
-                //try
-                //{
-                //    var authService = new AutenticacionServicio(configuration);
-                //    var response = await authService.LoginAsync(request);
+                var resultado = await authServicio.LoginAsync(request);
 
-                //    if (response == null)
-                //    {
-                //        return Results.Unauthorized();
-                //    }
+                if (resultado == null)
+                {
+                    return Results.Unauthorized();
+                }
 
-                //    return Results.Ok(response);
-                //}
-                //catch (Exception ex)
-                //{
-                //    return Results.Problem($"Error durante el login: {ex.Message}");
-                //}
+                return Results.Ok(resultado);
             });
         }
     }

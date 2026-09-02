@@ -7,13 +7,13 @@ namespace Servicios
 {
     public class AutenticacionServicio 
     {
-        private readonly UsuarioRepositorio usuarioRepositorio;
+        private readonly IUsuarioRepositorio usuarioRepositorio;
        
         private readonly IConfiguration configuration;
 
-        public AutenticacionServicio(IConfiguration configuration)
+        public AutenticacionServicio(IUsuarioRepositorio usuarioRepositorio, IConfiguration configuration)
         {
-            //usuarioRepositorio = new UsuarioRepositorio();
+            this.usuarioRepositorio = usuarioRepositorio;
             this.configuration = configuration;
         }
 

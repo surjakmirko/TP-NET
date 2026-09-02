@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-
+builder.Services.AddScoped<AutenticacionServicio>();
 // Lee la conexión del appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -64,6 +64,7 @@ app.MapTipoTurnoEndpoints();
 app.MapProvinciaEndpoints();
 app.MapLocalidadEndpoints();
 app.MapTurnoEndpoints();
+app.MapAuthEndpoints();
 
 
 app.Run();
