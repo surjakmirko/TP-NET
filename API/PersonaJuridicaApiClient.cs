@@ -7,8 +7,7 @@ namespace API
     {
         public static async Task CrearPersonaJuridicaAsync(PersonaJuridicaDTO dto)
         {
-            // Apunta al endpoint correspondiente en la WebAPI
-            await PostAsync("api/personajuridica", dto);
+            await PostAsync("personajuridica", dto);
         }
     }
 }

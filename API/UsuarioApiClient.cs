@@ -6,19 +6,21 @@ namespace API
 {
     public class UsuarioApiClient : BaseApiClient
     {
-        public static async Task<List<UsuarioCrearDTO>?> GetAllAsync()
+        public static async Task<List<UsuarioDTO>?> GetAllAsync()
         {
-            return await GetAsync<List<UsuarioCrearDTO>>("api/usuario");
+            return await GetAsync<List<UsuarioDTO>>("usuarios");
         }
-
+        public static async Task<UsuarioDTO?> GetByIdAsync(int id)
+        {
+            return await GetAsync<UsuarioDTO>($"usuarios/{id}");
+        }
         public static async Task CrearUsuarioAsync(UsuarioCrearDTO dto)
         {
-            await PostAsync("api/usuario", dto);
+            await PostAsync("usuarios", dto);
         }
-
         public static async Task EliminarUsuarioAsync(int id)
         {
-            await DeleteAsync($"api/usuario/{id}");
+            await DeleteAsync($"usuarios/{id}");
         }
     }
 }

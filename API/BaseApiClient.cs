@@ -66,5 +66,11 @@ namespace API
                 throw new HttpRequestException($"Error en la API ({response.StatusCode}): {errorContent}");
             }
         }
+        protected static async Task PutAsync<TRequest>(string endpoint, TRequest data)
+        {
+            using var client = await CreateHttpClientAsync();
+            var response = await client.PutAsJsonAsync(endpoint, data);
+            HandleResponseError(response);
+        }
     }
 }

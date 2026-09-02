@@ -1,5 +1,8 @@
-﻿using Data;
-using Modelo.Dominio;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using DTOs;
+using API;
 
 namespace WindowsForms
 {
@@ -7,7 +10,7 @@ namespace WindowsForms
     {
         private readonly int _idComplejo;
         private readonly int _nroCancha;
-        private Cancha _canchaActual;
+        private CanchaDTO _canchaActual;
 
         public EditarCanchaForm(int idComplejo, int nroCancha)
         {
@@ -20,33 +23,20 @@ namespace WindowsForms
         {
             await CargarTiposDeCanchaAsync();
             await CargarDatosCanchaAsync();
-            //try
-            //{
-            //    // Si tenés un método GetByIdAsync en tu repositorio:
-            //    _canchaActual = await CanchaRepositorioProvider.Instance.GetAsync(_idComplejo, _nroCancha);
-
-            //    // Mostrás el número y cargás el tipo de cancha actual en el control correspondiente
-            //    txtNumeroCancha.Text = _canchaActual.Nro.ToString();
-            //    txtTipoDeporteId.Text = _canchaActual.TipoCanchaId.ToString();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error al cargar la cancha: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    this.Close();
-            //}
         }
 
         private async Task CargarTiposDeCanchaAsync()
         {
             try
             {
-                // 1. Obtenemos la lista completa de tipos
-                var tipos = await TipoCanchaRepositorioProvider.Instance.GetAllAsync();
+                var tipos = await TipoCanchaApiClient.ObtenerTodosAsync();
 
-                // 2. Configuramos qué se muestra y qué valor devuelve el ComboBox
-                cmbTipoCancha.DataSource = tipos;
-                cmbTipoCancha.DisplayMember = "Deporte"; // Propiedad que ve el usuario (ej: "Fútbol", "Tenis")
-                cmbTipoCancha.ValueMember = "Id";       // Propiedad que se usa como clave primaria/ID
+                if (tipos != null)
+                {
+                    cmbTipoCancha.DataSource = tipos;
+                    cmbTipoCancha.DisplayMember = "Deporte";
+                    cmbTipoCancha.ValueMember = "Id";
+                }
             }
             catch (Exception ex)
             {
@@ -58,14 +48,17 @@ namespace WindowsForms
         {
             try
             {
-                // Obtenemos los datos actuales de la cancha
-                _canchaActual = await CanchaRepositorioProvider.Instance.GetAsync(_idComplejo, _nroCancha);
+                _canchaActual = await CanchaApiClient.ObtenerCanchaAsync(_idComplejo, _nroCancha);
 
                 if (_canchaActual != null)
                 {
                     txtNumeroCancha.Text = _canchaActual.Nro.ToString();
-                    // Preseleccionamos en el combo el ID correspondiente
                     cmbTipoCancha.SelectedValue = _canchaActual.TipoCanchaId;
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró la cancha seleccionada.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this.Close();
                 }
             }
             catch (Exception ex)
@@ -73,7 +66,6 @@ namespace WindowsForms
                 MessageBox.Show($"Error al obtener la cancha: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -90,29 +82,23 @@ namespace WindowsForms
                     MessageBox.Show("Por favor, selecciona un tipo de cancha.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                // Aplicás las funciones set de tu entidad
-                int nuevoTipoId = Convert.ToInt32(cmbTipoCancha.SelectedValue);
-
-                _canchaActual.SetTipoCanchaId(nuevoTipoId);
-                _canchaActual.SetNro(nuevoNroCancha);
-
-
-                // Guardás los cambios
-                await CanchaRepositorioProvider.Instance.UpdateAsync(_canchaActual);
-
+                _canchaActual.TipoCanchaId = Convert.ToInt32(cmbTipoCancha.SelectedValue);
+                _canchaActual.Nro = nuevoNroCancha;
+                await CanchaApiClient.ActualizarCanchaAsync(_canchaActual);
                 MessageBox.Show("Cancha actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-            catch (InvalidOperationException ex)
-            {
-                // Mensaje controlado cuando el número ya existe
-                MessageBox.Show($"Ya existe una cancha con ese numero", "Número duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar los cambios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message.Contains("duplicado") || ex.Message.Contains("ya existe"))
+                {
+                    MessageBox.Show($"Ya existe una cancha con ese número", "Número duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Error al guardar los cambios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -121,7 +107,5 @@ namespace WindowsForms
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
-
-        
     }
 }

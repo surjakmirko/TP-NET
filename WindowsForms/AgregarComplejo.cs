@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using DTOs; // Asegúrate de tener el namespace de tu ComplejoDTO
+using DTOs;
+using API;
 
 namespace WindowsForms
 {
@@ -10,10 +11,8 @@ namespace WindowsForms
         {
             InitializeComponent();
         }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
-            // Validaciones básicas de campos vacíos
             if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
                 string.IsNullOrWhiteSpace(txtDireccion.Text) ||
                 string.IsNullOrWhiteSpace(txtEncargadoId.Text) ||
@@ -24,7 +23,6 @@ namespace WindowsForms
                 return;
             }
 
-            // Validar que los IDs sean números enteros válidos
             if (!int.TryParse(txtEncargadoId.Text, out int encargadoId) ||
                 !int.TryParse(txtLocalidadId.Text, out int localidadId) ||
                 !int.TryParse(txtDueñoId.Text, out int dueñoId))
@@ -33,7 +31,6 @@ namespace WindowsForms
                 return;
             }
 
-            // Crear el objeto ComplejoDTO con los datos capturados
             ComplejoDTO nuevoComplejo = new ComplejoDTO
             {
                 Nombre = txtNombre.Text.Trim(),
@@ -43,11 +40,18 @@ namespace WindowsForms
                 DueñoId = dueñoId
             };
 
-            // AQUÍ INVOCAS A TU SERVICIO / CONTROLADOR:
-            // _complejoService.Agregar(nuevoComplejo);
+            try
+            {
 
-            MessageBox.Show("¡Complejo registrado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+                await ComplejoApiClient.CrearComplejoAsync(nuevoComplejo);
+
+                MessageBox.Show("¡Complejo registrado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar el complejo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

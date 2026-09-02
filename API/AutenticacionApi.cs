@@ -8,7 +8,7 @@ namespace API
 {
     public class AutenticacionApi: BaseApiClient
     {
-        public async Task<LoginResponseDTO?> LoginAsync(LoginDTO request)
+        public static async Task<LoginResponseDTO?> LoginAsync(LoginDTO request)
         {
             using var httpClient = await CreateHttpClientAsync();
 
@@ -25,8 +25,6 @@ namespace API
                     PropertyNameCaseInsensitive = true
                 });
             }
-
-            // Si no es successful, devolver null (credenciales incorrectas)
             return null;
         }
     }

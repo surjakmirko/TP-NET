@@ -59,7 +59,7 @@ namespace WindowsForms
 
         private void cambiarComplejoBoton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK; 
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
