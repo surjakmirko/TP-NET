@@ -38,6 +38,7 @@ namespace WebAPI
 
             app.MapPost("/complejos", async (ComplejoCrearDTO dto, IComplejoServicio complejoServicio) =>
             {
+                Console.WriteLine(dto);
                 try
                 {
                     ComplejoDTO complejoDTO = await complejoServicio.AddAsync(dto);

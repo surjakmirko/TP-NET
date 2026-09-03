@@ -14,7 +14,12 @@ namespace Data
         }
         public async Task<IEnumerable<Complejo>> GetAllAsync()
         {
-            return await _context.Complejos.ToListAsync();
+            return await _context.Complejos
+                .Include(c => c.Localidad)
+                .Include(c => c.Dueño)
+                    .ThenInclude(d => d.PersonaJuridica)
+                .Include(c => c.Encargado)
+                .ToListAsync();
         }
 
         public async Task<Complejo?> GetAsync(int id)

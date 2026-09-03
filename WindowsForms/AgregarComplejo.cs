@@ -46,6 +46,7 @@ namespace WindowsForms
                 await ComplejoApiClient.CrearComplejoAsync(nuevoComplejo);
 
                 MessageBox.Show("¡Complejo registrado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
