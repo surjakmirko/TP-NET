@@ -18,31 +18,23 @@ namespace WindowsForms
         {
             InitializeComponent();
         }
-        private void VerComplejos_Load(object sender, EventArgs e)
+        private async void VerComplejos_Load(object sender, EventArgs e)
         {
 
             dgvComplejos.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvComplejos.ReadOnly = false;
 
-            CargarComplejos();
+            await CargarComplejos();
         }
 
-        private async void CargarComplejos()
+        private async Task CargarComplejos()
         {
             try
             {
                 var listaComplejos = await ComplejoApiClient.ObtenerTodosAsync();
-                var listaTipos = await TipoCanchaApiClient.ObtenerTodosAsync();
-
-                // 3. Cruzamos los datos vinculando el ID con el Nombre
-                var listaParaGrilla = listaComplejos.Select(c => new ComplejoDTO
-                {
-                    Id = c.Id,
-                    Nombre = c.Nombre
-                }).ToList();
                 dgvComplejos.AutoGenerateColumns = false;
                 dgvComplejos.DataSource = null;
-                dgvComplejos.DataSource = listaParaGrilla;
+                dgvComplejos.DataSource = listaComplejos;
             }
             catch (Exception ex)
             {
@@ -89,7 +81,8 @@ namespace WindowsForms
                 await ComplejoApiClient.EliminarComplejoAsync(id);
                 MessageBox.Show($"El Complejo N° {id} fue eliminado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                CargarComplejos();
+               
+                await CargarComplejos();
             }
             catch (Exception ex)
             {
@@ -102,15 +95,16 @@ namespace WindowsForms
             this.Close();
         }
 
-        private void btnAgregarComplejo_Click(object sender, EventArgs e)
+        private async void btnAgregarComplejo_Click(object sender, EventArgs e)
         {
-            this.Hide();
             using (AgregarComplejo agregarComplejo = new AgregarComplejo())
             {
+                
                 var result = agregarComplejo.ShowDialog();
+
                 if (result == DialogResult.OK)
                 {
-                    CargarComplejos();
+                    await CargarComplejos();
                 }
             }
         }

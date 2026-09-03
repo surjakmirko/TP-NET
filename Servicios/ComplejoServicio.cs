@@ -15,7 +15,7 @@ namespace Servicios
         public async Task<ComplejoDTO> AddAsync(ComplejoCrearDTO dto)
         {
             
-            Complejo complejo = new Complejo(0, dto.Direccion, dto.Nombre, dto.EncargadoId, dto.DueñoId, dto.LocalidadId);
+            Complejo complejo = new Complejo(0, dto.Direccion, dto.Nombre, dto.DueñoId, dto.EncargadoId, dto.LocalidadId);
 
             await complejoRepositorio.AddAsync(complejo);
 
@@ -78,7 +78,15 @@ namespace Servicios
                 Nombre = complejo.Nombre,
                 LocalidadId = complejo.LocalidadId,
                 DueñoId = complejo.DueñoId,
-                EncargadoId = complejo.EncargadoId
+                EncargadoId = complejo.EncargadoId,
+
+                // Mapeo de nombres
+                NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
+
+                // Navegación en cadena: Dueño -> PersonaJuridica -> RazonSocial
+                NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
+
+                NombreEncargado = complejo.Encargado?.Email ?? string.Empty
             }).ToList();
         }
 
