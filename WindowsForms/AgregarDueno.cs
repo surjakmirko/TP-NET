@@ -45,6 +45,7 @@ namespace WindowsForms
                 await API.PersonaJuridicaApiClient.CrearPersonaJuridicaAsync(nuevaPersonaJuridica);
                 await API.UsuarioApiClient.CrearUsuarioAsync(nuevoUsuario);
                 MessageBox.Show("¡Dueño registrado exitosamente vía API!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)

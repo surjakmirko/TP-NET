@@ -67,6 +67,18 @@ namespace WebAPI
 
                 return Results.NoContent();
             });
+            app.MapGet("/usuarios/duenos", async (IUsuarioServicio usuarioServicio) =>
+            {
+                try
+                {
+                    var dueños = await usuarioServicio.GetDuenosAsync();
+                    return Results.Ok(dueños);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
         }
     }
 }

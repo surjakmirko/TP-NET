@@ -22,8 +22,6 @@ namespace API
         {
             await DeleteAsync($"usuarios/{id}");
         }
-
-        //CREAR ENDPOINT PARA OBTENER TODOS LOS DUEÑOS
         public static async Task<List<UsuarioDTO>?> GetAllDueno()
         {
             return await GetAsync<List<UsuarioDTO>>("usuarios/duenos");

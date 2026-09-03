@@ -88,5 +88,20 @@ namespace Servicios
 
             return await usuarioRepositorio.UpdateAsync(usuario);
         }
+        public async Task<List<UsuarioDTO>> GetDuenosAsync()
+        {
+            var usuarios = await usuarioRepositorio.GetAllAsync();
+            var dueños = usuarios.Where(u => u.TipoUsuarioId == 4).ToList();
+            return dueños.Select(usuario => new UsuarioDTO
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Telefono = usuario.Telefono,
+                Password = usuario.Password,
+                TipoUsuarioId = usuario.TipoUsuarioId,
+                PersonaFisicaDni = usuario.PersonaFisicaDni,
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
+            }).ToList();
+        }
     }
 }

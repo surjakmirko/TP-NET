@@ -10,5 +10,6 @@ namespace Servicios
         Task<UsuarioDTO?> GetAsync(int id);
         Task<IEnumerable<UsuarioDTO>> GetAllAsync();
         Task<bool> UpdateAsync(UsuarioDTO dto);
+        Task<List<UsuarioDTO>> GetDuenosAsync();
     }
 }

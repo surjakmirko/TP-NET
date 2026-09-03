@@ -7,7 +7,7 @@ namespace API
     {
         public static async Task CrearPersonaJuridicaAsync(PersonaJuridicaDTO dto)
         {
-            await PostAsync("personajuridica", dto);
+            await PostAsync("personasjuridicas", dto);
         }
     }
 }
