@@ -83,17 +83,27 @@ namespace WindowsForms
                     return;
                 }
 
-                
                 int nroCanchaOriginal = _canchaActual.Nro;
 
-                
+                var canchas = await ComplejoApiClient.ObtenerCanchasAsync(_idComplejo);
+                if (canchas != null)
+                {
+                    bool existeOtraConMismoNro = canchas.Any(c => c.Nro == nuevoNroCancha && c.Nro != nroCanchaOriginal);
+                    if (existeOtraConMismoNro)
+                    {
+                        MessageBox.Show("Ya existe una cancha con ese número en el complejo.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+
                 CanchaCrearDTO nuevaCancha = new CanchaCrearDTO
                 {
                     Nro = nuevoNroCancha,
                     TipoCanchaId = Convert.ToInt32(cmbTipoCancha.SelectedValue)
                 };
 
-                
+
                 await ComplejoApiClient.ActualizarCanchaAsync(_idComplejo, nroCanchaOriginal, nuevaCancha);
 
                 MessageBox.Show("Cancha actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

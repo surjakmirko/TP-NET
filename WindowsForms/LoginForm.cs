@@ -63,6 +63,10 @@ namespace WindowsForms
 
                     this.Close();
                 }
+                else if (resultadoLogin == null)
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos.", "Error de inicio de sesión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {

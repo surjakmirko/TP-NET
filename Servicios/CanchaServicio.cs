@@ -62,10 +62,7 @@ namespace Servicios
 
         public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nroOriginal)
         {
-            // Construimos la entidad Cancha con el NUEVO número que viene en dto.Nro
-            Cancha canchaNueva = new Cancha(complejoId, dto.Nro, dto.TipoCanchaId);
-
-            // Le pasamos al repositorio la cancha con el nuevo número Y el número original para buscarla
+            Cancha canchaNueva = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId);
             return await canchaRepositorio.UpdateAsync(canchaNueva, nroOriginal);
         }
     }

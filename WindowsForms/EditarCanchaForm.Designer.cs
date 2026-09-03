@@ -6,7 +6,6 @@
 
         private Label lblTitulo;
         private Label lblNumeroCancha;
-        private TextBox txtNumeroCancha;
         private Label lblTipoDeporte;
         private Button btnGuardar;
         private Button btnCancelar;
@@ -24,11 +23,12 @@
         {
             lblTitulo = new Label();
             lblNumeroCancha = new Label();
-            txtNumeroCancha = new TextBox();
             lblTipoDeporte = new Label();
             btnGuardar = new Button();
             btnCancelar = new Button();
             cmbTipoCancha = new ComboBox();
+            numericUpDown1 = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
@@ -37,7 +37,7 @@
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblTitulo.Location = new Point(20, 15);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(115, 21);
+            lblTitulo.Size = new Size(142, 28);
             lblTitulo.TabIndex = 6;
             lblTitulo.Text = "Editar Cancha";
             // 
@@ -46,25 +46,18 @@
             lblNumeroCancha.AutoSize = true;
             lblNumeroCancha.Location = new Point(46, 55);
             lblNumeroCancha.Name = "lblNumeroCancha";
-            lblNumeroCancha.Size = new Size(67, 15);
+            lblNumeroCancha.Size = new Size(81, 20);
             lblNumeroCancha.TabIndex = 5;
             lblNumeroCancha.Text = "N° Cancha:";
-            // 
-            // txtNumeroCancha
-            // 
-            txtNumeroCancha.Location = new Point(120, 52);
-            txtNumeroCancha.Name = "txtNumeroCancha";
-            txtNumeroCancha.Size = new Size(140, 23);
-            txtNumeroCancha.TabIndex = 4;
             // 
             // lblTipoDeporte
             // 
             lblTipoDeporte.AutoSize = true;
             lblTipoDeporte.Location = new Point(20, 90);
             lblTipoDeporte.Name = "lblTipoDeporte";
-            lblTipoDeporte.Size = new Size(93, 15);
+            lblTipoDeporte.Size = new Size(101, 20);
             lblTipoDeporte.TabIndex = 3;
-            lblTipoDeporte.Text = "Tipo Deporte ID:";
+            lblTipoDeporte.Text = "Tipo Deporte:";
             // 
             // btnGuardar
             // 
@@ -90,19 +83,26 @@
             // 
             cmbTipoCancha.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoCancha.FormattingEnabled = true;
-            cmbTipoCancha.Location = new Point(119, 87);
+            cmbTipoCancha.Location = new Point(127, 87);
             cmbTipoCancha.Name = "cmbTipoCancha";
-            cmbTipoCancha.Size = new Size(141, 23);
+            cmbTipoCancha.Size = new Size(141, 28);
             cmbTipoCancha.TabIndex = 1;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(133, 54);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(46, 27);
+            numericUpDown1.TabIndex = 7;
             // 
             // EditarCanchaForm
             // 
             ClientSize = new Size(284, 181);
+            Controls.Add(numericUpDown1);
             Controls.Add(cmbTipoCancha);
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardar);
             Controls.Add(lblTipoDeporte);
-            Controls.Add(txtNumeroCancha);
             Controls.Add(lblNumeroCancha);
             Controls.Add(lblTitulo);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -112,9 +112,11 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Modificar Cancha";
             Load += EditarCanchaForm_Load;
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
         private ComboBox cmbTipoCancha;
+        private NumericUpDown numericUpDown1;
     }
 }
