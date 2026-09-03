@@ -35,8 +35,8 @@
             btnVerCancha = new Button();
             btnDarDeAltaCancha = new Button();
             label1 = new Label();
-            btnCerrarSesion = new Button();
             cambiarComplejoBoton = new Button();
+            btnCerrarSesion = new Button();
             SuspendLayout();
             // 
             // bienvenido
@@ -118,17 +118,6 @@
             label1.TabIndex = 5;
             label1.Text = "Mis Canchas";
             // 
-            // btnCerrarSesion
-            // 
-            btnCerrarSesion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnCerrarSesion.Location = new Point(406, 488);
-            btnCerrarSesion.Name = "btnCerrarSesion";
-            btnCerrarSesion.Size = new Size(188, 33);
-            btnCerrarSesion.TabIndex = 10;
-            btnCerrarSesion.Text = "Cerrar Sesion";
-            btnCerrarSesion.UseVisualStyleBackColor = true;
-            btnCerrarSesion.Click += btnCerrarSesion_Click;
-            // 
             // cambiarComplejoBoton
             // 
             cambiarComplejoBoton.Location = new Point(10, 390);
@@ -140,13 +129,24 @@
             cambiarComplejoBoton.UseVisualStyleBackColor = true;
             cambiarComplejoBoton.Click += cambiarComplejoBoton_Click;
             // 
+            // btnCerrarSesion
+            // 
+            btnCerrarSesion.Location = new Point(324, 390);
+            btnCerrarSesion.Margin = new Padding(2);
+            btnCerrarSesion.Name = "btnCerrarSesion";
+            btnCerrarSesion.Size = new Size(150, 26);
+            btnCerrarSesion.TabIndex = 12;
+            btnCerrarSesion.Text = "Cerrar Sesion";
+            btnCerrarSesion.UseVisualStyleBackColor = true;
+            btnCerrarSesion.Click += btnCerrarSesion_Click_1;
+            // 
             // MenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(485, 426);
-            Controls.Add(cambiarComplejoBoton);
             Controls.Add(btnCerrarSesion);
+            Controls.Add(cambiarComplejoBoton);
             Controls.Add(btnVerCancha);
             Controls.Add(btnDarDeAltaCancha);
             Controls.Add(label1);
@@ -172,7 +172,7 @@
         private Button btnVerCancha;
         private Button btnDarDeAltaCancha;
         private Label label1;
-        private Button btnCerrarSesion;
         private Button cambiarComplejoBoton;
+        private Button btnCerrarSesion;
     }
 }

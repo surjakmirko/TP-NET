@@ -52,11 +52,6 @@ namespace WindowsForms
             this.Show();
         }
 
-        private void btnCerrarSesion_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void cambiarComplejoBoton_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
@@ -69,6 +64,10 @@ namespace WindowsForms
             AltaCancha formAltaCancha = new AltaCancha(_idComplejoSeleccionado);
             formAltaCancha.ShowDialog();
             this.Show();
+        }
+        private void btnCerrarSesion_Click_1(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
