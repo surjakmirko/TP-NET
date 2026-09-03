@@ -52,7 +52,7 @@ namespace WindowsForms
 
                 if (_canchaActual != null)
                 {
-                    txtNumeroCancha.Text = _canchaActual.Nro.ToString();
+                    nroCanchaUpDown.Text = _canchaActual.Nro.ToString();
                     cmbTipoCancha.SelectedValue = _canchaActual.TipoCanchaId;
                 }
                 else
@@ -71,7 +71,7 @@ namespace WindowsForms
         {
             try
             {
-                if (!int.TryParse(txtNumeroCancha.Text, out int nuevoNroCancha) || nuevoNroCancha <= 0)
+                if (!int.TryParse(nroCanchaUpDown.Text, out int nuevoNroCancha) || nuevoNroCancha <= 0)
                 {
                     MessageBox.Show("Ingresá un número de cancha válido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;

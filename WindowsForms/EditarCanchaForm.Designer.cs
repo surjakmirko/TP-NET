@@ -27,8 +27,8 @@
             btnGuardar = new Button();
             btnCancelar = new Button();
             cmbTipoCancha = new ComboBox();
-            numericUpDown1 = new NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            nroCanchaUpDown = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)nroCanchaUpDown).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
@@ -88,17 +88,17 @@
             cmbTipoCancha.Size = new Size(141, 28);
             cmbTipoCancha.TabIndex = 1;
             // 
-            // numericUpDown1
+            // nroCanchaUpDown
             // 
-            numericUpDown1.Location = new Point(133, 54);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(46, 27);
-            numericUpDown1.TabIndex = 7;
+            nroCanchaUpDown.Location = new Point(133, 54);
+            nroCanchaUpDown.Name = "nroCanchaUpDown";
+            nroCanchaUpDown.Size = new Size(46, 27);
+            nroCanchaUpDown.TabIndex = 7;
             // 
             // EditarCanchaForm
             // 
             ClientSize = new Size(284, 181);
-            Controls.Add(numericUpDown1);
+            Controls.Add(nroCanchaUpDown);
             Controls.Add(cmbTipoCancha);
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardar);
@@ -112,11 +112,11 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Modificar Cancha";
             Load += EditarCanchaForm_Load;
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nroCanchaUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
         private ComboBox cmbTipoCancha;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown nroCanchaUpDown;
     }
 }
