@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AplicacionDbContext))]
-    partial class AplicacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260907215751_SeedPersonaJuridica")]
+    partial class SeedPersonaJuridica
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,26 +78,6 @@ namespace Data.Migrations
                     b.HasIndex("LocalidadId");
 
                     b.ToTable("Complejos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Direccion = "Calle Falsa 123",
-                            DueñoId = 2,
-                            EncargadoId = 3,
-                            LocalidadId = 15,
-                            Nombre = "Complejo Deportivo La Canchita"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Direccion = "Avenida Siempre Viva 456",
-                            DueñoId = 2,
-                            EncargadoId = 4,
-                            LocalidadId = 15,
-                            Nombre = "Complejo Deportivo El Golazo"
-                        });
                 });
 
             modelBuilder.Entity("Modelo.Dominio.Horario", b =>
@@ -1427,41 +1410,6 @@ namespace Data.Migrations
                     b.HasIndex("TipoUsuarioId");
 
                     b.ToTable("Usuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "admin@gmail.com",
-                            Password = "$2a$11$nbToVlWyDCWqbz.kzL9n8ONEKU0QXSXwmIEPp1GJ89SuxK1IVNLWO",
-                            Telefono = "12345678",
-                            TipoUsuarioId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "encargado@gmail.com",
-                            Password = "$2a$11$wAxPtWlkZh//qsM0h0M6Aujxy58RZWmZAOib4ZjnhRavu2rCJOR5.",
-                            Telefono = "987654321",
-                            TipoUsuarioId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "encargado2@gmail.com",
-                            Password = "$2a$11$nCOULbax26.BO2tfpIDmEOO3q4jdZX.BuN2rQhotGr8OpWxzFJyFS",
-                            Telefono = "113355799",
-                            TipoUsuarioId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "dueño@gmail.com",
-                            Password = "$2a$11$ffGXzD1pY8Aw3Q4tpikSa.gHyd8A7zXHtTD0HDewIqG2b3J6yIvn2",
-                            PersonaJuridicaCuit = "20123456789",
-                            Telefono = "22446688",
-                            TipoUsuarioId = 4
-                        });
                 });
 
             modelBuilder.Entity("Modelo.Dominio.Cancha", b =>

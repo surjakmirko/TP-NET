@@ -12,6 +12,6 @@ namespace Data
         Task<IEnumerable<Usuario>> GetAllAsync();
         Task<bool> UpdateAsync(Usuario cliente);
         Task<bool> EmailExistsAsync(string email);
-        Task<int> IniciarSesion(string email, string password);
+        
     }
 }

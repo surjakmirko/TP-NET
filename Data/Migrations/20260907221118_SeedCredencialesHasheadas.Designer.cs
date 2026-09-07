@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AplicacionDbContext))]
-    partial class AplicacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260907221118_SeedCredencialesHasheadas")]
+    partial class SeedCredencialesHasheadas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +84,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Direccion = "Calle Falsa 123",
-                            DueñoId = 2,
+                            DueñoId = 1,
                             EncargadoId = 3,
                             LocalidadId = 15,
                             Nombre = "Complejo Deportivo La Canchita"
@@ -90,7 +93,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             Direccion = "Avenida Siempre Viva 456",
-                            DueñoId = 2,
+                            DueñoId = 1,
                             EncargadoId = 4,
                             LocalidadId = 15,
                             Nombre = "Complejo Deportivo El Golazo"
@@ -1433,7 +1436,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Email = "admin@gmail.com",
-                            Password = "$2a$11$nbToVlWyDCWqbz.kzL9n8ONEKU0QXSXwmIEPp1GJ89SuxK1IVNLWO",
+                            Password = "$2a$11$AlwmwydZgOtVAim4taaFnOVeuSkOwKCqWDUiWtGGlKyko.nZeTnCW",
                             Telefono = "12345678",
                             TipoUsuarioId = 1
                         },
@@ -1441,7 +1444,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             Email = "encargado@gmail.com",
-                            Password = "$2a$11$wAxPtWlkZh//qsM0h0M6Aujxy58RZWmZAOib4ZjnhRavu2rCJOR5.",
+                            Password = "$2a$11$2NnPNWqlDO.Q.oXyP.me9ew2bQQjl9XSJWJkdSVrKTwa0uC5z7yNK",
                             Telefono = "987654321",
                             TipoUsuarioId = 2
                         },
@@ -1449,7 +1452,7 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             Email = "encargado2@gmail.com",
-                            Password = "$2a$11$nCOULbax26.BO2tfpIDmEOO3q4jdZX.BuN2rQhotGr8OpWxzFJyFS",
+                            Password = "$2a$11$23p8zZjfS6Jo3.2yTFp.k.jkyJ9rtnEUvokDGexDrHSkTrIoJJWTq",
                             Telefono = "113355799",
                             TipoUsuarioId = 2
                         },
@@ -1457,7 +1460,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             Email = "dueño@gmail.com",
-                            Password = "$2a$11$ffGXzD1pY8Aw3Q4tpikSa.gHyd8A7zXHtTD0HDewIqG2b3J6yIvn2",
+                            Password = "$2a$11$BDMfISYyMo0LgRNqQp1Xl.pJ6LRnwqZKg8kR2xIy8oTOEKV2nITny",
                             PersonaJuridicaCuit = "20123456789",
                             Telefono = "22446688",
                             TipoUsuarioId = 4

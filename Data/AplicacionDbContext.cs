@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modelo.Dominio;
+using BCrypt.Net;
 
 
 namespace Data
@@ -34,9 +35,15 @@ namespace Data
             modelBuilder.Entity<PersonaJuridica>()
                 .HasKey(pj => pj.Cuit);
 
+            modelBuilder.Entity<PersonaJuridica>().HasData(
+                new PersonaJuridica("20123456789", "Complejo Deportivo La Canchita")
+            );
+
+
             //USUARIO
             modelBuilder.Entity<Usuario>()
                 .HasKey(u => u.Id);
+
 
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.TipoUsuario)
@@ -52,6 +59,13 @@ namespace Data
                 .HasOne(u => u.PersonaJuridica)
                 .WithMany(pj => pj.Usuarios)
                 .HasForeignKey(u => u.PersonaJuridicaCuit);
+
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario(1,"admin@gmail.com", "12345678", BCrypt.Net.BCrypt.HashPassword("admin"), 1, null, null),
+                new Usuario(3,"encargado@gmail.com", "987654321", BCrypt.Net.BCrypt.HashPassword("encargado"), 2, null, null),
+                new Usuario(4, "encargado2@gmail.com", "113355799", BCrypt.Net.BCrypt.HashPassword("encargado2"), 2, null, null),
+                new Usuario(2,"dueño@gmail.com", "22446688", BCrypt.Net.BCrypt.HashPassword("dueño"), 4, null, "20123456789")
+            );
 
             modelBuilder.Entity<TipoUsuario>()
                 .HasKey(tp => tp.Id);
@@ -113,6 +127,11 @@ namespace Data
                 .WithMany(d => d.Complejos)
                 .HasForeignKey(c => c.DueñoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Complejo>().HasData(
+                new Complejo(1,"Calle Falsa 123", "Complejo Deportivo La Canchita", 2, 3, 15),
+                new Complejo(2,"Avenida Siempre Viva 456", "Complejo Deportivo El Golazo",2,4, 15)
+            );
 
             //HORARIO
             modelBuilder.Entity<Horario>()

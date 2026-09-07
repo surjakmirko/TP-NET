@@ -88,7 +88,7 @@ namespace Servicios
         public async Task<bool> UpdateAsync(ComplejoDTO dto)
         {   
         
-            Complejo complejo = new Complejo(dto.Id, dto.Direccion, dto.Nombre, dto.EncargadoId, dto.DueñoId, dto.LocalidadId);
+            Complejo complejo = new Complejo(dto.Id, dto.Direccion, dto.Nombre, dto.DueñoId, dto.EncargadoId, dto.LocalidadId);
 
             return await complejoRepositorio.UpdateAsync(complejo);
         }

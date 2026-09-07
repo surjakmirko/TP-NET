@@ -46,7 +46,7 @@
             dgvDuenos.MultiSelect = false;
             dgvDuenos.Name = "dgvDuenos";
             dgvDuenos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDuenos.Size = new Size(600, 280);
+            dgvDuenos.Size = new Size(892, 465);
             dgvDuenos.TabIndex = 1;
             dgvDuenos.CellClick += dgvDuenos_CellClick;
             // 
@@ -60,7 +60,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(20, 340);
+            btnVolver.Location = new Point(20, 521);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(90, 28);
             btnVolver.TabIndex = 2;
@@ -70,7 +70,7 @@
             // 
             // btnAgregarDueno
             // 
-            btnAgregarDueno.Location = new Point(505, 340);
+            btnAgregarDueno.Location = new Point(797, 521);
             btnAgregarDueno.Name = "btnAgregarDueno";
             btnAgregarDueno.Size = new Size(115, 28);
             btnAgregarDueno.TabIndex = 3;
@@ -80,7 +80,7 @@
             // 
             // VerDuenos
             // 
-            ClientSize = new Size(640, 380);
+            ClientSize = new Size(944, 561);
             Controls.Add(btnAgregarDueno);
             Controls.Add(btnVolver);
             Controls.Add(lblTitulo);
