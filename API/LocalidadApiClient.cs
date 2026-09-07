@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using DTOs; // Asumiendo que tenés un LocalidadDTO
+using DTOs; 
 
 namespace API
 {

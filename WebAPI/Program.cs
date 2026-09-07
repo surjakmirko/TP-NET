@@ -5,7 +5,7 @@ using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -17,7 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AplicacionDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Add Dependency Injection
+
 
 builder.Services.AddScoped<ITipoUsuarioRepositorio, TipoUsuarioRepositorio>();
 builder.Services.AddScoped<ITipoUsuarioServicio, TipoUsuarioServicio>();

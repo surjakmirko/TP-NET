@@ -9,7 +9,7 @@ namespace Data
     {
         public AplicacionDbContext CreateDbContext(string[] args)
         {
-            // Apunta directamente a la carpeta de la WebAPI para leer el appsettings.json
+            
             var basePath = Path.Combine(Directory.GetCurrentDirectory(), "../WebAPI");
 
             if (!File.Exists(Path.Combine(basePath, "appsettings.json")))

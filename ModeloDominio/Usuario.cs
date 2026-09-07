@@ -9,7 +9,6 @@ namespace Modelo.Dominio
         public string Telefono { get; private set; }
         public string Password { get; private set; }
 
-        //foraing key
         public int TipoUsuarioId { get; private set; }
         public TipoUsuario TipoUsuario { get; set; } = null!;
 
@@ -21,18 +20,18 @@ namespace Modelo.Dominio
 
         public PersonaJuridica? PersonaJuridica { get; set; }
 
-        //si un usuario tiene varios complejos
+        
         public ICollection<Complejo> Complejos { get; set; } = new List<Complejo>();
 
-        // si un usuario (encargado) 
+       
         public Complejo Complejo { get; set; }
 
-        // si un usuario (cliente)
+   
         public ICollection<Turno> Turnos { get; set; } = new List<Turno>();
 
 
 
-        // Constructor para CREAR nuevos usuarios (Sin ID, SQL Server asigna el autoincremental)
+        
         public Usuario(string email, string telefono, string password, int tipoUsuarioId, string? personaFisicaDni = null, string? personaJuridicaCuit = null)
         {
             SetEmail(email);
@@ -43,7 +42,7 @@ namespace Modelo.Dominio
             SetPersonaJuridicaCuit(personaJuridicaCuit);
         }
 
-        // Constructor completo para RECONSTRUIR usuarios existentes (por ejemplo, desde DTOs o tests)
+       
         public Usuario(int id, string email, string telefono, string password, int tipoUsuarioId, string? personaFisicaDni = null, string? personaJuridicaCuit = null)
             : this(email, telefono, password, tipoUsuarioId, personaFisicaDni, personaJuridicaCuit)
         {

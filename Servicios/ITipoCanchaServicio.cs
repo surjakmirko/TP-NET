@@ -12,6 +12,6 @@ namespace Servicios
 
         Task<TipoCanchaDTO?> GetAsync(int id);
         Task<IEnumerable<TipoCanchaDTO>> GetAllAsync();
-        //Task<IEnumerable<TipoCanchaDTO>> GetByCriteriaAsync(TipoCanchaCriteriaDTO criteriaDTO);
+       
     }
 }

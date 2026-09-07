@@ -181,7 +181,7 @@ namespace WebAPI
             {
                 try
                 {
-                    // Llamamos al servicio enviando el DTO, el ID del complejo y el número original de la URL
+                   
                     var encontrado = await canchaServicio.UpdateAsync(dto, idComplejo, nro);
 
                     if (!encontrado)

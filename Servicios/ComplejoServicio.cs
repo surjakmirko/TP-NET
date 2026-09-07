@@ -79,13 +79,8 @@ namespace Servicios
                 LocalidadId = complejo.LocalidadId,
                 DueñoId = complejo.DueñoId,
                 EncargadoId = complejo.EncargadoId,
-
-                // Mapeo de nombres
                 NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
-
-                // Navegación en cadena: Dueño -> PersonaJuridica -> RazonSocial
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
-
                 NombreEncargado = complejo.Encargado?.Email ?? string.Empty
             }).ToList();
         }

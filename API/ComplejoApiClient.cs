@@ -7,7 +7,7 @@ namespace API
 {
     public class ComplejoApiClient : BaseApiClient
     {
-        // --- COMPLEJOS ---
+        //COMPLEJOS
 
         public static async Task<List<ComplejoDTO>?> ObtenerTodosAsync()
         {
@@ -40,7 +40,7 @@ namespace API
             await DeleteAsync($"complejos/{id}");
         }
 
-        // --- HORARIOS ---
+        //HORARIOS
 
         public static async Task<List<HorarioDTO>?> ObtenerHorariosAsync(int idComplejo)
         {
@@ -67,7 +67,7 @@ namespace API
             await DeleteAsync($"complejos/{idComplejo}/horarios/{numDia}");
         }
 
-        // --- CANCHAS ---
+        //CANCHAS
 
         public static async Task<List<CanchaDTO>?> ObtenerCanchasAsync(int idComplejo)
         {
@@ -94,7 +94,7 @@ namespace API
             await DeleteAsync($"complejos/{idComplejo}/canchas/{nro}");
         }
 
-        // --- PRECIOS ---
+        //PRECIOS
 
         public static async Task<List<PrecioDTO>?> ObtenerPreciosAsync(int idComplejo, int nroCancha)
         {

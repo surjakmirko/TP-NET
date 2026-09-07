@@ -43,7 +43,7 @@ namespace Data
         }
         public async Task<bool> UpdateAsync(Cancha cancha, int nroOriginal)
         {
-            // Buscamos la cancha existente por su clave primaria compuesta original (ComplejoId, nroOriginal)
+       
             var existingCancha = await _context.Canchas.FindAsync(cancha.ComplejoId, nroOriginal);
 
             if (existingCancha == null)
@@ -51,7 +51,7 @@ namespace Data
                 return false;
             }
 
-            // Si el número de cancha cambió, en EF Core con PK compuesta eliminamos el registro viejo y agregamos el nuevo
+           
             if (nroOriginal != cancha.Nro)
             {
                 _context.Canchas.Remove(existingCancha);
@@ -59,7 +59,7 @@ namespace Data
             }
             else
             {
-                // Si el número no cambió, solo actualizamos los demás atributos
+               
                 existingCancha.SetTipoCanchaId(cancha.TipoCanchaId);
             }
 
