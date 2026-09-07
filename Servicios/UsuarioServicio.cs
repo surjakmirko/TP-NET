@@ -40,7 +40,14 @@ namespace Servicios
 
         public async Task<bool> DeleteAsync(int id)
         {
-            return await usuarioRepositorio.DeleteAsync(id);
+            try
+            {
+                return await usuarioRepositorio.DeleteAsync(id);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                throw new ArgumentException("No se puede eliminar este dueño porque tiene complejos asociados.");
+            }
         }
 
         public async Task<UsuarioDTO?> GetAsync(int id)

@@ -58,14 +58,19 @@ namespace WebAPI
             });
             app.MapDelete("/usuarios/{id}", async (int id, IUsuarioServicio usuarioServicio) =>
             {
-                var deleted = await usuarioServicio.DeleteAsync(id);
-
-                if (!deleted)
+                try
                 {
-                    return Results.NotFound();
+                    var deleted = await usuarioServicio.DeleteAsync(id);
+                    if (!deleted)
+                    {
+                        return Results.NotFound();
+                    }
+                    return Results.NoContent();
                 }
-
-                return Results.NoContent();
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
             });
             app.MapGet("/usuarios/duenos", async (IUsuarioServicio usuarioServicio) =>
             {
