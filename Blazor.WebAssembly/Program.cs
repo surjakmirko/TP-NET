@@ -1,7 +1,9 @@
+using API;
+using API.Client;
 using Blazor.WebAssembly;
+using Blazor.WebAssembly.Servicios;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using API;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -13,5 +15,10 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 
 builder.Services.AddScoped<ComplejoApiClient>();
+builder.Services.AddScoped<AutenticacionApi>();
+builder.Services.AddScoped<UsuarioApiClient>();
+
+builder.Services.AddScoped<IAutenticacionService, BlazorWasmAuthService>();
+
 
 await builder.Build().RunAsync();

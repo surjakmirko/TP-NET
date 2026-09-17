@@ -1,0 +1,166 @@
+﻿@page "/register"
+@using API
+@using DTOs
+@inject UsuarioApiClient UsuarioApi
+@inject NavigationManager Navigation
+
+<div class="register-container">
+    <div class="register-card">
+
+        <div class="register-form-side">
+            <div class="register-header">
+                <div class="brand-logo">TL</div>
+                <h2>Crear Cuenta</h2>
+                <p class="register-subtitle">Sumate a Turno Libre y empezá a reservar</p>
+            </div>
+
+            <EditForm Model="model" OnValidSubmit="HandleSubmit" class="register-form">
+                <DataAnnotationsValidator />
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger mb-3">@errorMessage</div>
+                }
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div class="alert alert-success mb-3">@successMessage</div>
+                }
+
+                <!-- Fila 1: Nombre y Apellido -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <InputText id="nombre" class="form-control" @bind-Value="model.Nombre" placeholder="Lionel" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <InputText id="apellido" class="form-control" @bind-Value="model.Apellido" placeholder="Messi" required />
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group mb-3">
+                    <label for="email">Correo Electrónico</label>
+                    <InputText id="email" type="email" class="form-control" @bind-Value="model.Email" placeholder="tuemail@ejemplo.com" required />
+                </div>
+
+                <!-- Fila 2: DNI y Teléfono -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dni">DNI</label>
+                        <InputText id="dni" class="form-control" @bind-Value="model.Dni" placeholder="12345678" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <InputText id="telefono" type="tel" class="form-control" @bind-Value="model.Telefono" placeholder="123-456-7890" required />
+                    </div>
+                </div>
+
+                <!-- Fecha de Nacimiento -->
+                <div class="form-group mb-3">
+                    <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                    <InputDate id="fechaNacimiento" class="form-control" @bind-Value="model.FechaNacimiento" required />
+                </div>
+
+                <!-- Fila 3: Contraseña y Confirmar -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <InputText id="password" type="password" class="form-control" @bind-Value="model.Password" placeholder="••••••••" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Contraseña</label>
+                        <InputText id="confirmPassword" type="password" class="form-control" @bind-Value="confirmPassword" placeholder="••••••••" required />
+                    </div>
+                </div>
+
+                <button class="register-boton mt-3" type="submit" disabled="@cargando">
+                    @(cargando ? "Registrando..." : "Registrarse")
+                </button>
+            </EditForm>
+
+            <div class="register-footer">
+                <p>¿Ya tenés una cuenta? <a href="/login" class="redirect-login">Iniciar sesión</a></p>
+            </div>
+        </div>
+
+        <div class="register-image-side">
+            <div class="image-overlay">
+                <h3>¡Formá parte de la comunidad!</h3>
+                <p>Organizá partidos, encontrá canchas disponibles y no te quedes fuera de la jugada.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private RegistroFormModel model = new();
+    private string confirmPassword = string.Empty;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+    private bool cargando = false;
+
+    private async Task HandleSubmit()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        if (model.Password != confirmPassword)
+        {
+            errorMessage = "Las contraseñas no coinciden.";
+            return;
+        }
+
+        cargando = true;
+
+        try
+        {
+            // 1. Crear o asegurar la existencia de PersonaFisica en el backend
+            var personaDto = new PersonaFisicaDTO
+            {
+                Dni = model.Dni,
+                Nombre = model.Nombre,
+                Apellido = model.Apellido,
+                Fecha_Nacimiento = model.FechaNacimiento
+            };
+
+            // await PersonaApiClient.CrearAsync(personaDto);
+
+            // 2. Armar el UsuarioCrearDTO exacto que espera tu cliente API
+            var usuarioDto = new UsuarioCrearDTO
+            {
+                Email = model.Email,
+                Telefono = model.Telefono,
+                Password = model.Password,
+                PersonaFisicaDni = model.Dni,
+                PersonaJuridicaCuit = null,
+                TipoUsuarioId = 1
+            };
+
+            await UsuarioApiClient.CrearUsuarioAsync(usuarioDto);
+            successMessage = "¡Cuenta creada con éxito! Redirigiendo al login...";
+            await Task.Delay(2000);
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al registrar usuario: {ex.Message}";
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    public class RegistroFormModel
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Dni { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
+        public DateOnly FechaNacimiento { get; set; }
+        public string Password { get; set; } = string.Empty;
+    }
+}

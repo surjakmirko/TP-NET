@@ -11,6 +11,7 @@ namespace Modelo.Dominio
 
         public int TipoUsuarioId { get; private set; }
         public TipoUsuario TipoUsuario { get; set; } = null!;
+        public string Rol => TipoUsuario?.Descripcion ?? string.Empty;
 
         public string? PersonaFisicaDni { get;private set; }
          

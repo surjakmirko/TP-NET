@@ -80,6 +80,7 @@ namespace Servicios
                 Telefono = usuario.Telefono,
                 Password = usuario.Password, 
                 TipoUsuarioId = usuario.TipoUsuarioId,
+                Rol = usuario.TipoUsuario?.Descripcion ?? string.Empty,
                 PersonaFisicaDni = usuario.PersonaFisicaDni,
                 PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
             }).ToList();
