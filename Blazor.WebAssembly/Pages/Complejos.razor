@@ -1,0 +1,124 @@
+﻿@page "/complejos"
+@using DTOs
+@using Servicios
+@using API
+@inject NavigationManager NavigationManager
+@inject ComplejoApiClient ComplejoApi
+
+<div class="contenedor-pagina">
+    <div class="barra-busqueda">
+        <BarraBusqueda />
+    </div>
+    
+    <div class="contenido-principal">
+        <aside class="columna-filtros">
+            <BarraFiltros OnFiltroCambio="AplicarFiltroPrecio" MinActual="Min" MaxActual="Max" />
+        </aside>
+        
+        <main class="seccion-resultados">
+            <div class="encabezado-resultados">
+                <h1>
+                    @(cargando ? "Buscando complejos..." : $"{ComplejosOrdenados.Count()} complejos encontrados")
+                </h1>
+                
+                <div class="selector-orden">
+                    Ordenar por:
+                    <select value="@(Sort ?? "relevantes")" @onchange="CambiarOrden">
+                        <option value="relevantes">Más relevantes</option>
+                        <option value="precio_menor">Menor precio</option>
+                        <option value="precio_mayor">Mayor precio</option>
+                        <option value="nombre_az">Nombre (A - Z)</option>
+                        <option value="nombre_za">Nombre (Z - A)</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(error))
+            {
+                <p class="error-mensaje">@error</p>
+            }
+            else
+            {
+                @* Actualizamos el componente Grilla para que reciba ComplejoDTO *@
+                <GrillaComplejos Complejos="ComplejosOrdenados" />
+            }
+        </main>
+    </div>
+</div>
+
+@code {
+    // Parámetros capturados de la URL automáticamente
+    [SupplyParameterFromQuery] public string? ciudad { get; set; }
+    [SupplyParameterFromQuery] public string? deporte { get; set; }
+    [SupplyParameterFromQuery] public string? fecha { get; set; }
+    [SupplyParameterFromQuery] public string? hora { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery] public decimal? Min { get; set; }
+    [SupplyParameterFromQuery] public decimal? Max { get; set; }
+
+    // Usamos ComplejoDTO
+    private IEnumerable<ComplejoDTO> complejos = new List<ComplejoDTO>();
+    private bool cargando = true;
+    private string? error = null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await CargarComplejos();
+    }
+
+    private async Task CargarComplejos()
+    {
+        try
+        {
+            cargando = true;
+            error = null;
+            
+            // Llamamos al nuevo método de tu servicio
+            complejos = await  ComplejoApi.BuscarAsync(ciudad, deporte, fecha, hora, Min, Max);
+        }
+        catch (Exception ex)
+        {
+            error = "Ocurrió un error al cargar los complejos. Intenta nuevamente.";
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    // Ordenamiento en memoria sobre la lista de DTOs obtenida
+    private IEnumerable<ComplejoDTO> ComplejosOrdenados
+    {
+        get
+        {
+            var ordenActual = Sort ?? "relevantes";
+            return ordenActual switch
+            {
+                "precio_menor" => complejos.OrderBy(c => c.PrecioDesde),
+                "precio_mayor" => complejos.OrderByDescending(c => c.PrecioDesde),
+                "nombre_az" => complejos.OrderBy(c => c.Nombre),
+                "nombre_za" => complejos.OrderByDescending(c => c.Nombre),
+                _ => complejos
+            };
+        }
+    }
+
+    private void CambiarOrden(ChangeEventArgs e)
+    {
+        var nuevoOrden = e.Value?.ToString();
+        var uri = NavigationManager.GetUriWithQueryParameter("sort", nuevoOrden);
+        NavigationManager.NavigateTo(uri);
+    }
+
+    private void AplicarFiltroPrecio(FiltrosPrecioArgs args)
+    {
+        var parametros = new Dictionary<string, object?>
+        {
+            { "min", args.Min > 0 ? args.Min : null },
+            { "max", args.Max == decimal.MaxValue ? null : args.Max }
+        };
+        var uri = NavigationManager.GetUriWithQueryParameters(parametros);
+        NavigationManager.NavigateTo(uri);
+    }
+}

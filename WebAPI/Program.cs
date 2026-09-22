@@ -85,6 +85,8 @@ builder.Services.AddScoped<IProvinciaServicio, ProvinciaServicio>();
 
 var app = builder.Build();
 
+
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(corsPolicy);
@@ -104,4 +106,4 @@ app.MapLocalidadEndpoints();
 app.MapTurnoEndpoints();
 app.MapAuthEndpoints();
 
-app.Run();
+app.Run();  

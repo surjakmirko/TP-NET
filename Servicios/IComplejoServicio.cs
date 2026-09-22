@@ -1,5 +1,6 @@
 ﻿using DTOs;
-using Modelo.Dominio;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Servicios
 {
@@ -13,5 +14,6 @@ namespace Servicios
 
         Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno);
 
+        Task<IEnumerable<ComplejoDTO>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max);
     }
 }

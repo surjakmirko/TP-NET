@@ -241,6 +241,11 @@ namespace WebAPI
                     return Results.BadRequest(new { error = ex.Message });
                 }
             });
+            app.MapGet("/complejos/buscar", async (string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max, IComplejoServicio complejoServicio) =>
+            {
+                var dtos = await complejoServicio.BuscarAsync(ciudad, deporte, fecha, hora, min, max);
+                return Results.Ok(dtos);
+            });
         }
     }
 }

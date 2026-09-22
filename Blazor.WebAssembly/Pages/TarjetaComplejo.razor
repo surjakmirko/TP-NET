@@ -1,0 +1,44 @@
+﻿@using DTOs
+@inject NavigationManager NavigationManager
+
+<div class="tarjeta-complejo" @onclick="ManejarClic" style="cursor: pointer;">
+    <div class="complejo-media">
+        @* Asegúrate de tener una imagen o un placeholder en tu entidad Complejo *@
+        @* <img src="@(string.IsNullOrEmpty(Complejo.ImagenUrl) ? "/images/placeholder.jpg" : Complejo.ImagenUrl)" alt="@Complejo.Nombre" class="complejo-imagen" /> *@
+
+        <div class="precio-overlay">
+            @if (Complejo.PrecioDesde > 0)
+            {
+                <span>desde <strong>$@Complejo.PrecioDesde.ToString("N0", new System.Globalization.CultureInfo("es-AR"))</strong></span>
+            }
+            else
+            {
+                <span><strong>Consultar precio</strong></span>
+            }
+        </div>
+    </div>
+    <div class="complejo-info">
+        <h3>@Complejo.Nombre</h3>
+        <p>📍 @Complejo.Direccion</p>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ComplejoDTO Complejo { get; set; } = null!;
+
+    [SupplyParameterFromQuery(Name = "fecha")]
+    public string? Fecha { get; set; }
+
+    private void ManejarClic()
+    {
+        var ruta = $"/detalle-complejo/{Complejo.Id}";
+
+        if (!string.IsNullOrEmpty(Fecha))
+        {
+            ruta += $"?fecha={Uri.EscapeDataString(Fecha)}";
+        }
+
+        NavigationManager.NavigateTo(ruta);
+    }
+}

@@ -111,5 +111,15 @@ namespace API
         {
             return await PostAsync<PrecioCrearDTO, PrecioDTO>($"complejos/{idComplejo}/canchas/{nroCancha}/precios", dto);
         }
+        public async Task<IEnumerable<ComplejoDTO>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max)
+        {
+            var q = new List<string>();
+            void Add(string k, object? v) { if (v != null) q.Add($"{k}={Uri.EscapeDataString(v.ToString()!)}"); }
+            Add("ciudad", ciudad); Add("deporte", deporte); Add("fecha", fecha); Add("hora", hora); Add("min", min); Add("max", max);
+            var qs = q.Count > 0 ? "?" + string.Join("&", q) : "";
+
+            // Asegurate de que GetAsync espere una colección de DTOs
+            return await GetAsync<IEnumerable<ComplejoDTO>>($"complejos/buscar{qs}") ?? new List<ComplejoDTO>();
+        }
     }
 }

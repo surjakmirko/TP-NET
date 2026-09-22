@@ -1,0 +1,23 @@
+﻿@using DTOs
+
+@if (Complejos == null || !Complejos.Any())
+{
+    <div class="mensaje-vacio">
+        <p>No se encontraron complejos con esos filtros.</p>
+    </div>
+}
+else
+{
+    <div class="contenedor-grilla">
+        @foreach (var complejo in Complejos)
+        {
+            @* Llamamos al componente TarjetaComplejo que creamos antes *@
+            <TarjetaComplejo Complejo="complejo" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<ComplejoDTO> Complejos { get; set; } = Enumerable.Empty<ComplejoDTO>();
+}

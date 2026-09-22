@@ -77,5 +77,29 @@ namespace Data
         {
             return await _context.Complejos.Where(c => c.DueñoId == idDueno).ToListAsync();
         }
+
+        public async Task<IEnumerable<Complejo>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max)
+        {
+            var query = _context.Complejos
+                .Include(c => c.Localidad)
+                .Include(c => c.Dueño)
+                    .ThenInclude(d => d.PersonaJuridica)
+                .Include(c => c.Encargado)
+                .Include(c => c.Canchas)
+                    .ThenInclude(can => can.TipoCancha)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(ciudad))
+            {
+                query = query.Where(c => c.Localidad != null && c.Localidad.Nombre.Contains(ciudad));
+            }
+
+            if (!string.IsNullOrWhiteSpace(deporte))
+            {
+                query = query.Where(c => c.Canchas.Any(can => can.TipoCancha != null && can.TipoCancha.Deporte.Contains(deporte)));
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }
