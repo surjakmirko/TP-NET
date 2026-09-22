@@ -13,5 +13,7 @@ namespace Servicios
 
         Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno);
 
+        Task<IEnumerable<ComplejoDTO>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max);
+
     }
 }

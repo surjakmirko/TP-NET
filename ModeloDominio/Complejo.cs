@@ -16,6 +16,41 @@
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
 
+        public string ImagenUrl { get; private set; } = string.Empty;
+        public decimal PrecioDesde
+        {
+            get
+            {
+                if (Canchas == null || !Canchas.Any())
+                    return 0;
+
+                var todosLosPrecios = Canchas
+                    .Where(c => c.Precios != null)
+                    .SelectMany(c => c.Precios)
+                    .ToList();
+
+                if (!todosLosPrecios.Any())
+                    return 0;
+
+                var fechaActual = DateOnly.FromDateTime(DateTime.Now);
+
+                // Filtramos los precios que ya están vigentes (FechaDesde <= Hoy)
+                var preciosVigentes = todosLosPrecios
+                    .Where(p => p.FechaDesde <= fechaActual)
+                    .ToList();
+
+                if (!preciosVigentes.Any())
+                {
+                    // Si no hay precios vigentes (ej: todos son para el futuro), 
+                    // devolvemos el mínimo de los futuros por si acaso.
+                    return todosLosPrecios.Min(p => p.PrecioBase);
+                }
+
+                // Devolvemos el precio base más bajo vigente
+                return preciosVigentes.Min(p => p.PrecioBase);
+            }
+        }
+
 
 
 
