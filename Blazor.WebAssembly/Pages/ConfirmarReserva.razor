@@ -1,0 +1,340 @@
+﻿@page "/confirmar-reserva"
+@using API
+@using API.Client
+@using DTOs
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject TurnoApiClient ReservaService
+@inject IAutenticacionService AuthService
+<div class="confirmar-reserva-wrapper">
+    <div class="reserva-container">
+
+        <!-- Encabezado Principal -->
+        <header class="reserva-header">
+            <h1>¡Ya casi terminamos!</h1>
+            <p>Revisá los detalles de tu turno y tus datos para confirmar la reserva.</p>
+        </header>
+
+        <EditForm Model="titular" OnValidSubmit="HandleConfirmar">
+            <DataAnnotationsValidator />
+
+            <!-- Sección de Tarjetas Separadas -->
+            <div class="reserva-grid">
+
+                <!-- Tarjeta 1: Detalles del Turno -->
+                <div class="card-reserva card-turno">
+                    <h2>Detalles del Turno</h2>
+
+                    <div class="info-grupo con-linea">
+                        <span class="info-label">Complejo</span>
+                        <div class="info-detalle">
+                            <!-- Ícono Edificio/Complejo -->
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0V5" />
+                            </svg>
+                            <span class="info-valor destacado">
+                                @(cargando ? "Cargando..." : reserva?.ComplejoNombre ?? "Estrella del Sur")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="info-grupo con-linea">
+                        <span class="info-label">Ubicación</span>
+                        <div class="info-detalle">
+                            <!-- Ícono Ubicación / Pin -->
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="info-valor">
+                                @(cargando ? "Cargando..." : reserva?.ComplejoUbicacion ?? "Cullen 1665, Rosario")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="info-grupo con-linea">
+                        <span class="info-label">Cancha</span>
+                        <div class="info-detalle">
+                            <!-- Ícono Cancha / Líneas -->
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            <span class="info-valor">Cancha @(CanchaNro.HasValue? CanchaNro.Value.ToString() : "1")</span>
+                        </div>
+                    </div>
+
+                    <div class="info-grupo con-linea">
+                        <span class="info-label">Deporte</span>
+                        <div class="info-detalle">
+                            <!-- Ícono Deporte / Dólar o Pelota -->
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="info-valor">
+                                @(cargando ? "Cargando..." : reserva?.Deporte ?? "Fútbol 5")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="info-row con-linea">
+                        <div class="info-grupo">
+                            <span class="info-label">Hora Inicio</span>
+                            <div class="info-detalle">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="info-valor">@(HorarioInicio.HasValue? HorarioInicio.Value.ToString("HH:mm") : "19:00") hs</span>
+                            </div>
+                        </div>
+
+                        <div class="info-grupo">
+                            <span class="info-label">Hora Fin</span>
+                            <div class="info-detalle">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="info-valor">@(string.IsNullOrEmpty(horaFin) ? "20:00" : horaFin) hs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-grupo precio-row con-linea">
+                        <span class="info-label">Precio Seña</span>
+                        <div class="info-detalle">
+                            <svg class="icon icon-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span class="info-valor sena">
+                                $ @(cargando ? "..." : reserva?.PrecioSena ?? "10.000")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="info-grupo precio-row total">
+                        <span class="info-label">Precio Total</span>
+                        <div class="info-detalle">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            <span class="info-valor total-monto">
+                                $ @(cargando ? "..." : reserva?.PrecioTotal ?? "37.000")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Datos del Titular -->
+                <div class="card-reserva card-titular">
+                    <h2>Datos del Titular</h2>
+
+                    <div class="reserva-form">
+                        <div class="input-forum-group">
+                            <label for="nombre">Nombre</label>
+                            <InputText id="nombre" class="input-forum" @bind-Value="titular.Nombre" placeholder="Ej. Mirko" required />
+                        </div>
+
+                        <div class="input-forum-group">
+                            <label for="apellido">Apellido</label>
+                            <InputText id="apellido" class="input-forum" @bind-Value="titular.Apellido" placeholder="Ej. Surjak" required />
+                        </div>
+
+                        <div class="input-forum-group">
+                            <label for="telefono">Teléfono</label>
+                            <InputText id="telefono" type="tel" class="input-forum" @bind-Value="usuario.Telefono" placeholder="Ej. +54 3471 330992" required />
+                        </div>
+
+                        <div class="input-forum-group">
+                            <label for="email">Correo Electrónico</label>
+                            <InputText id="email" type="email" class="input-forum" @bind-Value="usuario.Email" placeholder="tuemail@ejemplo.com" required />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Botón de Confirmar centrado ABAJO (Igual que en React) -->
+            <div class="confirmar-action">
+                <button type="submit" class="btn-confirmar" disabled="@cargando">
+                    @(cargando ? "Procesando..." : "Confirmar Reserva")
+                </button>
+            </div>
+        </EditForm>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    @if (mostrarModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-confirmacion-contenido">
+                <h2>¡Reserva Confirmada!</h2>
+                <p>Su turno se ha creado correctamente, le enviamos el comprobante por email.</p>
+                <p class="modal-subtexto">Recuerde que puede ver sus turnos en su perfil.</p>
+
+                <button type="button" class="btn-modal-home" @onclick="IrAlHome">
+                    Ir al Home
+                </button>
+            </div>
+        </div>
+    }
+</div>
+@code {
+    [SupplyParameterFromQuery(Name = "complejoId")]
+    public int? ComplejoId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "canchaNro")]
+    public int? CanchaNro { get; set; } 
+
+    [SupplyParameterFromQuery(Name = "fecha")]
+    public DateOnly? Fecha { get; set; } 
+
+    [SupplyParameterFromQuery(Name = "horarioInicio")]
+    public TimeOnly? HorarioInicio { get; set; }
+
+    private PersonaFisicaDTO titular = new();
+    private UsuarioDTO usuario = new();
+    private ReservaDetalleDTO? reserva;
+    private string horaFin = string.Empty;
+    private bool cargando = false;
+    private bool mostrarModal = false;
+    private int clienteId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            usuario.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+            usuario.Telefono = user.FindFirst(ClaimTypes.HomePhone)?.Value ?? string.Empty;
+
+            var usuarioIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(usuarioIdClaim, out var idParsed))
+            {
+                clienteId = idParsed;
+                try
+                {
+                    var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
+                    if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
+                    {
+                        titular.Nombre = usuarioCompleto.Nombre;
+                        titular.Apellido = usuarioCompleto.Nombre;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al traer datos del usuario: {ex.Message}");
+                }
+            }
+        }
+        else
+        {
+            // Si no está autenticado, redirige al Login
+            Navigation.NavigateTo("/login");
+        }
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //obtener nombre complejo, ubi
+        //obtener deporte cancha y precio cancha
+        if (HorarioInicio.HasValue)
+        {
+            // Calculamos la hora fin sumando 1 hora
+            horaFin = HorarioInicio.Value.AddHours(1).ToString("HH:mm");
+        }
+        if (ComplejoId.HasValue && CanchaNro.HasValue)
+        {
+            await CargarDetallesReservaAsync(ComplejoId.Value, CanchaNro.Value);
+        }
+    }
+
+    private async Task HandleConfirmar()
+    {
+        // Validamos que todos los parámetros requeridos hayan venido en la URL
+        if (!ComplejoId.HasValue || !CanchaNro.HasValue || !Fecha.HasValue || !HorarioInicio.HasValue)
+        {
+            Console.WriteLine("Error: Faltan parámetros requeridos en la URL.");
+            return;
+        }
+
+        cargando = true;
+        try
+        {
+            var exito = await TurnoApiClient.CrearTurnoAsync(new TurnoCrearDTO
+            {
+                HoraInicio = HorarioInicio.Value,
+                HoraFin = HorarioInicio.Value.AddHours(1),
+                Estado = "Reservado",
+                ClienteId = clienteId,
+                TipoTurnoId = 1,
+                ComplejoId = ComplejoId.Value,
+                CanchaNro = CanchaNro.Value,
+                Fecha = Fecha.Value
+            });
+
+            if (exito != null)
+            {
+                mostrarModal = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al confirmar la reserva: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void IrAlHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private async Task CargarDetallesReservaAsync(int complejoId, int canchaNro)
+    {
+        cargando = true;
+        try
+        {
+            // 1. Consultar Complejo
+            var complejo = await ComplejoApiClient.ObtenerPorIdAsync(complejoId);
+
+            // 2. Consultar Cancha (o datos específicos del deporte y precio)
+            var cancha = await ComplejoApiClient.ObtenerCanchaPorNroAsync(complejoId, canchaNro);
+
+            if (complejo != null)
+            {
+                reserva = new ReservaDetalleDTO
+                {
+                    ComplejoNombre = complejo.Nombre,
+                    ComplejoUbicacion = $"{complejo.Direccion}, {complejo?.NombreLocalidad ?? ""}",
+                    Deporte = cancha?.Deporte ?? "Error",
+                    PrecioTotal = cancha != null ? cancha.Precio.ToString("N0") : "10.000",
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar datos del complejo/cancha: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    public class ReservaDetalleDTO
+    {
+        public string ComplejoNombre { get; set; } = string.Empty;
+        public string ComplejoUbicacion { get; set; } = string.Empty;
+        public string Deporte { get; set; } = string.Empty;
+        public string PrecioSena { get; set; } = string.Empty;
+        public string PrecioTotal { get; set; } = string.Empty;
+    }
+}

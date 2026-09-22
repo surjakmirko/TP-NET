@@ -65,7 +65,9 @@ namespace Servicios
                 Password = usuario.Password,
                 TipoUsuarioId = usuario.TipoUsuarioId,
                 PersonaFisicaDni = usuario.PersonaFisicaDni,
-                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit,
+                Nombre = usuario.PersonaFisica?.Nombre ?? string.Empty,
+                Apellido = usuario.PersonaFisica?.Apellido ?? string.Empty
             };
         }
 

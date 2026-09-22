@@ -10,6 +10,9 @@
         public string? PersonaJuridicaCuit { get;  set; }
         public int TipoUsuarioId { get; set; }
         public string Rol { get; set; } = string.Empty;
+        public string? Nombre { get; set; }
+        public string? Apellido { get; set; }
+
 
     }
 

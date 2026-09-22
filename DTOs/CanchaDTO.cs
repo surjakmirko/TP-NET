@@ -7,6 +7,12 @@ namespace DTOs
         public int Nro {  get; set; }
         public int ComplejoId {  get; set; }
         public int TipoCanchaId {  get; set; }
+        public string Deporte { get; set; }
+
+        public decimal Precio { get; set; }
+
+
+
     }
 
     public class CanchaCrearDTO

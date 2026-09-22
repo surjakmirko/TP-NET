@@ -15,5 +15,7 @@ namespace DTOs
     public class LoginResponseDTO
     {
         public string Token { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public int TipoUsuarioId { get; set; }
     }
 }

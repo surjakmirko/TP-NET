@@ -16,11 +16,14 @@ namespace Servicios
 
             public async Task<PersonaFisicaDTO> AddAsync(PersonaFisicaDTO dto)
             {
+            var personaFisicaExiste = await GetAsync(dto.Dni);
+            if (personaFisicaExiste == null)
+            {
                 PersonaFisica personaFisica = new PersonaFisica(dto.Nombre, dto.Apellido, dto.Dni, dto.Fecha_Nacimiento);
 
                 await personaFisicaRepositorio.AddAsync(personaFisica);
-
-                return dto;
+            }
+             return dto;
             }
 
             public async Task<bool> DeleteAsync(string dni)

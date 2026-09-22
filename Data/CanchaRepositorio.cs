@@ -33,8 +33,13 @@ namespace Data
         }
         public async Task<Cancha?> GetAsync(int complejoId, int nro)
         {
-            return await _context.Canchas.FindAsync(complejoId, nro);
+            return await _context.Canchas
+                .Include(c => c.TipoCancha)
+                .Include(c=>c.Precios)
+                .FirstOrDefaultAsync(c=> c.Nro == nro && c.ComplejoId == complejoId) ;
         }
+
+
         public async Task<IEnumerable<Cancha>> GetAllAsync(int id)
         {
             return await _context.Canchas

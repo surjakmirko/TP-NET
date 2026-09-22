@@ -8,11 +8,14 @@ namespace DTOs
         public string Direccion { get; set; }
         public int EncargadoId { get; set; }
         public int LocalidadId {  get; set; }
+   
         public int DueñoId {  get; set; }
 
         public string NombreLocalidad { get; set; }
         public string NombreDueño { get; set; }
         public string NombreEncargado { get; set; }
+
+
 
     }
 
