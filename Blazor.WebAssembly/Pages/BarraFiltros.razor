@@ -1,0 +1,36 @@
+﻿
+<div class="contenedor-filtros">
+    <h3>Filtrar por Precio</h3>
+    <div class="filtro-inputs">
+        <input type="number" placeholder="Mínimo" @bind="minInput" />
+        <span> - </span>
+        <input type="number" placeholder="Máximo" @bind="maxInput" />
+    </div>
+    <button class="boton-aplicar" @onclick="Aplicar">Aplicar</button>
+</div>
+
+@code {
+    [Parameter] public EventCallback<FiltrosPrecioArgs> OnFiltroCambio { get; set; }
+    [Parameter] public decimal? MinActual { get; set; }
+    [Parameter] public decimal? MaxActual { get; set; }
+
+    private decimal minInput;
+    private decimal maxInput;
+
+    protected override void OnParametersSet()
+    {
+        // Si hay valores en la URL, los cargamos en los inputs
+        minInput = MinActual ?? 0;
+        maxInput = MaxActual ?? 0; // 0 o vacío para representar que no hay máximo
+    }
+
+    private async Task Aplicar()
+    {
+        var args = new FiltrosPrecioArgs
+        {
+            Min = minInput,
+            Max = maxInput <= 0 ? decimal.MaxValue : maxInput // Si deja 0, asumimos infinito
+        };
+        await OnFiltroCambio.InvokeAsync(args);
+    }
+}

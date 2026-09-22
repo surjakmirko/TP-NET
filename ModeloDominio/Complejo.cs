@@ -15,8 +15,6 @@
 
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
-
-        public string ImagenUrl { get; private set; } = string.Empty;
         public decimal PrecioDesde
         {
             get

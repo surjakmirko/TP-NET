@@ -2,8 +2,6 @@
 using API.Client;
 using DTOs;
 using Microsoft.JSInterop;
-using System.IdentityModel.Tokens.Jwt;
-
 namespace Blazor.WebAssembly.Servicios
 {
     public class BlazorWasmAuthService : IAutenticacionService

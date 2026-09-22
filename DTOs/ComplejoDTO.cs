@@ -13,7 +13,6 @@ namespace DTOs
         public string NombreLocalidad { get; set; }
         public string NombreDueño { get; set; }
         public string NombreEncargado { get; set; }
-        public string ImagenUrl { get; set; } = string.Empty;
         public decimal PrecioDesde { get; set; }
 
     }
