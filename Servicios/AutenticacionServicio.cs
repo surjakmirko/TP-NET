@@ -39,7 +39,9 @@ namespace Servicios
 
             return new LoginResponseDTO
             {
-                Token = token
+                Token = token,
+                Id= usuario.Id,
+                TipoUsuarioId = usuario.TipoUsuarioId
             };
         }
         public string GenerarToken(Usuario usuario)

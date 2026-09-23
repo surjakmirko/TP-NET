@@ -1,0 +1,186 @@
+﻿@page "/perfil"
+@using API
+@using API.Client
+@using DTOs
+@using System.Security.Claims
+@using Blazor.WebAssembly.Servicios
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject BlazorWasmAuthService AuthService
+
+<PageTitle>Mi Perfil</PageTitle>
+
+<section class="perfil-container">
+    <div class="perfil-header">
+        <h1 class="saludo-titulo">Hola )!</h1>
+        <p class="perfil-subtitulo">Gestioná tu información personal y consultá tus reservas.</p>
+    </div>
+
+    <div class="card-seccion">
+        <h2 class="seccion-subtitulo">Datos Personales</h2>
+        
+        <EditForm Model="@usuario" OnValidSubmit="ActualizarCambios">
+            <div class="grid-inputs">
+                <div class="campo-grupo">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" class="input-forum" @bind="persona.Nombre" readonly="@(!isEditing)" />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" class="input-forum" @bind-value="persona.Apellido" readonly="@(!isEditing)" />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="input-forum" @bind-value="usuario.Email" readonly="@(!isEditing)" />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" class="input-forum" @bind-value="usuario.Telefono" readonly="@(!isEditing)" />
+                </div>
+    
+                <div class="campo-grupo">
+                    <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                    <input type="date" id="fechaNacimiento" class="input-forum" @bind-value="persona.Fecha_Nacimiento" readonly="@(!isEditing)" />
+                </div>                  
+            </div>
+
+            <div class="acciones-form">
+                @if (!isEditing)
+                {
+                    <button type="button" class="btn-primario" @onclick="EditarDatos">
+                        Editar Perfil
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn-primario">Guardar Cambios</button>
+                    <button type="button" class="btn-secundario" @onclick="HandleCancel">Cancelar</button>
+                }
+            </div>
+        </EditForm>
+    </div>
+
+    <div class="card-seccion">
+        <h2 class="seccion-subtitulo">Tus Últimos Turnos</h2>
+        @if (turnos != null && turnos.Count > 0)
+        {
+            <div class="grid-turnos">
+                @foreach (var turno in turnos.Take(3))
+                {
+                    <TarjetaTurno Turno="@turno" />
+                }
+            </div>
+        }
+        else
+        {
+            <p class="turnos-vacio">No tenés turnos registrados actualmente.</p>
+        }
+    </div>
+
+    <button type="button" class="btn-primario" @onclick="CerrarSesion">Cerrar Sesión</button>
+</section>
+
+@code {
+    private UsuarioDTO usuario = new();
+    private int clienteId;
+    private PersonaFisicaDTO persona = new();
+    private UsuarioDTO originalUsuario = new();
+    private PersonaFisicaDTO originalPersona = new();
+    private List<TurnoDTO> turnos = new();
+    private bool isEditing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            usuario.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+            usuario.Telefono = user.FindFirst(ClaimTypes.HomePhone)?.Value ?? string.Empty;
+
+            var usuarioIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(usuarioIdClaim, out var idParsed))
+            {
+                clienteId = idParsed;
+                try
+                {
+                    var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
+                    if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
+                    {
+                        persona.Nombre = usuarioCompleto.Nombre;
+                        persona.Apellido = usuarioCompleto.Nombre;
+                        persona.Fecha_Nacimiento = usuarioCompleto.Fecha_Nacimiento ?? DateOnly.FromDateTime(DateTime.Now); //asigna la fecha de hoy 
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al traer datos del usuario: {ex.Message}");
+                }
+            }
+        }
+        else
+        {
+            // Si no está autenticado, redirige al Login
+            Navigation.NavigateTo("/login");
+        }
+
+    }
+
+    private async Task ObtenerPerfil(string token)
+    {
+            
+            
+    }
+
+    private async Task BuscarTurnos(string token)
+    {
+        
+    }
+
+    private async Task ActualizarCambios()
+    {
+       
+    }
+
+    private void EditarDatos()
+    {
+        isEditing = true;
+    }
+
+    private void HandleCancel()
+    {
+        usuario = new UsuarioDTO
+        {
+            Nombre = originalUsuario.Nombre,
+            Apellido = originalUsuario.Apellido,
+            Email = originalUsuario.Email,
+            Telefono = originalUsuario.Telefono,
+           //FechaNacimiento = originalUsuario.FechaNacimiento
+        };
+        isEditing = false;
+    }
+
+    private async Task CerrarSesion()
+    {
+        await AuthService.LogoutAsync();
+        Navigation.NavigateTo("/"); // O a la ruta raíz "/"
+    }
+
+    private void ClonarUsuarioOriginal()
+    {
+        originalUsuario = new UsuarioDTO
+        {
+            // Nombre = usuario.Nombre,
+            // Apellido = usuario.Apellido,
+            Email = usuario.Email,
+            Telefono = usuario.Telefono,
+            // FechaNacimiento = usuario.FechaNacimiento
+        };
+    }
+}

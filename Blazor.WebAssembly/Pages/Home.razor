@@ -1,7 +1,72 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@inject NavigationManager Navigation
+@implements IDisposable
 
-<h1>Hello, world!</h1>
+<PageTitle>Inicio</PageTitle>
 
-Welcome to your new app.
+<main>
+    <div class="contenedor-imagenes">
+        <img src="/images/fondo-1.jpg" class="imagenes-fondo @(imagenActual == 0 ? "active" : "")" alt="Fondo 1" />
+        <img src="/images/fondo-2.jpg" class="imagenes-fondo @(imagenActual == 1 ? "active" : "")" alt="Fondo 2" />
+        <img src="/images/fondo-3.jpg" class="imagenes-fondo @(imagenActual == 2 ? "active" : "")" alt="Fondo 3" />
+        
+        <div class="contenedor-barra">
+            <h1 style="color:#ffffff; text-shadow:4px 4px 10px rgba(0, 0, 0, 1); font-size:50px;">
+                Busca tu cancha ya!
+            </h1>
+            <BarraBusqueda />
+        </div>
+    </div>
+
+    <div class="contenedor-home"> 
+        <div class="contenedor-home-texto">
+            <h2 style="font-size: 3.7vh;">
+                Te gustaría alquilar una cancha para tu próximo partido?<br />Es muy sencillo y rápido!
+            </h2>
+            <p style="font-size: 2.6vh; letter-spacing: 0.1vh; line-height: 1.8;">
+                Reunir a tus amigos y organizar el partido de la semana nunca había sido tan fácil. Explora nuestra exclusiva selección de complejos, compara canchas y elegí la que más te guste. En solo unos clics podes revisar la disponibilidad de horarios en tiempo real, reservar tu lugar de forma segura y garantizar que todo esté listo para divertirse. No dejes que se queden sin lugar esta semana, asegura tu cancha ahora mismo y prepárate para jugar!
+            </p>
+        </div>
+        <div class="contenedor-home-boton">
+            <img class="contenedor-home-imagen" src="/images/background-boton-complejo.jpg" alt="Complejos" />
+            <button class="boton-home" @onclick='() => NavegarA("complejos")'>
+                <strong>Ver Todos Los Complejos</strong>
+            </button>
+        </div>
+    </div>
+
+    <CarruselDeporte />
+
+    <div class="contenedor-home"> 
+        <div class="contenedor-home-boton">
+            <img class="contenedor-home-imagen" src="/images/background-boton-software.jpg" alt="Software" />
+            <button class="boton-home" @onclick='() => NavegarA("software")'>
+                <strong>Contactate Con Nosotros</strong>
+            </button>
+        </div>
+        <div class="contenedor-home-texto">
+            <h2 style="font-size: 3.7vh;">
+                Tenés un complejo deportivo?<br />Digitalizá tu gestión y hacé crecer tu negocio!
+            </h2>
+            <p style="font-size: 2.6vh; letter-spacing: 0.1vh; line-height: 1.8;">
+                Llevar el control de las reservas en papel o por mensajes de WhatsApp puede ser caótico y hacerte perder clientes. Con nuestra plataforma de gestión, vas a poder automatizar las reservas de tus canchas, administrar los horarios sin riesgo de superposiciones y ofrecerle a los jugadores la comodidad de agendar su turno las 24 horas del día. Centralizá toda tu administración en un solo lugar, reducí el ausentismo y enfocate en lo que realmente importa: hacer crecer tu complejo.
+            </p>
+        </div>
+    </div>
+</main>
+@code{
+    private int imagenActual = 0;
+    private const int totalImagenes = 3;
+    private System.Threading.Timer? timer;
+    private void NavegarA(string ruta)
+    {
+        Navigation.NavigateTo(ruta);
+    }
+
+    public void Dispose()
+    {
+        // Limpia el temporizador al salir del componente para evitar fugas de memoria
+        timer?.Dispose();
+    }
+}

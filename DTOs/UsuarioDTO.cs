@@ -13,6 +13,8 @@
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
 
+        public DateOnly? Fecha_Nacimiento { get; set; }
+
 
     }
 

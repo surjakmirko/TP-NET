@@ -1,0 +1,130 @@
+﻿@page "/software"
+@inject IJSRuntime JS
+
+<PageTitle>Software para Complejos</PageTitle>
+
+<main>
+    <section class="seccion-contenedor-imagen-complejo">
+        <div class="contenedor-imagen-complejo">
+            <h1>Plataforma para Complejos Deportivos</h1>
+            <h2>Optimizá el alquiler de tus canchas</h2>
+        </div>
+    </section>
+
+    <div class="rectangulo-naranja"></div>
+
+    <section class="seccion-celular">
+        <div class="contenedor-imagen-celular"></div>
+        <div class="contenedor-texto-celular">
+            <h1>Reserva Automática de Turnos</h1>
+            <h2>Todas tus reservas, en un solo lugar</h2>
+            <p>Conecta WhatsApp, Instagram, Facebook y Google en un único sistema. Tus clientes consultan la disponibilidad en tiempo real y aseguran su cancha en segundos, sin intermediarios ni esperas.</p>
+        </div>
+    </section>
+
+    <div class="planes" @ref="planesRef">
+        <h1>Nuestros planes</h1>
+        <Planes />
+    </div>
+
+    <section class="seccion-contacto">
+        <div class="contenedor-formulario">
+            <h2>Contratá la plataforma</h2>
+            <p>Dejanos tus datos y nos ponemos en contacto para configurar tu complejo.</p>
+
+            <EditForm Model="@formData" OnValidSubmit="HandleSubmit" class="formulario-contratacion">
+
+                <div class="campo-grupo">
+                    <label for="RazonSocial">Razón social</label>
+                    <input type="text"
+                           id="RazonSocial"
+                           class="input-forum"
+                           @bind-value="formData.RazonSocial"
+                           placeholder="Messi S.A."
+                           required />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="nombre">Nombre de contacto</label>
+                    <input type="text"
+                           id="nombre"
+                           class="input-forum"
+                           @bind-value="formData.NombreContacto"
+                           placeholder="Antonella Roccuzzo"
+                           required />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email"
+                           id="email"
+                           class="input-forum"
+                           @bind-value="formData.Email"
+                           placeholder="tuemail@ejemplo.com"
+                           required />
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="plan">Plan de Preferencia</label>
+                    <select id="plan" class="input-forum" @bind="formData.Plan" required>
+                        <option value="" disabled selected>Selecciona un plan...</option>
+                        <option value="Plan Base">Plan Base (1-3 Canchas)</option>
+                        <option value="Plan Estándar">Plan Estándar (4-6 Canchas)</option>
+                        <option value="Plan Full">Plan Full (7+ Canchas)</option>
+                    </select>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="comentario">Comentario</label>
+                    <textarea id="comentario"
+                              @bind="formData.Comentario"
+                              placeholder="Dejá tu comentario..."
+                              class="textarea-comentario">
+                </textarea>
+                </div>
+
+                <button type="submit" class="btn-enviar-formulario">
+                    Enviar Solicitud
+                </button>
+            </EditForm>
+        </div>
+    </section>
+</main>
+
+@code {
+    private ElementReference planesRef;
+    private ContactoModel formData = new();
+
+    private List<OptionItem> opcionesPlanes = new()
+    {
+        new OptionItem { Value = "Plan Base", Label = "Plan Base (1-3 Canchas)" },
+        new OptionItem { Value = "Plan Estándar", Label = "Plan Estándar (4-6 Canchas)" },
+        new OptionItem { Value = "Plan Full", Label = "Plan Full (7+ Canchas)" }
+    };
+
+    private async Task ScrollToPlanes()
+    {
+        // Reemplaza a planesRef.current?.scrollIntoView({ behavior: 'smooth' })
+        await JS.InvokeVoidAsync("eval", "arguments[0].scrollIntoView({ behavior: 'smooth' })", planesRef);
+    }
+
+    private void HandleSubmit()
+    {
+        // Pendiente: Funcionalidad de envío del formulario
+    }
+
+    public class ContactoModel
+    {
+        public string RazonSocial { get; set; } = string.Empty;
+        public string NombreContacto { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Plan { get; set; } = string.Empty;
+        public string Comentario { get; set; } = string.Empty;
+    }
+
+    public class OptionItem
+    {
+        public string Value { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+    }
+}

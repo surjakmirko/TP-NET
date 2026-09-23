@@ -27,9 +27,9 @@ builder.Services.AddAuthorizationCore();
 
 // Registra el proveedor de estado de autenticación (usando tu CustomAuthenticationStateProvider)
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-
-
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IAutenticacionService, BlazorWasmAuthService>();
+builder.Services.AddScoped<BlazorWasmAuthService>();
 
 
 await builder.Build().RunAsync();

@@ -29,22 +29,33 @@ namespace Blazor.WebAssembly.Servicios
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                // Usuario Anónimo / No logueado
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
             try
             {
-                // Parseamos el JWT para extraer las Claims
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
-                var identity = new ClaimsIdentity(jwtToken.Claims, "jwt");
+
+                // 1. Verificar si el token expiró
+                if (jwtToken.ValidTo < DateTime.UtcNow)
+                {
+                    await _authService.LogoutAsync(); // O remover token de localStorage
+                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                }
+
+                // 2. Especificar explícitamente el tipo de autenticación ("jwt") y las claims para Name y Role
+                var identity = new ClaimsIdentity(
+                    claims: jwtToken.Claims,
+                    authenticationType: "jwt",
+                    nameType: ClaimTypes.Name,
+                    roleType: ClaimTypes.Role
+                );
 
                 return new AuthenticationState(new ClaimsPrincipal(identity));
             }
             catch
             {
-                // Si el token es inválido o no se puede leer
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
         }
