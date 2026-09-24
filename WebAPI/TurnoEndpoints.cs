@@ -67,6 +67,17 @@ namespace WebAPI
 
                 return Results.NoContent();
             });
+            app.MapGet("/turnos/cliente/{idCliente}", async (int idCliente, ITurnoServicio turnoServicio) =>
+            {
+                var turnos = await turnoServicio.ObtenerPorClienteIdAsync(idCliente);
+
+                if (turnos == null || !turnos.Any())
+                {
+                    return Results.Ok(new List<TurnoDTO>()); // Devuelve lista vacía si no tiene turnos
+                }
+
+                return Results.Ok(turnos);
+            });
         }
     }
 }

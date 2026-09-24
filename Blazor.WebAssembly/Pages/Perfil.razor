@@ -13,7 +13,7 @@
 
 <section class="perfil-container">
     <div class="perfil-header">
-        <h1 class="saludo-titulo">Hola )!</h1>
+        <h1 class="saludo-titulo">Hola!</h1>
         <p class="perfil-subtitulo">Gestioná tu información personal y consultá tus reservas.</p>
     </div>
 
@@ -66,7 +66,7 @@
 
     <div class="card-seccion">
         <h2 class="seccion-subtitulo">Tus Últimos Turnos</h2>
-        @if (turnos != null && turnos.Count > 0)
+        @if (turnos.Any() && turnos.Count > 0)
         {
             <div class="grid-turnos">
                 @foreach (var turno in turnos.Take(3))
@@ -97,11 +97,9 @@
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
+
         if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            usuario.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
-            usuario.Telefono = user.FindFirst(ClaimTypes.HomePhone)?.Value ?? string.Empty;
-
             var usuarioIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (int.TryParse(usuarioIdClaim, out var idParsed))
@@ -109,13 +107,26 @@
                 clienteId = idParsed;
                 try
                 {
+                    // Traemos la información fresca directamente de la base de datos
                     var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
-                    if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
-                    {
-                        persona.Nombre = usuarioCompleto.Nombre;
-                        persona.Apellido = usuarioCompleto.Nombre;
-                        persona.Fecha_Nacimiento = usuarioCompleto.Fecha_Nacimiento ?? DateOnly.FromDateTime(DateTime.Now); //asigna la fecha de hoy 
 
+                    if (usuarioCompleto != null)
+                    {
+
+                        usuario.Id = clienteId;
+                        usuario.Email = usuarioCompleto.Email;
+                        usuario.Telefono = usuarioCompleto.Telefono; 
+
+
+                        persona.Dni = usuarioCompleto.PersonaFisicaDni;
+                        persona.Nombre = usuarioCompleto.Nombre ?? string.Empty;
+                        persona.Apellido = usuarioCompleto.Apellido ?? string.Empty;
+                        persona.Fecha_Nacimiento = usuarioCompleto.Fecha_Nacimiento ?? DateOnly.FromDateTime(DateTime.Now);
+
+                        ClonarDatosOriginales();
+
+                        await BuscarTurnos();
+                      
                     }
                 }
                 catch (Exception ex)
@@ -126,43 +137,84 @@
         }
         else
         {
-            // Si no está autenticado, redirige al Login
             Navigation.NavigateTo("/login");
         }
-
     }
 
-    private async Task ObtenerPerfil(string token)
-    {
-            
-            
-    }
 
-    private async Task BuscarTurnos(string token)
+    private async Task BuscarTurnos()
     {
-        
+        try{
+        var listaTurnos = await TurnoApiClient.ObtenerTurnosCliente(clienteId);
+
+            if (listaTurnos != null && listaTurnos.Any())
+        {
+            
+            turnos = listaTurnos
+                .OrderByDescending(t => t.Fecha) 
+                .Take(3)
+                .ToList();
+        }
+            else
+            {
+                turnos = new List<TurnoDTO>(); // Forzamos lista vacía
+            }
+           }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al traer datos o turnos del usuario: {ex.Message}");
+            }
+        finally
+        {
+            StateHasChanged(); // 👈 Asegura que la vista se actualice tras recibir la respuesta
+        }
     }
 
     private async Task ActualizarCambios()
     {
+        try
+        {
+            // Construimos o actualizamos los DTOs para enviar al backend
+            await UsuarioApiClient.ActualizarAsync(usuario);
+            await PersonaFisicaApiClient.ActualizarAsync(persona);
+
+
+
+            ClonarDatosOriginales(); // Actualizamos la copia de respaldo
+            isEditing = false;
+            StateHasChanged();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error actualizando perfil: {ex.Message}");
+            Console.WriteLine(persona.Dni);
+            Console.WriteLine(persona.Nombre);
+            Console.WriteLine(persona.Apellido);
+            Console.WriteLine(persona.Fecha_Nacimiento);
+
+
+
+        }
        
     }
 
     private void EditarDatos()
     {
+        ClonarDatosOriginales();
         isEditing = true;
     }
 
     private void HandleCancel()
     {
-        usuario = new UsuarioDTO
-        {
-            Nombre = originalUsuario.Nombre,
-            Apellido = originalUsuario.Apellido,
-            Email = originalUsuario.Email,
-            Telefono = originalUsuario.Telefono,
-           //FechaNacimiento = originalUsuario.FechaNacimiento
-        };
+        usuario.Email = originalUsuario.Email;
+        usuario.Telefono = originalUsuario.Telefono;
+
+        persona.Nombre = originalPersona.Nombre;
+        persona.Apellido = originalPersona.Apellido;
+        persona.Fecha_Nacimiento = originalPersona.Fecha_Nacimiento;
+
         isEditing = false;
     }
 
@@ -172,15 +224,21 @@
         Navigation.NavigateTo("/"); // O a la ruta raíz "/"
     }
 
-    private void ClonarUsuarioOriginal()
+    private void ClonarDatosOriginales()
     {
         originalUsuario = new UsuarioDTO
         {
-            // Nombre = usuario.Nombre,
-            // Apellido = usuario.Apellido,
             Email = usuario.Email,
-            Telefono = usuario.Telefono,
-            // FechaNacimiento = usuario.FechaNacimiento
+            Telefono = usuario.Telefono
+        };
+
+        originalPersona = new PersonaFisicaDTO
+        {
+            Dni = persona.Dni,
+            Nombre = persona.Nombre,
+            Apellido = persona.Apellido,
+            Fecha_Nacimiento = persona.Fecha_Nacimiento
         };
     }
 }
+

@@ -132,22 +132,22 @@
                     <div class="reserva-form">
                         <div class="input-forum-group">
                             <label for="nombre">Nombre</label>
-                            <InputText id="nombre" class="input-forum" @bind-Value="titular.Nombre" placeholder="Ej. Mirko" required />
+                            <InputText id="nombre" class="input-forum" @bind-Value="titular.Nombre" placeholder="Ej. Mirko" required readOnly="true"/>
                         </div>
 
                         <div class="input-forum-group">
                             <label for="apellido">Apellido</label>
-                            <InputText id="apellido" class="input-forum" @bind-Value="titular.Apellido" placeholder="Ej. Surjak" required />
+                            <InputText id="apellido" class="input-forum" @bind-Value="titular.Apellido" placeholder="Ej. Surjak" required readOnly="true" />
                         </div>
 
                         <div class="input-forum-group">
                             <label for="telefono">Teléfono</label>
-                            <InputText id="telefono" type="tel" class="input-forum" @bind-Value="usuario.Telefono" placeholder="Ej. +54 3471 330992" required />
+                            <InputText id="telefono" type="tel" class="input-forum" @bind-Value="usuario.Telefono" placeholder="Ej. +54 3471 330992" required readOnly="true" />
                         </div>
 
                         <div class="input-forum-group">
                             <label for="email">Correo Electrónico</label>
-                            <InputText id="email" type="email" class="input-forum" @bind-Value="usuario.Email" placeholder="tuemail@ejemplo.com" required />
+                            <InputText id="email" type="email" class="input-forum" @bind-Value="usuario.Email" placeholder="tuemail@ejemplo.com" required readOnly="true" />
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@
                     if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
                     {
                         titular.Nombre = usuarioCompleto.Nombre;
-                        titular.Apellido = usuarioCompleto.Nombre;
+                        titular.Apellido = usuarioCompleto.Apellido;
 
                     }
                 }

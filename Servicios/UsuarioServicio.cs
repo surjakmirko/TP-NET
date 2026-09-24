@@ -90,11 +90,32 @@ namespace Servicios
 
         public async Task<bool> UpdateAsync(UsuarioDTO dto)
         {
-            if (await usuarioRepositorio.EmailExistsAsync(dto.Email))
+            // buscamos el actual
+            var usuarioActual = await usuarioRepositorio.GetAsync(dto.Id);
+            if (usuarioActual == null)
             {
-                throw new ArgumentException($"Ya existe otro usuario con el Email '{dto.Email}'.");
+                return false;
             }
-            Usuario usuario = new Usuario(dto.Id, dto.Email, dto.Telefono, dto.Password, dto.TipoUsuarioId, dto.PersonaFisicaDni, dto.PersonaJuridicaCuit);
+
+            // si cambio verificamos si esta usado o no el otro email
+            if (!usuarioActual.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                // Verificamos si OTRO usuario ya tiene ese nuevo email
+                if (await usuarioRepositorio.EmailExistsForOtherUserAsync(dto.Email, dto.Id))
+                {
+                    throw new ArgumentException($"Ya existe otro usuario con el Email '{dto.Email}'.");
+                }
+            }
+
+            Usuario usuario = new Usuario(
+                usuarioActual.Id,
+                dto.Email,
+                dto.Telefono,
+                usuarioActual.Password,
+                usuarioActual.TipoUsuarioId,
+                usuarioActual.PersonaFisicaDni,
+                usuarioActual.PersonaJuridicaCuit
+            );
 
             return await usuarioRepositorio.UpdateAsync(usuario);
         }

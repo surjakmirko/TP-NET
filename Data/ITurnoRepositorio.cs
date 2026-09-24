@@ -9,5 +9,7 @@ namespace Data
         Task<Turno?> GetAsync(int id);
         Task<IEnumerable<Turno>> GetAllAsync();
         Task<bool> UpdateAsync(Turno turno);
+
+        Task<List<Turno>> ObtenerPorClienteIdAsync(int idCliente);
     }
 }

@@ -15,6 +15,11 @@ namespace API
         {
             return await GetAsync<PersonaFisicaDTO>($"personafisicas/{dni}");
         }
+
+        public static async Task ActualizarAsync(PersonaFisicaDTO dto)
+        {
+            await PutAsync("personasfisicas", dto);
+        }
     }
 }
 

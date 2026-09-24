@@ -56,7 +56,6 @@ namespace Data
             }
             existingUsuario.SetEmail(usuario.Email);
             existingUsuario.SetTelefono(usuario.Telefono);
-            existingUsuario.SetPassword(usuario.Password);
             existingUsuario.SetTipoUsuarioId(usuario.TipoUsuarioId);
             existingUsuario.SetPersonaFisicaDni(usuario.PersonaFisicaDni);
             existingUsuario.SetPersonaJuridicaCuit(usuario.PersonaJuridicaCuit);
@@ -83,6 +82,12 @@ namespace Data
             return await _context.Usuarios
                 .AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
-       
+
+        public async Task<bool> EmailExistsForOtherUserAsync(string email, int usuarioId)
+        {
+            return await _context.Usuarios
+                .AnyAsync(u => u.Email.ToLower() == email.ToLower() && u.Id != usuarioId);
+        }
+
     }
 }

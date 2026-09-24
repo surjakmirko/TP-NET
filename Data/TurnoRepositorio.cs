@@ -57,5 +57,12 @@ namespace Data
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<List<Turno>> ObtenerPorClienteIdAsync(int idCliente)
+        {
+            return await _context.Turnos
+                .Where(t => t.ClienteId == idCliente) // Ajustá 'ClienteId' según el nombre en tu entidad
+                .OrderByDescending(t => t.Fecha)        // Ordena por fecha más reciente
+                .ToListAsync();
+        }
     }
 }

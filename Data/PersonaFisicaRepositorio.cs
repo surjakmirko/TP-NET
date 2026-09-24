@@ -32,12 +32,19 @@ namespace Data
 
         public async Task<bool> UpdateAsync(PersonaFisica personaFisica)
         {
-            PersonaFisica persona = await _context.PersonaFisicas.FindAsync(personaFisica.Dni);
-            if (persona == null)
+            // Buscamos el registro existente por su clave (DNI)
+            PersonaFisica? personaExistente = await _context.PersonaFisicas.FindAsync(personaFisica.Dni);
+
+            if (personaExistente == null)
             {
                 return false;
             }
-            _context.PersonaFisicas.Update(persona);
+
+            // Actualizamos sus campos con los nuevos valores recibidos
+            personaExistente.SetNombre(personaFisica.Nombre);
+            personaExistente.SetApellido(personaFisica.Apellido);
+            personaExistente.SetFechaNacimiento(personaFisica.FechaNacimiento);
+
             await _context.SaveChangesAsync();
             return true;
         }

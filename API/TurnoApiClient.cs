@@ -7,5 +7,10 @@ namespace API
         {
             return await PostAsync<TurnoCrearDTO, TurnoDTO>("turnos", dto);
         }
+        public static async Task<List<TurnoDTO>?> ObtenerTurnosCliente(int idCliente)
+        {
+            return await GetAsync<List<TurnoDTO>>($"turnos/cliente/{idCliente}");
+        }
+
     }
 }

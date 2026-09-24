@@ -62,13 +62,8 @@ namespace Servicios
 
             public async Task<bool> UpdateAsync(PersonaFisicaDTO dto)
             {
-                if (await personaFisicaRepositorio.DniExistsAsync(dto.Dni))
-                {
-                    throw new ArgumentException($"Ya existe otro usuario con el Dni '{dto.Dni}'.");
-                }
-
-
-                PersonaFisica personaFisica = new PersonaFisica(dto.Dni, dto.Nombre, dto.Apellido, dto.Fecha_Nacimiento);
+                
+                PersonaFisica personaFisica = new PersonaFisica(dto.Nombre, dto.Apellido, dto.Dni, dto.Fecha_Nacimiento);
 
                 return await personaFisicaRepositorio.UpdateAsync(personaFisica);
             }

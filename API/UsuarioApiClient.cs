@@ -26,5 +26,10 @@ namespace API
         {
             return await GetAsync<List<UsuarioDTO>>("usuarios/duenos");
         }
+
+        public static async Task ActualizarAsync(UsuarioDTO dto)
+        {
+            await PutAsync("usuarios",dto);
+        }
     }
 }

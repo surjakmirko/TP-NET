@@ -1,5 +1,8 @@
-﻿@inject NavigationManager NavigationManager
-@inject HttpClient Http
+﻿@using DTOs
+@using API
+
+@inject NavigationManager NavigationManager
+
 
 <div class="barraBusqueda-contenedor">
     <form class="barraBusqueda-form" @onsubmit="HandleSubmit">
@@ -17,7 +20,7 @@
                 </option>
                 @foreach (var dep in deportes)
                 {
-                    <option value="@dep.Id">@dep.NombreDeporte</option>
+                    <option value="@dep.Id">@dep.Deporte</option>
                 }
             </select>
         </div>
@@ -87,7 +90,7 @@
     public string? Hora { get; set; }
 
     // Lista para poblar el select de deportes
-    private List<TipoCanchaDto> deportes = new();
+    private List<TipoCanchaDTO> deportes = new();
 
     // Reemplaza al useEffect() de carga inicial
     protected override async Task OnInitializedAsync()
@@ -96,7 +99,7 @@
         {
             // NOTA: Lo ideal en Blazor es inyectar un Servicio en vez de usar HttpClient directo,
             // pero mantenemos la lógica de tu fetch original.
-            deportes = await Http.GetFromJsonAsync<List<TipoCanchaDto>>("http://localhost:3000/api/tipoCancha") ?? new();
+            deportes = await TipoCanchaApiClient.ObtenerTodosAsync();
         }
         catch (Exception ex)
         {
@@ -118,13 +121,5 @@
         // Genera la URL (/complejos?ciudad=X&deporte=Y) y navega
         var uri = NavigationManager.GetUriWithQueryParameters("/complejos", parametros);
         NavigationManager.NavigateTo(uri);
-    }
-
-    // Clase DTO temporal para mapear el JSON (cámbiala si ya tienes tu clase en Modelo.Dominio)
-    public class TipoCanchaDto
-    {
-        public string Id { get; set; } = string.Empty;
-        // Ajusta esta propiedad según cómo te devuelve el JSON tu API (en React leías dep.deporte)
-        public string NombreDeporte { get; set; } = string.Empty;
     }
 }
