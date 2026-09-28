@@ -36,6 +36,16 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
+            app.MapGet("/complejos/encargado/{idEncargado}", async (int idEncargado, IComplejoServicio complejoServicio) =>
+            {
+                var dto = await complejoServicio.GetByEncargadoAsync(idEncargado);
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(dto);
+            });
+
             app.MapPost("/complejos", async (ComplejoCrearDTO dto, IComplejoServicio complejoServicio) =>
             {
                 Console.WriteLine(dto);

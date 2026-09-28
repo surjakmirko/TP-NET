@@ -78,6 +78,21 @@ namespace Data
             return await _context.Complejos.Where(c => c.DueñoId == idDueno).ToListAsync();
         }
 
+        public async Task<Complejo> GetComplejosByIdEncargado(int idEncargado)
+        {
+            return await _context.Complejos
+                .Include(c => c.Horarios)
+                .Include(c => c.Localidad)
+                .Include(c => c.Canchas)
+                    .ThenInclude(can => can.Turnos)
+                .Include(c => c.Canchas)
+                    .ThenInclude(can => can.TipoCancha)
+                 .FirstOrDefaultAsync(c => c.EncargadoId == idEncargado);
+
+
+        }
+
+
         public async Task<IEnumerable<Complejo>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max)
         {
             var query = _context.Complejos
