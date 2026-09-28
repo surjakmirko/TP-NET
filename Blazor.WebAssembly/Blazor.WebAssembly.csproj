@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Layout\Footer.razor.css" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Pages\HorariosCancha.razor.css" />
     <Content Include="Pages\MenuEncargado.razor.css" />
   </ItemGroup>
