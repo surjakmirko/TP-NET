@@ -39,7 +39,9 @@ namespace Servicios
 
             return new LoginResponseDTO
             {
-                Token = token
+                Token = token,
+                Id= usuario.Id,
+                TipoUsuarioId = usuario.TipoUsuarioId
             };
         }
         public string GenerarToken(Usuario usuario)
@@ -56,6 +58,7 @@ namespace Servicios
             {
             new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
             new Claim(ClaimTypes.Email, usuario.Email),
+            new Claim(ClaimTypes.HomePhone,usuario.Telefono),
             new Claim(ClaimTypes.Role, usuario.Rol)
         };
 

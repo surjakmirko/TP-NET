@@ -12,6 +12,7 @@ namespace Data
         Task<IEnumerable<Usuario>> GetAllAsync();
         Task<bool> UpdateAsync(Usuario cliente);
         Task<bool> EmailExistsAsync(string email);
-        
+
+        Task<bool> EmailExistsForOtherUserAsync(string email, int usuarioId);
     }
 }

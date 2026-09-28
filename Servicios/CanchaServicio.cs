@@ -33,18 +33,23 @@ namespace Servicios
             return await canchaRepositorio.DeleteAsync(id, nro);
         }
 
-        public async Task<CanchaDTO?> GetAsync(int id, int nro)
+        public async Task<CanchaDTO?> GetAsync(int complejoId, int nro)
         {
-            Cancha? cancha = await canchaRepositorio.GetAsync(id, nro);
+            var cancha = await canchaRepositorio.GetAsync(complejoId, nro);
 
-            if (cancha == null)
-                return null;
+            if (cancha == null) return null;
+
+            // Obtenemos el precio más reciente filtrando la colección de la Entidad
+            var ultimoPrecio = cancha.Precios
+                .OrderByDescending(p => p.FechaDesde) // o p.Id / p.Fecha
+                .FirstOrDefault();
 
             return new CanchaDTO
             {
+                Nro = cancha.Nro,
                 ComplejoId = cancha.ComplejoId,
-                Nro= cancha.Nro,
-                TipoCanchaId = cancha.TipoCanchaId
+                Deporte = cancha.TipoCancha?.Deporte,
+                Precio = ultimoPrecio?.PrecioBase ?? 0
             };
         }
 

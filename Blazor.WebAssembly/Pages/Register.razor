@@ -2,6 +2,7 @@
 @using API
 @using DTOs
 @inject UsuarioApiClient UsuarioApi
+@inject PersonaFisicaApiClient PersonaApi
 @inject NavigationManager Navigation
 
 <div class="register-container">
@@ -125,7 +126,7 @@
                 Fecha_Nacimiento = model.FechaNacimiento
             };
 
-            // await PersonaApiClient.CrearAsync(personaDto);
+            await PersonaFisicaApiClient.CrearPersonaFisicaAsync(personaDto);
 
             // 2. Armar el UsuarioCrearDTO exacto que espera tu cliente API
             var usuarioDto = new UsuarioCrearDTO
@@ -135,7 +136,7 @@
                 Password = model.Password,
                 PersonaFisicaDni = model.Dni,
                 PersonaJuridicaCuit = null,
-                TipoUsuarioId = 1
+                TipoUsuarioId = 3
             };
 
             await UsuarioApiClient.CrearUsuarioAsync(usuarioDto);

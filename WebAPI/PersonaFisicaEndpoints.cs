@@ -39,6 +39,7 @@ namespace WebAPI
             });
             app.MapPut("/personasfisicas", async (PersonaFisicaDTO dto, IPersonaFisicaServicio personaFisicaServicio) =>
             {
+  
                 try
                 {
                     var encontrado = await personaFisicaServicio.UpdateAsync(dto);

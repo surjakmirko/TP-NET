@@ -49,7 +49,10 @@ namespace Servicios
                 Nombre = complejo.Nombre,
                 LocalidadId = complejo.LocalidadId,
                 DueñoId = complejo.DueñoId,
-                EncargadoId = complejo.EncargadoId
+                EncargadoId = complejo.EncargadoId,
+                NombreLocalidad = complejo.Localidad.Nombre,
+                NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
+                NombreEncargado = complejo.Encargado?.Email ?? string.Empty
             };
         }
 

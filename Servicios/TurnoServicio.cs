@@ -92,6 +92,17 @@ namespace Servicios
 
             return await turnoRepositorio.UpdateAsync(turno);
         }
+        public async Task<List<TurnoDTO>> ObtenerPorClienteIdAsync(int idCliente)
+        {
+            var turnos = await turnoRepositorio.ObtenerPorClienteIdAsync(idCliente);
 
+            return turnos.Select(t => new TurnoDTO
+            {
+                Id = t.Id,
+                Fecha = t.Fecha,
+                HoraInicio = t.HoraInicio,
+                // Asigná los demás campos que necesite tu DTO
+            }).ToList();
+        }
     }
 }

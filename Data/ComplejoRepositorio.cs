@@ -24,7 +24,12 @@ namespace Data
 
         public async Task<Complejo?> GetAsync(int id)
         {
-            return await _context.Complejos.FindAsync(id);
+            return await _context.Complejos
+            .Include(c => c.Localidad)
+            .Include(c => c.Dueño)
+                .ThenInclude(d => d.PersonaJuridica)
+            .Include(c => c.Encargado)
+            .FirstOrDefaultAsync(c => c.Id == id); ;
         }
 
 

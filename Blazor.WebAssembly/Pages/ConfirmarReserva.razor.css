@@ -1,0 +1,269 @@
+﻿/* Contenedor wrapper */
+.confirmar-reserva-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 50px 24px;
+    box-sizing: border-box;
+    background-color: #f8fafc;
+}
+
+/* Contenedor principal */
+.reserva-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Header principal */
+.reserva-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+    .reserva-header h1 {
+        margin: 0 0 10px 0;
+        font-size: 2.2rem;
+        color: #1e293b;
+        font-weight: 800;
+    }
+
+    .reserva-header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 1.05rem;
+    }
+
+/* Grilla principal */
+.reserva-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+}
+
+/* Tarjetas */
+.card-reserva {
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    padding: 32px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid #f1f5f9 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+    .card-reserva h2 {
+        font-size: 1.3rem;
+        color: #ee5801 !important; /* Naranja directo */
+        margin-top: 0;
+        margin-bottom: 24px;
+        font-weight: 700;
+    }
+
+/* Grupos de información */
+.info-grupo {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+    .info-grupo.con-linea,
+    .info-row.con-linea {
+        border-bottom: 1px dashed #e2e8f0;
+    }
+
+.info-row {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+    .info-row .info-grupo {
+        flex: 1;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+
+.info-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.info-detalle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-valor {
+    font-size: 0.98rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+    .info-valor.destacado {
+        font-size: 1.15rem;
+        font-weight: 700;
+    }
+
+/* Precios */
+.precio-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .precio-row .sena {
+        color: #ee5801 !important; /* Naranja directo */
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .precio-row.total {
+        margin-top: 4px;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+        .precio-row.total .total-monto {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+/* SVG Íconos */
+.icon {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+    flex-shrink: 0;
+}
+
+.icon-orange {
+    stroke: #ee5801 !important;
+}
+
+/* Formulario Lado Derecho */
+.reserva-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-forum-group {
+    display: flex;
+    flex-direction: column;
+}
+
+    .input-forum-group label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #1e293b;
+    }
+
+.input-forum {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 25px !important;
+    font-size: 0.95rem;
+    outline: none;
+    box-sizing: border-box;
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    transition: all 0.2s ease;
+}
+
+    .input-forum:focus {
+        border-color: #ee5801 !important;
+        box-shadow: 0 0 0 3px rgba(238, 88, 1, 0.15) !important;
+    }
+
+/* Botón de Confirmar */
+.confirmar-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+}
+
+.btn-confirmar {
+    padding: 14px 42px;
+    background-color: #ee5801 !important; /* Naranja de fondo */
+    color: #ffffff !important; /* Texto blanco */
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(238, 88, 1, 0.35) !important;
+    transition: all 0.2s ease;
+}
+
+    .btn-confirmar:hover:not(:disabled) {
+        background-color: #d44d00 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(238, 88, 1, 0.45) !important;
+    }
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-confirmacion-contenido {
+    background-color: #ffffff;
+    padding: 32px 24px;
+    border-radius: 16px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    animation: modalEntrada 0.3s ease-out forwards;
+}
+
+.btn-modal-home {
+    width: 100%;
+    background-color: #ee5801 !important;
+    color: #ffffff !important;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-modal-home:hover {
+        background-color: #d44d00 !important;
+    }
+
+@media (max-width: 768px) {
+    .reserva-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-confirmar {
+        width: 100%;
+    }
+}

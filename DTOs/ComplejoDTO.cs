@@ -8,6 +8,7 @@ namespace DTOs
         public string Direccion { get; set; }
         public int EncargadoId { get; set; }
         public int LocalidadId {  get; set; }
+   
         public int DueñoId {  get; set; }
 
         public string NombreLocalidad { get; set; }
@@ -16,6 +17,8 @@ namespace DTOs
         public decimal PrecioDesde { get; set; }
         public List<CanchaDTO> Canchas { get; set; } = new();
         public List<HorarioDTO> Horarios { get; set; } = new();
+
+
 
     }
 

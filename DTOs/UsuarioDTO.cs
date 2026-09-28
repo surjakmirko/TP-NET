@@ -12,6 +12,12 @@
         public string Rol { get; set; } = string.Empty;
         public PersonaFisicaDTO? PersonaFisica { get; set; }
         public PersonaJuridicaDTO? PersonaJuridica { get; set; }
+        public string? Nombre { get; set; }
+        public string? Apellido { get; set; }
+
+        public DateOnly? Fecha_Nacimiento { get; set; }
+
+
     }
 
     public class UsuarioCrearDTO
