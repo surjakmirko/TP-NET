@@ -1,0 +1,109 @@
+﻿@page "/complejo/{Id:int}"
+@using DTOs
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@if (cargando)
+{
+    <p class="detalle-complejo-estado">Cargando complejo...</p>
+}
+else if (!string.IsNullOrEmpty(error))
+{
+    <p class="detalle-complejo-estado">@error</p>
+}
+else if (complejo != null)
+{
+    <main class="detalle-complejo">
+        <!-- Imagen del complejo -->
+        <img class="detalle-complejo-imagen"
+             alt="Imagen de @complejo.Nombre" />
+
+        <!-- Nombre -->
+        <h1 class="detalle-complejo-nombre">@complejo.Nombre</h1>
+
+        <!-- Componente de Horarios / Grilla -->
+        <HorariosCancha Complejo="complejo" FechaActual="@fechaActual" />
+
+        <!-- Acordeón de Ubicación -->
+        <details class="detalle-complejo-acordeon" open>
+            <summary>Ubicación</summary>
+            <div class="contenido-acordeon">
+                <p>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style="margin-right: 8px; vertical-align: text-bottom;">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    @complejo.Direccion
+                    @(string.IsNullOrEmpty(complejo.NombreLocalidad) ? "" : $", {complejo.NombreLocalidad}")
+                </p>
+            </div>
+        </details>
+
+        <!-- Acordeón de Horarios del Club -->
+        <details class="detalle-complejo-acordeon" open>
+            <summary>Horarios del Club</summary>
+            <div class="contenido-acordeon">
+                @if (complejo.Horarios != null)
+                {
+                    @foreach (var horario in complejo.Horarios)
+                    {
+                        <div class="horario-fila" @key="@($"{horario.ComplejoId}-{horario.NroDia}")">
+                            <strong>@diasSemana[horario.NroDia]</strong>
+                            <span>@horario.HoraApertura.ToString("HH:mm") a @horario.HoraCierre.ToString("HH:mm")</span>
+                        </div>
+                    }
+                }
+            </div>
+        </details>
+    </main>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromQuery] public string? Fecha { get; set; }
+
+    // Cambiamos el tipo a ComplejoDTO
+    private ComplejoDTO? complejo;
+    private bool cargando = true;
+    private string error = "";
+    private string fechaActual = "";
+
+    private readonly string[] diasSemana = new[]
+    {
+        "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        fechaActual = string.IsNullOrEmpty(Fecha) ? DateTime.Now.ToString("yyyy-MM-dd") : Fecha;
+
+        if (Id <= 0)
+        {
+            error = "No se recibió el id del complejo.";
+            cargando = false;
+            return;
+        }
+
+        try
+        {
+            // Petición usando el DTO oficial del proyecto
+            complejo = await Http.GetFromJsonAsync<ComplejoDTO>($"http://localhost:3000/api/complejos/{Id}");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private string FormatearHora(string? valor)
+    {
+        if (string.IsNullOrWhiteSpace(valor)) return "-";
+
+        var match = System.Text.RegularExpressions.Regex.Match(valor, @"(?:T|^)(\d{1,2}):(\d{2})");
+        return match.Success ? $"{match.Groups[1].Value.PadLeft(2, '0')}:{match.Groups[2].Value}" : valor;
+    }
+}

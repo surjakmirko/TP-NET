@@ -1,4 +1,6 @@
 ﻿@page "/menu-encargado"
+@using API
+@using DTOs
 @inject ComplejoApiClient ComplejoService
 
 @if (cargando)
@@ -20,7 +22,7 @@ else if (complejo != null)
             </div>
             <label class="menu-encargado-fecha">
                 Fecha
-                <input type="date" @bind="fecha" @bind:event="oninput" />
+                <input type="text" @bind="fecha" @bind:event="oninput" />
             </label>
         </header>
 
@@ -72,7 +74,7 @@ else
     {
         try
         {
-            complejo = await ComplejoService.ObtenerComplejoDelEncargadoAsync();
+            //complejo = await ComplejoService.ObtenerComplejoDelEncargadoAsync();
 
             // Si la API devuelve null, informamos al usuario para no dejar la página en blanco
             if (complejo == null)
