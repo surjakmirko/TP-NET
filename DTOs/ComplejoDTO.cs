@@ -14,6 +14,8 @@ namespace DTOs
         public string NombreDueño { get; set; }
         public string NombreEncargado { get; set; }
         public decimal PrecioDesde { get; set; }
+        public List<CanchaDTO> Canchas { get; set; } = new();
+        public List<HorarioDTO> Horarios { get; set; } = new();
 
     }
 

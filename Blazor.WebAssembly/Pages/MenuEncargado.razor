@@ -1,0 +1,127 @@
+﻿@page "/menu-encargado"
+@inject ComplejoApiClient ComplejoService
+
+@if (cargando)
+{
+    <main class="menu-encargado-estado">Cargando tu complejo...</main>
+}
+else if (!string.IsNullOrEmpty(error))
+{
+    <main class="menu-encargado-estado">@error</main>
+}
+else if (complejo != null)
+{
+    <main class="menu-encargado">
+        <header class="menu-encargado-cabecera">
+            <div>
+                <p class="menu-encargado-etiqueta">Panel del encargado</p>
+                <h1>@complejo.Nombre</h1>
+                <p>@complejo.Direccion, @complejo.NombreLocalidad</p>
+            </div>
+            <label class="menu-encargado-fecha">
+                Fecha
+                <input type="date" @bind="fecha" @bind:event="oninput" />
+            </label>
+        </header>
+
+        <section class="menu-encargado-resumen">
+            <div>
+                <strong>@(complejo.Canchas?.Count ?? 0)</strong>
+                <span>Canchas</span>
+            </div>
+            <div>
+                <strong>@(CalcularReservasDelDia())</strong>
+                <span>Reservas del día</span>
+            </div>
+            <div>
+                <strong>@(EstaAbierto() ? "Abierto" : "Cerrado")</strong>
+                <span>Estado del complejo</span>
+            </div>
+        </section>
+
+        <section class="menu-encargado-grilla">
+            <div class="menu-encargado-grilla-cabecera">
+                <div>
+                    <h2>Agenda de canchas</h2>
+                    <p>Seleccioná un turno ocupado para consultar los datos del cliente.</p>
+                </div>
+                <div class="leyenda">
+                    <span class="leyenda-libre"></span> Disponible 
+                    <span class="leyenda-ocupada"></span> Reservada
+                </div>
+            </div>
+            
+            <!-- Llamamos al componente HorariosCancha -->
+            <HorariosCancha Complejo="complejo" FechaActual="@fecha" EsPanelEncargado="true" />
+        </section>
+    </main>
+}
+else
+{
+    // Nueva rama: mostrar mensaje cuando no hay complejo y no hubo excepción
+    <main class="menu-encargado-estado">No se encontró un complejo para el encargado.</main>
+}
+
+@code {
+    private ComplejoDTO? complejo;
+    private string fecha = ObtenerFechaHoy();
+    private bool cargando = true;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            complejo = await ComplejoService.ObtenerComplejoDelEncargadoAsync();
+
+            // Si la API devuelve null, informamos al usuario para no dejar la página en blanco
+            if (complejo == null)
+            {
+                error = string.Empty; // mantenemos vacío si prefieres otro mensaje
+            }
+        }
+        catch (Exception ex)
+        {
+            // Capturar la excepción completa ayuda a depurar (stacktrace)
+            error = ex.ToString();
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private static string ObtenerFechaHoy()
+    {
+        return DateTime.Now.ToString("yyyy-MM-dd");
+    }
+
+    private int CalcularReservasDelDia()
+    {
+        if (complejo?.Canchas == null) return 0;
+
+        if (!DateOnly.TryParse(fecha, out var fechaDate)) return 0;
+
+        int total = 0;
+        foreach (var cancha in complejo.Canchas)
+        {
+            if (cancha.Turnos == null) continue;
+
+            total += cancha.Turnos.Count(turno =>
+                turno.Fecha == fechaDate &&
+                turno.Estado?.ToLower() != "cancelado"
+            );
+        }
+        return total;
+    }
+
+    private bool EstaAbierto()
+    {
+        if (complejo?.Horarios == null || !complejo.Horarios.Any()) return false;
+
+        if (!DateOnly.TryParse(fecha, out var fechaSeleccionada)) return false;
+
+        int nroDia = ((int)fechaSeleccionada.DayOfWeek == 0) ? 7 : (int)fechaSeleccionada.DayOfWeek;
+        return complejo.Horarios.Any(h => h.NroDia == nroDia);
+    }
+}

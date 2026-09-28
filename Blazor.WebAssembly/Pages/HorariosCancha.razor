@@ -1,0 +1,314 @@
+﻿@inject NavigationManager Navigation
+@using DTOs
+
+<div class="contenedor-horarios-cancha">
+    @if (!EsPanelEncargado)
+    {
+        <div class="info-fecha-grilla" style="margin-bottom: 10px; font-weight: bold; font-size: 2.2vh;">
+            Fecha: @FormatearFecha(FechaAUsar)
+        </div>
+    }
+
+    <div class="fila-cabecera">
+        <div class="columna-info-vacia"></div>
+        <div class="contenedor-columnas-horas">
+            @for (int i = 0; i < totalBloques; i++)
+            {
+                var inicio = aperturaMinutos + i * duracionGrilla;
+                <div class="celda-cabecera-hora">
+                    @FormatearHora(inicio)
+                </div>
+            }
+        </div>
+    </div>
+
+    @foreach (var cancha in canchas)
+    {
+        <div class="fila-cancha">
+            <div class="info-cancha">
+                <h4>Cancha @cancha.Nro</h4>
+                <p>@(cancha.TipoCancha?.Deporte ?? "Deporte no especificado")</p>
+            </div>
+
+            <div class="contenedor-celdas">
+                @for (int i = 0; i < totalBloques; i++)
+                {
+                    var inicioBloque = aperturaMinutos + i * duracionGrilla;
+                    var finBloque = Math.Min(inicioBloque + duracionGrilla, cierreMinutos);
+                    var horaStr = FormatearHora(inicioBloque);
+
+                    var turnoActivo = ObtenerTurnoActivo(cancha, inicioBloque, finBloque);
+                    var estaOcupado = turnoActivo != null;
+
+                    var localCancha = cancha;
+                    var localTurno = turnoActivo;
+
+                    <div class="celda-turno @(estaOcupado ? "ocupada" : "libre")"
+                         title="@(EsPanelEncargado && !estaOcupado ? "Hacé clic para agendar un turno" : null)"
+                         @onclick="() => ManejarClickCelda(localCancha, horaStr, estaOcupado, localTurno)">
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@if (modalAbierto)
+{
+    <aside class="modal-contenido" aria-label="Confirmar reserva">
+        @if (turnoSeleccionadoDetalle != null)
+        {
+            <h3>Detalle de la reserva</h3>
+            <p>Cancha: @turnoSeleccionadoDetalle.CanchaNro</p>
+            <p>Horario: @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraInicio, true) ?? 0) a @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraFin, true) ?? 0)</p>
+            <p>Estado: @turnoSeleccionadoDetalle.Turno.Estado</p>
+            <p>
+                <strong>@ObtenerNombreCliente(turnoSeleccionadoDetalle.Turno)</strong>
+            </p>
+            <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Email</p>
+            <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Telefono</p>
+        }
+        else if (reservaPendiente != null)
+        {
+            <h3>Confirmar reserva</h3>
+            <p>Fecha: @reservaPendiente.Fecha</p>
+            <p>Horario: @reservaPendiente.HorarioInicio hs</p>
+            <p>Cancha: @reservaPendiente.CanchaNro</p>
+            <div class="modal-botones">
+                <button class="btn-pagar" @onclick="ConfirmarYPagar">Ir a pagar</button>
+            </div>
+        }
+        <button class="btn-cerrar-modal" @onclick="CerrarModal">Cerrar</button>
+    </aside>
+}
+
+@code {
+    [Parameter] public ComplejoDTO Complejo { get; set; } = default!;
+    [Parameter] public string? FechaActual { get; set; }
+    [Parameter] public bool EsPanelEncargado { get; set; } = false;
+    private ReservaPendienteModel? reservaPendiente;
+    private TurnoDetalleModel? turnoSeleccionadoDetalle;
+    private bool modalAbierto = false;
+
+    private string FechaAUsar => string.IsNullOrWhiteSpace(FechaActual) ? ObtenerFechaHoy() : FechaActual!;
+
+    private int aperturaMinutos;
+    private int cierreMinutos;
+    private int duracionGrilla;
+    private int totalBloques;
+    private List<CanchaDTO> canchas => Complejo?.Canchas ?? new();
+
+    protected override void OnParametersSet()
+    {
+        CalcularHorariosGrilla();
+    }
+
+    private void CalcularHorariosGrilla()
+    {
+        if (Complejo?.Horarios == null || !Complejo.Horarios.Any()) return;
+
+        // Fecha como DateOnly para comparaciones
+        var fechaSeleccionada = DateOnly.Parse(FechaAUsar);
+        int diaSeleccionado = ((int)fechaSeleccionada.DayOfWeek == 0) ? 7 : (int)fechaSeleccionada.DayOfWeek;
+
+        var horario = Complejo.Horarios.FirstOrDefault(item => item.NroDia == diaSeleccionado);
+        if (horario == null) return;
+
+        // Horario.HoraApertura / HoraCierre son TimeOnly en DTOs: usar la sobrecarga de ExtraerMinutos
+        aperturaMinutos = ExtraerMinutos(horario.HoraApertura) ?? 0;
+        var cierreHorario = ExtraerMinutos(horario.HoraCierre) ?? 0;
+
+        cierreMinutos = (cierreHorario <= aperturaMinutos) ? cierreHorario + 24 * 60 : cierreHorario;
+
+        // Duración de grilla: intentar inferirla a partir de turnos existentes, si no, usar 60
+        duracionGrilla = canchas.Any() ? Math.Min(canchas.Min(c => ObtenerDuracion(c)), 60) : 60;
+        if (duracionGrilla <= 0) duracionGrilla = 60;
+
+        totalBloques = Math.Max(0, (cierreMinutos - aperturaMinutos) / duracionGrilla);
+    }
+
+    private TurnoDTO? ObtenerTurnoActivo(CanchaDTO cancha, int inicioBloque, int finBloque)
+    {
+        if (cancha.Turnos == null) return null;
+
+        // Parse FechaAUsar una sola vez
+        var fechaActualDate = DateOnly.Parse(FechaAUsar);
+
+        foreach (var turno in cancha.Turnos)
+        {
+            var estado = turno.Estado?.ToLower();
+            if (estado == "cancelado") continue;
+
+            // turno.Fecha es DateOnly en DTO -> comparar directamente
+            if (turno.Fecha != fechaActualDate) continue;
+
+            var turnoInicioNullable = ExtraerMinutos(turno.HoraInicio, true);
+            var turnoFinNullable = ExtraerMinutos(turno.HoraFin, true);
+
+            if (turnoInicioNullable == null || turnoFinNullable == null) continue;
+
+            int turnoInicio = turnoInicioNullable.Value;
+            int turnoFin = turnoFinNullable.Value;
+
+            if (turnoFin <= turnoInicio)
+            {
+                turnoFin += 24 * 60;
+            }
+
+            if (inicioBloque < turnoFin && finBloque > turnoInicio)
+            {
+                return turno;
+            }
+        }
+        return null;
+    }
+
+    private void ManejarClickCelda(CanchaDTO cancha, string horaStr, bool estaOcupado, TurnoDTO? turnoActivo)
+    {
+        if (estaOcupado && EsPanelEncargado && turnoActivo != null)
+        {
+            turnoSeleccionadoDetalle = new TurnoDetalleModel { CanchaNro = cancha.Nro, Turno = turnoActivo };
+            reservaPendiente = null;
+            modalAbierto = true;
+        }
+        else if (!estaOcupado)
+        {
+            if (EsPanelEncargado)
+            {
+                AgendarComoEncargado(cancha, horaStr);
+            }
+            else
+            {
+                reservaPendiente = new ReservaPendienteModel
+                {
+                    Fecha = FechaAUsar,
+                    CanchaNro = cancha.Nro,
+                    ComplejoId = Complejo.Id,
+                    HorarioInicio = horaStr
+                };
+                turnoSeleccionadoDetalle = null;
+                modalAbierto = true;
+            }
+        }
+    }
+
+    private void CerrarModal()
+    {
+        modalAbierto = false;
+        reservaPendiente = null;
+        turnoSeleccionadoDetalle = null;
+    }
+
+    private void ConfirmarYPagar()
+    {
+        if (reservaPendiente == null) return;
+        var query = $"fecha={reservaPendiente.Fecha}&canchaNro={reservaPendiente.CanchaNro}&complejoId={reservaPendiente.ComplejoId}&horarioInicio={reservaPendiente.HorarioInicio}";
+        Navigation.NavigateTo($"/confirmar-reserva?{query}");
+    }
+
+    private void AgendarComoEncargado(CanchaDTO cancha, string horaString)
+    {
+        var query = $"complejoId={Complejo.Id}&canchaNro={cancha.Nro}&fecha={FechaAUsar}&horarioInicio={horaString}&modo=encargado";
+        Navigation.NavigateTo($"/confirmar-reserva?{query}");
+    }
+
+    // Sobrecargas para ExtraerMinutos: aceptar TimeOnly (y string para compatibilidad)
+    private int? ExtraerMinutos(TimeOnly? time, bool _ = false)
+    {
+        if (time == null) return null;
+        return time.Value.Hour * 60 + time.Value.Minute;
+    }
+
+    private int? ExtraerMinutos(string? valor, bool convertirHoraLocal = false)
+    {
+        if (string.IsNullOrEmpty(valor)) return null;
+
+        if (convertirHoraLocal && valor.Contains('T'))
+        {
+            if (DateTime.TryParse(valor, null, System.Globalization.DateTimeStyles.RoundtripKind, out var fecha))
+            {
+                return fecha.Hour * 60 + fecha.Minute;
+            }
+        }
+
+        var match = System.Text.RegularExpressions.Regex.Match(valor, @"(?:T|^)(\d{1,2}):(\d{2})");
+        if (match.Success)
+        {
+            return int.Parse(match.Groups[1].Value) * 60 + int.Parse(match.Groups[2].Value);
+        }
+        return null;
+    }
+
+    private string FormatearHora(int minutos)
+    {
+        int hora = minutos / 60;
+        int minutosRestantes = minutos % 60;
+        return $"{hora:D2}:{minutosRestantes:D2}";
+    }
+
+    private int ObtenerDuracion(CanchaDTO cancha)
+    {
+        // Si hay turnos, inferir la duración mínima a partir de ellos.
+        if (cancha.Turnos != null && cancha.Turnos.Any())
+        {
+            var duraciones = new List<int>();
+            foreach (var t in cancha.Turnos)
+            {
+                var inicio = ExtraerMinutos(t.HoraInicio, true);
+                var fin = ExtraerMinutos(t.HoraFin, true);
+                if (inicio == null || fin == null) continue;
+                int i = inicio.Value;
+                int f = fin.Value;
+                if (f <= i) f += 24 * 60;
+                var d = f - i;
+                if (d > 0) duraciones.Add(d);
+            }
+            if (duraciones.Any()) return duraciones.Min();
+        }
+
+        // Fallback por defecto
+        return 60;
+    }
+
+    private string ObtenerFechaHoy()
+    {
+        return DateTime.Now.ToString("yyyy-MM-dd");
+    }
+
+    private string FormatearFecha(string fecha)
+    {
+        if (DateTime.TryParse(fecha, out var dt))
+        {
+            return dt.ToString("dd/MM/yyyy");
+        }
+        return fecha;
+    }
+
+    private string ObtenerNombreCliente(TurnoDTO turno)
+    {
+        var cliente = turno.Cliente;
+        if (cliente == null) return "Cliente sin nombre";
+
+        if (cliente.PersonaFisica != null)
+        {
+            return $"{cliente.PersonaFisica.Nombre} {cliente.PersonaFisica.Apellido}";
+        }
+
+        // DTO usa Razon_Social en lugar de RazonSocial
+        return cliente.PersonaJuridica?.Razon_Social ?? "Cliente sin nombre";
+    }
+
+    private class ReservaPendienteModel
+    {
+        public string Fecha { get; set; } = string.Empty;
+        public int CanchaNro { get; set; }
+        public int ComplejoId { get; set; }
+        public string HorarioInicio { get; set; } = string.Empty;
+    }
+
+    private class TurnoDetalleModel
+    {
+        public int CanchaNro { get; set; }
+        public TurnoDTO Turno { get; set; } = default!;
+    }
+}

@@ -7,6 +7,8 @@ namespace DTOs
         public int Nro {  get; set; }
         public int ComplejoId {  get; set; }
         public int TipoCanchaId {  get; set; }
+        public TipoCanchaDTO? TipoCancha { get; set; }
+        public List<TurnoDTO> Turnos { get; set; } = new();
     }
 
     public class CanchaCrearDTO

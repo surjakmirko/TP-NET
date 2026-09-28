@@ -10,7 +10,8 @@
         public string? PersonaJuridicaCuit { get;  set; }
         public int TipoUsuarioId { get; set; }
         public string Rol { get; set; } = string.Empty;
-
+        public PersonaFisicaDTO? PersonaFisica { get; set; }
+        public PersonaJuridicaDTO? PersonaJuridica { get; set; }
     }
 
     public class UsuarioCrearDTO

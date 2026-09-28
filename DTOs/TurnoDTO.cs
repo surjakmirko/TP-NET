@@ -13,6 +13,7 @@
         public int ComplejoId { get;  set; }
         public int CanchaNro { get;  set; }
         public DateOnly Fecha { get; set; }
+        public UsuarioDTO? Cliente { get; set; } = null;
     }
 
     public class TurnoCrearDTO
