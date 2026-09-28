@@ -40,6 +40,11 @@ namespace API
             await DeleteAsync($"complejos/{id}");
         }
 
+        public static async Task<ComplejoDTO?> ObtenerComplejoDelEncargadoAsync(int idEncargado)
+        {
+            return await GetAsync<ComplejoDTO>($"complejos/encargado/{idEncargado}");
+        }
+
         //HORARIOS
 
         public static async Task<List<HorarioDTO>?> ObtenerHorariosAsync(int idComplejo)

@@ -70,6 +70,25 @@ namespace Servicios
             }).ToList();
         }
 
+        public async Task<ComplejoDTO?> GetByEncargadoAsync(int idEncargado)
+        {
+            Complejo? complejo = await complejoRepositorio.GetComplejosByIdEncargado(idEncargado);
+            if (complejo == null)
+            {
+                return null;
+            }
+            return new ComplejoDTO
+            {
+                Id = complejo.Id,
+                Direccion = complejo.Direccion,
+                Nombre = complejo.Nombre,
+                LocalidadId = complejo.LocalidadId,
+                DueñoId = complejo.DueñoId,
+                EncargadoId = complejo.EncargadoId,
+                NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty
+            };
+        }
+
         public async Task<IEnumerable<ComplejoDTO>> GetAllAsync()
         {
             var complejos = await complejoRepositorio.GetAllAsync();
