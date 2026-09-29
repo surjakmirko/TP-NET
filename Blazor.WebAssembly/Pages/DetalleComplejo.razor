@@ -1,6 +1,6 @@
-﻿@page "/complejo/{Id:int}"
+﻿@page "/detalle-complejo/{Id:int}"
 @using DTOs
-@inject HttpClient Http
+@using API
 @inject NavigationManager Navigation
 
 @if (cargando)
@@ -21,7 +21,7 @@ else if (complejo != null)
         <!-- Nombre -->
         <h1 class="detalle-complejo-nombre">@complejo.Nombre</h1>
 
-        <!-- Componente de Horarios / Grilla -->
+        <!-- Invocación de la grilla de Horarios por Cancha -->
         <HorariosCancha Complejo="complejo" FechaActual="@fechaActual" />
 
         <!-- Acordeón de Ubicación -->
@@ -43,15 +43,19 @@ else if (complejo != null)
         <details class="detalle-complejo-acordeon" open>
             <summary>Horarios del Club</summary>
             <div class="contenido-acordeon">
-                @if (complejo.Horarios != null)
+                @if (horarios != null && horarios.Any())
                 {
-                    @foreach (var horario in complejo.Horarios)
+                    @foreach (var horario in horarios)
                     {
                         <div class="horario-fila" @key="@($"{horario.ComplejoId}-{horario.NroDia}")">
-                            <strong>@diasSemana[horario.NroDia]</strong>
+                            <strong>@ObtenerNombreDia(horario.NroDia)</strong>
                             <span>@horario.HoraApertura.ToString("HH:mm") a @horario.HoraCierre.ToString("HH:mm")</span>
                         </div>
                     }
+                }
+                else
+                {
+                    <p style="color: #64748b;">No hay horarios registrados para este club.</p>
                 }
             </div>
         </details>
@@ -62,16 +66,11 @@ else if (complejo != null)
     [Parameter] public int Id { get; set; }
     [SupplyParameterFromQuery] public string? Fecha { get; set; }
 
-    // Cambiamos el tipo a ComplejoDTO
     private ComplejoDTO? complejo;
+    private List<HorarioDTO>? horarios;
     private bool cargando = true;
     private string error = "";
     private string fechaActual = "";
-
-    private readonly string[] diasSemana = new[]
-    {
-        "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
-    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,8 +85,21 @@ else if (complejo != null)
 
         try
         {
-            // Petición usando el DTO oficial del proyecto
-            complejo = await Http.GetFromJsonAsync<ComplejoDTO>($"http://localhost:3000/api/complejos/{Id}");
+            // 1. Cargar datos del complejo
+            complejo = await ComplejoApiClient.ObtenerPorIdAsync(Id);
+
+            // 2. Cargar los horarios por id
+            horarios = await ComplejoApiClient.ObtenerHorariosAsync(Id);
+
+            // 3. Cargar las canchas del complejo
+            var canchas = await ComplejoApiClient.ObtenerCanchasAsync(Id);
+
+            if (complejo != null)
+            {
+                // Vinculamos horarios y canchas para que HorariosCancha pueda armar la grilla
+                complejo.Horarios = horarios ?? new List<HorarioDTO>();
+                complejo.Canchas = canchas ?? new List<CanchaDTO>();
+            }
         }
         catch (Exception ex)
         {
@@ -99,11 +111,19 @@ else if (complejo != null)
         }
     }
 
-    private string FormatearHora(string? valor)
+    private string ObtenerNombreDia(int nroDia)
     {
-        if (string.IsNullOrWhiteSpace(valor)) return "-";
-
-        var match = System.Text.RegularExpressions.Regex.Match(valor, @"(?:T|^)(\d{1,2}):(\d{2})");
-        return match.Success ? $"{match.Groups[1].Value.PadLeft(2, '0')}:{match.Groups[2].Value}" : valor;
+        return nroDia switch
+        {
+            1 => "Lunes",
+            2 => "Martes",
+            3 => "Miercoles",
+            4 => "Jueves",
+            5 => "Viernes",
+            6 => "Sabado",
+            7 or 0 => "Domingo",
+            8 => "Feriado",
+            _ => $"Día {nroDia}"
+        };
     }
 }

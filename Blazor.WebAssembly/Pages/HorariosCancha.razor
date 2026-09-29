@@ -55,31 +55,39 @@
 
 @if (modalAbierto)
 {
-    <aside class="modal-contenido" aria-label="Confirmar reserva">
-        @if (turnoSeleccionadoDetalle != null)
-        {
-            <h3>Detalle de la reserva</h3>
-            <p>Cancha: @turnoSeleccionadoDetalle.CanchaNro</p>
-            <p>Horario: @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraInicio, true) ?? 0) a @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraFin, true) ?? 0)</p>
-            <p>Estado: @turnoSeleccionadoDetalle.Turno.Estado</p>
-            <p>
-                <strong>@ObtenerNombreCliente(turnoSeleccionadoDetalle.Turno)</strong>
-            </p>
-            <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Email</p>
-            <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Telefono</p>
-        }
-        else if (reservaPendiente != null)
-        {
-            <h3>Confirmar reserva</h3>
-            <p>Fecha: @reservaPendiente.Fecha</p>
-            <p>Horario: @reservaPendiente.HorarioInicio hs</p>
-            <p>Cancha: @reservaPendiente.CanchaNro</p>
-            <div class="modal-botones">
-                <button class="btn-pagar" @onclick="ConfirmarYPagar">Ir a pagar</button>
-            </div>
-        }
-        <button class="btn-cerrar-modal" @onclick="CerrarModal">Cerrar</button>
-    </aside>
+    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 99999;"
+         @onclick="CerrarModal">
+
+        <aside class="modal-contenido"
+               style="position: relative; top: auto; left: auto; transform: none; background-color: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 400px; width: 90%; text-align: center; margin: auto;"
+               aria-label="Confirmar reserva"
+               @onclick:stopPropagation="true">
+
+            @if (turnoSeleccionadoDetalle != null)
+            {
+                <h3>Detalle de la reserva</h3>
+                <p>Cancha: @turnoSeleccionadoDetalle.CanchaNro</p>
+                <p>Horario: @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraInicio, true) ?? 0) a @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraFin, true) ?? 0)</p>
+                <p>Estado: @turnoSeleccionadoDetalle.Turno.Estado</p>
+                <p>
+                    <strong>@ObtenerNombreCliente(turnoSeleccionadoDetalle.Turno)</strong>
+                </p>
+                <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Email</p>
+                <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Telefono</p>
+            }
+            else if (reservaPendiente != null)
+            {
+                <h3>Confirmar reserva</h3>
+                <p>Fecha: @reservaPendiente.Fecha</p>
+                <p>Horario: @reservaPendiente.HorarioInicio hs</p>
+                <p>Cancha: @reservaPendiente.CanchaNro</p>
+                <div class="modal-botones" style="margin-top: 15px;">
+                    <button class="btn-pagar" @onclick="ConfirmarYPagar">Ir a pagar</button>
+                </div>
+            }
+            <button class="btn-cerrar-modal" style="margin-top: 10px;" @onclick="CerrarModal">Cerrar</button>
+        </aside>
+    </div>
 }
 
 @code {
