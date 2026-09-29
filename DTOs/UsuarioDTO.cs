@@ -17,7 +17,6 @@
 
         public DateOnly? Fecha_Nacimiento { get; set; }
 
-
     }
 
     public class UsuarioCrearDTO

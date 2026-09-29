@@ -26,8 +26,13 @@
         </div>
 
         <div class="filtro-form">
-            <svg class="icon" viewBox="0 0 24 24" width="24" height="24"><path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" /><path d="M16 2V6" /><path d="M8 2V6" /><path d="M3 10H21" /></svg>
-            <input name="fecha" type="string" style="color: gray;" @bind="Fecha" required />
+            <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" />
+                <path d="M16 2V6" />
+                <path d="M8 2V6" />
+                <path d="M3 10H21" />
+            </svg>
+            <input name="fecha" type="date" style="color: gray;" @bind="Fecha" required />
         </div>
 
         <div class="filtro-form">
@@ -84,7 +89,7 @@
     public string? Deporte { get; set; }
 
     [SupplyParameterFromQuery(Name = "fecha")]
-    public string? Fecha { get; set; }
+    public DateOnly? Fecha { get; set; }
 
     [SupplyParameterFromQuery(Name = "hora")]
     public string? Hora { get; set; }
@@ -115,7 +120,10 @@
 
         if (!string.IsNullOrWhiteSpace(Ciudad)) parametros.Add("ciudad", Ciudad);
         if (!string.IsNullOrWhiteSpace(Deporte)) parametros.Add("deporte", Deporte);
-        if (!string.IsNullOrWhiteSpace(Fecha)) parametros.Add("fecha", Fecha);
+        if (Fecha.HasValue)
+        {
+            parametros.Add("fecha", Fecha.Value.ToString("yyyy-MM-dd"));
+        }
         if (!string.IsNullOrWhiteSpace(Hora)) parametros.Add("hora", Hora);
 
         // Genera la URL (/complejos?ciudad=X&deporte=Y) y navega

@@ -1,0 +1,90 @@
+﻿@using System.Globalization
+@using System.Text.Json
+@using DTOs
+
+<div class="tarjeta-complejo">
+    <div class="tarjeta-img-contenedor">
+        <img src="@ImgSrc"
+             alt="@Turno?.ComplejoId"
+             @onerror="HandleErrorImage"
+             class="tarjeta-img" />
+
+        <span class="badge-estado @GetEstadoClass(Turno?.Estado)">
+            @Turno?.Estado
+        </span>
+    </div>
+
+    <div class="tarjeta-body">
+        <h3 class="complejo-nombre">@Turno?.Complejo.Nombre</h3>
+        <p class="cancha-info">Cancha N° @Turno?.Cancha.Nro</p>
+        <p class="cancha-info">Deporte @Turno?.Cancha.TipoCancha.Deporte </p>
+
+        <div class="tarjeta-fechas">
+            <span class="fecha-item">📅 @FormatearFecha(Turno?.Fecha)</span>
+            <span class="fecha-item">⏰ @FormatearHora(Turno?.HoraInicio)</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public TurnoDTO? Turno { get; set; }
+    private const string ImagenFallo = "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=600";
+    private string ImgSrc { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+     
+    }
+
+    private void HandleErrorImage()
+    {
+        ImgSrc = ImagenFallo;
+    }
+
+    private string GetEstadoClass(string? estado)
+    {
+        if (string.IsNullOrWhiteSpace(estado)) return string.Empty;
+
+        return estado.ToLower() switch
+        {
+            "reservado" => "estado-reservado",
+            "en curso" => "estado-encurso",
+            "completado" => "estado-finalizado",
+            "cancelado" => "estado-cancelado",
+            _ => string.Empty
+        };
+    }
+
+    private string FormatearFecha(DateOnly? fecha)
+    {
+        return fecha?.ToString("dd/MM/yyyy") ?? string.Empty;
+    }
+
+    // Si tu HoraInicio es de tipo TimeOnly, TimeSpan o DateTime:
+    private string FormatearHora(TimeOnly? hora)
+    {
+        return hora?.ToString("HH:mm") ?? string.Empty;
+    }
+
+    // Si en tu DTO la fecha u hora vienen como string formato ISO ("2025-03-10T15:00:00"):
+    private string FormatearFechaIso(string? fechaISO)
+    {
+        if (string.IsNullOrWhiteSpace(fechaISO)) return string.Empty;
+        if (DateTime.TryParse(fechaISO, out var date))
+        {
+            return date.ToString("dd/MM/yyyy");
+        }
+        return string.Empty;
+    }
+
+    private string FormatearHoraIso(string? horaISO)
+    {
+        if (string.IsNullOrWhiteSpace(horaISO)) return string.Empty;
+        if (DateTime.TryParse(horaISO, out var date))
+        {
+            return date.ToString("HH:mm");
+        }
+        return string.Empty;
+    }
+}
