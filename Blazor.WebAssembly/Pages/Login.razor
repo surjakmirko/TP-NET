@@ -2,7 +2,10 @@
 @using API.Client
 @using DTOs
 @using Blazor.WebAssembly.Servicios
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IAutenticacionService AuthService
+@inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
 <div class="login-container">
@@ -88,7 +91,23 @@
 
             if (success)
             {
-                Navigation.NavigateTo(RedirectTo);
+                // Obtener el estado de autenticación actualizado
+                var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                // Extraer el claim de rol (ClaimTypes.Role o "role")
+                var roleClaim = user.FindFirst(ClaimTypes.Role)?.Value
+                             ?? user.FindFirst("role")?.Value;
+
+                // Si el rol es 2 o "Encargado", redirigir al menú de encargado
+                if (roleClaim == "2" || string.Equals(roleClaim, "Encargado", StringComparison.OrdinalIgnoreCase))
+                {
+                    Navigation.NavigateTo("/menu-encargado");
+                }
+                else
+                {
+                    Navigation.NavigateTo(RedirectTo);
+                }
             }
             else
             {

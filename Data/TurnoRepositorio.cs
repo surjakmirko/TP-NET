@@ -60,7 +60,10 @@ namespace Data
         public async Task<List<Turno>> ObtenerPorClienteIdAsync(int idCliente)
         {
             return await _context.Turnos
-                .Where(t => t.ClienteId == idCliente) // Ajustá 'ClienteId' según el nombre en tu entidad
+                .Where(t => t.ClienteId == idCliente)// Ajustá 'ClienteId' según el nombre en tu entidad
+                .Include(t => t.Complejo)
+                .Include(t=> t.Cancha)
+                    .ThenInclude(can => can.TipoCancha)
                 .OrderByDescending(t => t.Fecha)        // Ordena por fecha más reciente
                 .ToListAsync();
         }

@@ -8,13 +8,14 @@
 @inject NavigationManager Navigation
 @inject TurnoApiClient ReservaService
 @inject IAutenticacionService AuthService
+
 <div class="confirmar-reserva-wrapper">
     <div class="reserva-container">
 
         <!-- Encabezado Principal -->
         <header class="reserva-header">
-            <h1>¡Ya casi terminamos!</h1>
-            <p>Revisá los detalles de tu turno y tus datos para confirmar la reserva.</p>
+            <h1>@(EsModoEncargado ? "Agendar Reserva" : "¡Ya casi terminamos!")</h1>
+            <p>@(EsModoEncargado ? "Ingresá los datos del cliente para agendar la reserva manualmente." : "Revisá los detalles de tu turno y tus datos para confirmar la reserva.")</p>
         </header>
 
         <EditForm Model="titular" OnValidSubmit="HandleConfirmar">
@@ -30,12 +31,11 @@
                     <div class="info-grupo con-linea">
                         <span class="info-label">Complejo</span>
                         <div class="info-detalle">
-                            <!-- Ícono Edificio/Complejo -->
                             <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0V5" />
                             </svg>
                             <span class="info-valor destacado">
-                                @(cargando ? "Cargando..." : reserva?.ComplejoNombre ?? "Estrella del Sur")
+                                @(cargando ? "Cargando..." : reserva?.ComplejoNombre ?? "Cargando...")
                             </span>
                         </div>
                     </div>
@@ -43,13 +43,12 @@
                     <div class="info-grupo con-linea">
                         <span class="info-label">Ubicación</span>
                         <div class="info-detalle">
-                            <!-- Ícono Ubicación / Pin -->
                             <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                             <span class="info-valor">
-                                @(cargando ? "Cargando..." : reserva?.ComplejoUbicacion ?? "Cullen 1665, Rosario")
+                                @(cargando ? "Cargando..." : reserva?.ComplejoUbicacion ?? "Cargando...")
                             </span>
                         </div>
                     </div>
@@ -57,7 +56,6 @@
                     <div class="info-grupo con-linea">
                         <span class="info-label">Cancha</span>
                         <div class="info-detalle">
-                            <!-- Ícono Cancha / Líneas -->
                             <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                             </svg>
@@ -68,12 +66,11 @@
                     <div class="info-grupo con-linea">
                         <span class="info-label">Deporte</span>
                         <div class="info-detalle">
-                            <!-- Ícono Deporte / Dólar o Pelota -->
                             <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span class="info-valor">
-                                @(cargando ? "Cargando..." : reserva?.Deporte ?? "Fútbol 5")
+                                @(cargando ? "Cargando..." : reserva?.Deporte ?? "General")
                             </span>
                         </div>
                     </div>
@@ -85,7 +82,7 @@
                                 <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="info-valor">@(HorarioInicio.HasValue? HorarioInicio.Value.ToString("HH:mm") : "19:00") hs</span>
+                                <span class="info-valor">@(horarioInicioTime.HasValue? horarioInicioTime.Value.ToString("HH:mm") : "18:04") hs</span>
                             </div>
                         </div>
 
@@ -95,7 +92,7 @@
                                 <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="info-valor">@(string.IsNullOrEmpty(horaFin) ? "20:00" : horaFin) hs</span>
+                                <span class="info-valor">@(string.IsNullOrEmpty(horaFin) ? "19:04" : horaFin) hs</span>
                             </div>
                         </div>
                     </div>
@@ -125,39 +122,44 @@
                     </div>
                 </div>
 
-                <!-- Tarjeta 2: Datos del Titular -->
+                <!-- Tarjeta 2: Datos del Cliente (HABILITADOS EN MODO ENCARGADO) -->
                 <div class="card-reserva card-titular">
-                    <h2>Datos del Titular</h2>
+                    <h2>@(EsModoEncargado ? "Datos del Cliente" : "Datos del Titular")</h2>
 
                     <div class="reserva-form">
                         <div class="input-forum-group">
                             <label for="nombre">Nombre</label>
-                            <InputText id="nombre" class="input-forum" @bind-Value="titular.Nombre" placeholder="Ej. Mirko" required readOnly="true"/>
+                            <InputText id="nombre" class="input-forum" @bind-Value="titular.Nombre" placeholder="Ej. Mirko" required readonly="@(EsModoEncargado ? null : "readonly")" />
                         </div>
 
                         <div class="input-forum-group">
                             <label for="apellido">Apellido</label>
-                            <InputText id="apellido" class="input-forum" @bind-Value="titular.Apellido" placeholder="Ej. Surjak" required readOnly="true" />
+                            <InputText id="apellido" class="input-forum" @bind-Value="titular.Apellido" placeholder="Ej. Surjak" required readonly="@(EsModoEncargado ? null : "readonly")" />
+                        </div>
+
+                        <div class="input-forum-group">
+                            <label for="dni">DNI</label>
+                            <InputText id="dni" class="input-forum" @bind-Value="titular.Dni" placeholder="Ej. 1243123" required readonly="@(EsModoEncargado ? null : "readonly")" />
                         </div>
 
                         <div class="input-forum-group">
                             <label for="telefono">Teléfono</label>
-                            <InputText id="telefono" type="tel" class="input-forum" @bind-Value="usuario.Telefono" placeholder="Ej. +54 3471 330992" required readOnly="true" />
+                            <InputText id="telefono" type="tel" class="input-forum" @bind-Value="usuario.Telefono" placeholder="Ej. +54 3471 330992" required readonly="@(EsModoEncargado ? null : "readonly")" />
                         </div>
 
                         <div class="input-forum-group">
                             <label for="email">Correo Electrónico</label>
-                            <InputText id="email" type="email" class="input-forum" @bind-Value="usuario.Email" placeholder="tuemail@ejemplo.com" required readOnly="true" />
+                            <InputText id="email" type="email" class="input-forum" @bind-Value="usuario.Email" placeholder="tuemail@ejemplo.com" required readonly="@(EsModoEncargado ? null : "readonly")" />
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Botón de Confirmar centrado ABAJO (Igual que en React) -->
+            <!-- Botón de Confirmar centrado ABAJO -->
             <div class="confirmar-action">
                 <button type="submit" class="btn-confirmar" disabled="@cargando">
-                    @(cargando ? "Procesando..." : "Confirmar Reserva")
+                    @(cargando ? "Procesando..." : (EsModoEncargado ? "Agendar Turno" : "Confirmar Reserva"))
                 </button>
             </div>
         </EditForm>
@@ -169,28 +171,39 @@
         <div class="modal-overlay">
             <div class="modal-confirmacion-contenido">
                 <h2>¡Reserva Confirmada!</h2>
-                <p>Su turno se ha creado correctamente, le enviamos el comprobante por email.</p>
-                <p class="modal-subtexto">Recuerde que puede ver sus turnos en su perfil.</p>
+                <p>El turno se ha registrado correctamente en la agenda.</p>
+                <p class="modal-subtexto">
+                    @(EsModoEncargado ? "Podés consultar y gestionar los turnos desde el Panel del Encargado." : "Recuerde que puede ver sus turnos en su perfil.")
+                </p>
 
-                <button type="button" class="btn-modal-home" @onclick="IrAlHome">
-                    Ir al Home
+                <button type="button" class="btn-modal-home" @onclick="IrAlDestino">
+                    @(EsModoEncargado ? "Volver a la Agenda" : "Ir al Home")
                 </button>
             </div>
         </div>
     }
 </div>
+
 @code {
     [SupplyParameterFromQuery(Name = "complejoId")]
     public int? ComplejoId { get; set; }
 
     [SupplyParameterFromQuery(Name = "canchaNro")]
-    public int? CanchaNro { get; set; } 
+    public int? CanchaNro { get; set; }
 
     [SupplyParameterFromQuery(Name = "fecha")]
-    public DateOnly? Fecha { get; set; } 
+    public string? FechaRaw { get; set; }
 
     [SupplyParameterFromQuery(Name = "horarioInicio")]
-    public TimeOnly? HorarioInicio { get; set; }
+    public string? HorarioInicioRaw { get; set; }
+
+    [SupplyParameterFromQuery(Name = "modo")]
+    public string? Modo { get; set; }
+
+    private bool EsModoEncargado => string.Equals(Modo, "encargado", StringComparison.OrdinalIgnoreCase);
+
+    private DateOnly? fechaDate;
+    private TimeOnly? horarioInicioTime;
 
     private PersonaFisicaDTO titular = new();
     private UsuarioDTO usuario = new();
@@ -204,49 +217,58 @@
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
+
         if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            usuario.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
-            usuario.Telefono = user.FindFirst(ClaimTypes.HomePhone)?.Value ?? string.Empty;
-
-            var usuarioIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (int.TryParse(usuarioIdClaim, out var idParsed))
+            // Si NO entra en modo encargado, traemos los datos del perfil del usuario logueado
+            if (!EsModoEncargado)
             {
-                clienteId = idParsed;
-                try
-                {
-                    var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
-                    if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
-                    {
-                        titular.Nombre = usuarioCompleto.Nombre;
-                        titular.Apellido = usuarioCompleto.Apellido;
+                usuario.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+                usuario.Telefono = user.FindFirst(ClaimTypes.HomePhone)?.Value ?? string.Empty;
 
-                    }
-                }
-                catch (Exception ex)
+                var usuarioIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (int.TryParse(usuarioIdClaim, out var idParsed))
                 {
-                    Console.WriteLine($"Error al traer datos del usuario: {ex.Message}");
+                    clienteId = idParsed;
+                    try
+                    {
+                        var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
+                        if (usuarioCompleto != null && usuarioCompleto.Nombre != null)
+                        {
+                            titular.Nombre = usuarioCompleto.Nombre;
+                            titular.Apellido = usuarioCompleto.Apellido;
+                            titular.Dni = usuarioCompleto.PersonaFisicaDni;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error al traer datos del usuario: {ex.Message}");
+                    }
                 }
             }
         }
         else
         {
-            // Si no está autenticado, redirige al Login
             Navigation.NavigateTo("/login");
         }
     }
 
-
     protected override async Task OnParametersSetAsync()
     {
-        //obtener nombre complejo, ubi
-        //obtener deporte cancha y precio cancha
-        if (HorarioInicio.HasValue)
+        // Parsear fecha desde la URL
+        if (!string.IsNullOrEmpty(FechaRaw) && DateOnly.TryParse(FechaRaw, out var fParsed))
         {
-            // Calculamos la hora fin sumando 1 hora
-            horaFin = HorarioInicio.Value.AddHours(1).ToString("HH:mm");
+            fechaDate = fParsed;
         }
+
+        // Parsear hora de inicio desde la URL (ej: "18:04")
+        if (!string.IsNullOrEmpty(HorarioInicioRaw) && TimeOnly.TryParse(HorarioInicioRaw, out var hParsed))
+        {
+            horarioInicioTime = hParsed;
+            horaFin = horarioInicioTime.Value.AddHours(1).ToString("HH:mm");
+        }
+
         if (ComplejoId.HasValue && CanchaNro.HasValue)
         {
             await CargarDetallesReservaAsync(ComplejoId.Value, CanchaNro.Value);
@@ -255,8 +277,7 @@
 
     private async Task HandleConfirmar()
     {
-        // Validamos que todos los parámetros requeridos hayan venido en la URL
-        if (!ComplejoId.HasValue || !CanchaNro.HasValue || !Fecha.HasValue || !HorarioInicio.HasValue)
+        if (!ComplejoId.HasValue || !CanchaNro.HasValue || !fechaDate.HasValue || !horarioInicioTime.HasValue)
         {
             Console.WriteLine("Error: Faltan parámetros requeridos en la URL.");
             return;
@@ -265,16 +286,72 @@
         cargando = true;
         try
         {
+            int clienteIdParaTurno = clienteId;
+            if (EsModoEncargado)
+            {
+                UsuarioCrearDTO nuevoUsuario = new UsuarioCrearDTO
+                    {
+                        Email = usuario.Email,
+                        Telefono = usuario.Telefono,
+                        PersonaFisicaDni = titular.Dni,
+                        PersonaJuridicaCuit = null,
+                        TipoUsuarioId = 3,
+                        Password = "cambiar"
+                    };
+                PersonaFisicaDTO nuevaPersona = new PersonaFisicaDTO
+                    {
+                        Nombre = titular.Nombre,
+                        Dni = titular.Dni,
+                        Apellido = titular.Apellido
+                    };
+                try
+                {
+                    //intento crear una persona
+                    await PersonaFisicaApiClient.CrearPersonaFisicaAsync(nuevaPersona);
+                }
+                catch (Exception ex)
+                {
+                    //si ya existre me da error
+                    Console.WriteLine($"La persona física con DNI {titular.Dni} ya existía o falló: {ex.Message}");
+                }
+
+               
+                try
+                {
+                    //intento crear un usuario
+                    await UsuarioApiClient.CrearUsuarioAsync(nuevoUsuario);
+                }
+                catch (Exception ex)
+                {
+                    //si ya existe lanza usuario
+                    Console.WriteLine($"El usuario con DNI {titular.Dni} o Email {usuario.Email} ya existía o falló: {ex.Message}");
+                }
+                var todosLosUsuarios = await UsuarioApiClient.GetAllAsync(); //traemos todos
+                var usuarioEncontrado = todosLosUsuarios?.FirstOrDefault(u =>
+                    string.Equals(u.Email, usuario.Email, StringComparison.OrdinalIgnoreCase)); //seleccionamos el del email
+                if (usuarioEncontrado != null)
+                {
+                    clienteIdParaTurno = usuarioEncontrado.Id;
+                }
+                else
+                {
+                    Console.WriteLine("No se pudo obtener el ID del usuario para asignar el turno.");
+                    return;
+                }
+
+
+            }
+
             var exito = await TurnoApiClient.CrearTurnoAsync(new TurnoCrearDTO
             {
-                HoraInicio = HorarioInicio.Value,
-                HoraFin = HorarioInicio.Value.AddHours(1),
+                HoraInicio = horarioInicioTime.Value,
+                HoraFin = horarioInicioTime.Value.AddHours(1),
                 Estado = "Reservado",
-                ClienteId = clienteId,
+                ClienteId = clienteIdParaTurno,
                 TipoTurnoId = 1,
                 ComplejoId = ComplejoId.Value,
                 CanchaNro = CanchaNro.Value,
-                Fecha = Fecha.Value
+                Fecha = fechaDate.Value
             });
 
             if (exito != null)
@@ -284,7 +361,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al confirmar la reserva: {ex.Message}");
+            Console.WriteLine($"Error al agendar reserva: {ex.Message}");
         }
         finally
         {
@@ -292,9 +369,16 @@
         }
     }
 
-    private void IrAlHome()
+    private void IrAlDestino()
     {
-        Navigation.NavigateTo("/");
+        if (EsModoEncargado)
+        {
+            Navigation.NavigateTo("/menu-encargado");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
     }
 
     private async Task CargarDetallesReservaAsync(int complejoId, int canchaNro)
@@ -302,10 +386,7 @@
         cargando = true;
         try
         {
-            // 1. Consultar Complejo
             var complejo = await ComplejoApiClient.ObtenerPorIdAsync(complejoId);
-
-            // 2. Consultar Cancha (o datos específicos del deporte y precio)
             var cancha = await ComplejoApiClient.ObtenerCanchaPorNroAsync(complejoId, canchaNro);
 
             if (complejo != null)
@@ -314,7 +395,7 @@
                 {
                     ComplejoNombre = complejo.Nombre,
                     ComplejoUbicacion = $"{complejo.Direccion}, {complejo?.NombreLocalidad ?? ""}",
-                    Deporte = cancha?.Deporte ?? "Error",
+                    Deporte = cancha?.Deporte ?? "Fútbol",
                     PrecioTotal = cancha != null ? cancha.Precio.ToString("N0") : "10.000",
                 };
             }

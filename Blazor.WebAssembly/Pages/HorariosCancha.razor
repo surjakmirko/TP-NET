@@ -108,63 +108,56 @@
 
     protected override void OnParametersSet()
     {
-        // Depuración: Ver qué llega al componente
-        Console.WriteLine($"[HorariosCancha] 🏢 Complejo recibido: {(Complejo != null ? Complejo.Nombre : "NULL")}");
-        Console.WriteLine($"[HorariosCancha] 🏟️ Cantidad de canchas: {Complejo?.Canchas?.Count ?? 0}");
-        Console.WriteLine($"[HorariosCancha] ⏰ Cantidad de horarios: {Complejo?.Horarios?.Count ?? 0}");
-        Console.WriteLine($"[HorariosCancha] 📅 FechaActual recibida: {FechaActual}");
-
-        if (Complejo?.Horarios != null)
-        {
-            foreach (var h in Complejo.Horarios)
-            {
-                Console.WriteLine($"   👉 Día {h.NroDia}: Abre {h.HoraApertura} - Cierra {h.HoraCierre}");
-            }
-        }
-
         CalcularHorariosGrilla();
-
-        Console.WriteLine($"[HorariosCancha] 📊 Resultado -> aperturaMinutos: {aperturaMinutos}, cierreMinutos: {cierreMinutos}, totalBloques: {totalBloques}");
     }
     
 
     private void CalcularHorariosGrilla()
     {
-        if (Complejo?.Horarios == null || !Complejo.Horarios.Any()) return;
+        
+        //buscamos los valores reales 
+        if (Complejo?.Horarios != null && Complejo.Horarios.Any())
+        {
+            if (DateOnly.TryParse(FechaAUsar, out var fechaSeleccionada))
+            {
+                int diaSeleccionado = ((int)fechaSeleccionada.DayOfWeek == 0) ? 7 : (int)fechaSeleccionada.DayOfWeek;
+                var horario = Complejo.Horarios.FirstOrDefault(item => item.NroDia == diaSeleccionado);
 
-        // Fecha como DateOnly para comparaciones
-        var fechaSeleccionada = DateOnly.Parse(FechaAUsar);
-        int diaSeleccionado = ((int)fechaSeleccionada.DayOfWeek == 0) ? 7 : (int)fechaSeleccionada.DayOfWeek;
+                if (horario != null)
+                {
+                    var ap = ExtraerMinutos(horario.HoraApertura);
+                    var ci = ExtraerMinutos(horario.HoraCierre);
 
-        var horario = Complejo.Horarios.FirstOrDefault(item => item.NroDia == diaSeleccionado);
-        if (horario == null) return;
+                    if (ap.HasValue && ci.HasValue)
+                    {
+                        aperturaMinutos = ap.Value;
+                        cierreMinutos = (ci.Value <= aperturaMinutos) ? ci.Value + 24 * 60 : ci.Value;
+                    }
+                }
+            }
+        }
 
-        // Horario.HoraApertura / HoraCierre son TimeOnly en DTOs: usar la sobrecarga de ExtraerMinutos
-        aperturaMinutos = ExtraerMinutos(horario.HoraApertura) ?? 0;
-        var cierreHorario = ExtraerMinutos(horario.HoraCierre) ?? 0;
-
-        cierreMinutos = (cierreHorario <= aperturaMinutos) ? cierreHorario + 24 * 60 : cierreHorario;
-
-        // Duración de grilla: intentar inferirla a partir de turnos existentes, si no, usar 60
+        // 3. Duración del bloque de grilla (inferida o 60 minutos)
         duracionGrilla = canchas.Any() ? Math.Min(canchas.Min(c => ObtenerDuracion(c)), 60) : 60;
         if (duracionGrilla <= 0) duracionGrilla = 60;
 
+        // 4. Cálculo final del número de bloques a renderizar
         totalBloques = Math.Max(0, (cierreMinutos - aperturaMinutos) / duracionGrilla);
     }
-
     private TurnoDTO? ObtenerTurnoActivo(CanchaDTO cancha, int inicioBloque, int finBloque)
     {
-        if (cancha.Turnos == null) return null;
+        //verifica si hay canchas
+        if (cancha.Turnos == null || !cancha.Turnos.Any()) return null;
 
-        // Parse FechaAUsar una sola vez
-        var fechaActualDate = DateOnly.Parse(FechaAUsar);
+        if (!DateOnly.TryParse(FechaAUsar, out var fechaActualDate)) return null;
 
+        //para cada turno en las canchas
         foreach (var turno in cancha.Turnos)
         {
             var estado = turno.Estado?.ToLower();
             if (estado == "cancelado") continue;
 
-            // turno.Fecha es DateOnly en DTO -> comparar directamente
+            // Validar que el turno pertenezca a la fecha seleccionada en la cabecera
             if (turno.Fecha != fechaActualDate) continue;
 
             var turnoInicioNullable = ExtraerMinutos(turno.HoraInicio, true);
@@ -177,15 +170,16 @@
 
             if (turnoFin <= turnoInicio)
             {
-                turnoFin += 24 * 60;
+                turnoFin += 24 * 60; // Ajuste si el turno pasa de medianoche
             }
 
+            // Si el bloque de la grilla se solapa con el horario del turno
             if (inicioBloque < turnoFin && finBloque > turnoInicio)
             {
-                return turno;
+                return turno; // Retorna el turno para marcar el bloque como OCUPADO
             }
         }
-        return null;
+        return null; // Si no hay coincidencias, el bloque queda LIBRE
     }
 
     private void ManejarClickCelda(CanchaDTO cancha, string horaStr, bool estaOcupado, TurnoDTO? turnoActivo)

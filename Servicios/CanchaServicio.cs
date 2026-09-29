@@ -56,17 +56,34 @@ namespace Servicios
         public async Task<IEnumerable<CanchaDTO>> GetAllAsync(int id)
         {
             var canchas = await canchaRepositorio.GetAllAsync(id);
-            
 
             return canchas.Select(cancha => new CanchaDTO
             {
                 ComplejoId = cancha.ComplejoId,
                 Nro = cancha.Nro,
                 Deporte = cancha.TipoCancha?.Deporte,
-                TipoCanchaId = cancha.TipoCanchaId
+                TipoCanchaId = cancha.TipoCanchaId,
+                Turnos = cancha.Turnos?.Select(t => new TurnoDTO
+                {
+                    Id = t.Id,
+                    Fecha = t.Fecha,
+                    HoraInicio = t.HoraInicio,
+                    HoraFin = t.HoraFin,
+                    Estado = t.Estado,
+                    ClienteId = t.ClienteId,
+                    Cliente = t.Cliente != null ? new UsuarioDTO
+                    {
+                        Email = t.Cliente.Email,
+                        Telefono = t.Cliente.Telefono,
+                        PersonaFisica = t.Cliente.PersonaFisica != null ? new PersonaFisicaDTO
+                        {
+                            Nombre = t.Cliente.PersonaFisica.Nombre,
+                            Apellido = t.Cliente.PersonaFisica.Apellido
+                        } : null
+                    } : null
+                }).ToList() ?? new List<TurnoDTO>()
             }).ToList();
         }
-
         public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nroOriginal)
         {
             Cancha canchaNueva = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId);

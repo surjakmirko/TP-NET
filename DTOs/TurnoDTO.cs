@@ -14,6 +14,8 @@
         public int CanchaNro { get;  set; }
         public DateOnly Fecha { get; set; }
         public UsuarioDTO? Cliente { get; set; } = null;
+        public ComplejoDTO? Complejo { get; set; }
+        public CanchaDTO? Cancha { get; set; }
     }
 
     public class TurnoCrearDTO

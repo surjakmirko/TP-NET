@@ -101,7 +101,26 @@ namespace Servicios
                 Id = t.Id,
                 Fecha = t.Fecha,
                 HoraInicio = t.HoraInicio,
-                // Asigná los demás campos que necesite tu DTO
+                HoraFin = t.HoraFin,
+                Estado = t.Estado,
+                CanchaNro = t.CanchaNro,
+                ComplejoId = t.ComplejoId,
+                Complejo = t.Complejo != null ? new ComplejoDTO
+                {
+                    Id = t.Complejo.Id,
+                    Nombre = t.Complejo.Nombre
+                } : null,
+
+                
+                Cancha = t.Cancha != null ? new CanchaDTO
+                {
+                    Nro = t.Cancha.Nro,
+                    TipoCancha = t.Cancha.TipoCancha != null ? new TipoCanchaDTO
+                    {
+                        Id = t.Cancha.TipoCancha.Id,
+                        Deporte = t.Cancha.TipoCancha.Deporte
+                    } : null
+                } : null,
             }).ToList();
         }
     }
