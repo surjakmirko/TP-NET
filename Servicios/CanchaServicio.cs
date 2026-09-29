@@ -56,11 +56,13 @@ namespace Servicios
         public async Task<IEnumerable<CanchaDTO>> GetAllAsync(int id)
         {
             var canchas = await canchaRepositorio.GetAllAsync(id);
+            
 
             return canchas.Select(cancha => new CanchaDTO
             {
                 ComplejoId = cancha.ComplejoId,
                 Nro = cancha.Nro,
+                Deporte = cancha.TipoCancha?.Deporte,
                 TipoCanchaId = cancha.TipoCanchaId
             }).ToList();
         }

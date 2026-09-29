@@ -44,6 +44,8 @@ namespace Data
         {
             return await _context.Canchas
                 .Where(c => c.ComplejoId == id) 
+                .Include(c=> c.TipoCancha)
+                .Include(c => c.Precios)
                 .ToListAsync();
         }
         public async Task<bool> UpdateAsync(Cancha cancha, int nroOriginal)

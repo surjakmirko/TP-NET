@@ -1,7 +1,13 @@
 ﻿@page "/menu-encargado"
-@using API
 @using DTOs
+@using API
 @inject ComplejoApiClient ComplejoService
+@using System.Security.Claims
+@using Blazor.WebAssembly.Servicios
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject BlazorWasmAuthService AuthService
 
 @if (cargando)
 {
@@ -22,7 +28,7 @@ else if (complejo != null)
             </div>
             <label class="menu-encargado-fecha">
                 Fecha
-                <input type="text" @bind="fecha" @bind:event="oninput" />
+                <input type="text" @bind="fecha" @bind:event="oninput" readonly="true"" />
             </label>
         </header>
 
@@ -74,17 +80,54 @@ else
     {
         try
         {
-            //complejo = await ComplejoService.ObtenerComplejoDelEncargadoAsync();
+            // 1. Obtener el estado de autenticación
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
-            // Si la API devuelve null, informamos al usuario para no dejar la página en blanco
-            if (complejo == null)
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
             {
-                error = string.Empty; // mantenemos vacío si prefieres otro mensaje
+                // Extraer el ID del usuario/encargado desde los claims (NameIdentifier)
+                var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (int.TryParse(idClaim, out var idEncargado))
+                {
+                    // 3. Pasar el idEncargado al cliente de la API
+                    complejo = await ComplejoApiClient.ObtenerComplejoDelEncargadoAsync(idEncargado);
+
+                    if (complejo == null)
+                    {
+                        error = string.Empty;
+                    }
+                    if (complejo != null)
+                    {
+                        var canchasConPrecios = await CanchaApiClient.ObtenerPorComplejoIdAsync(complejo.Id);
+                        if (canchasConPrecios != null)
+                        {
+                            complejo.Canchas = canchasConPrecios;
+                        }
+
+                        var horarios = await ComplejoApiClient.ObtenerHorariosAsync(complejo.Id);
+                        if (horarios != null)
+                        {
+                            complejo.Horarios = horarios;
+                        }
+                    }
+                   
+                }
+                else
+                {
+                    error = "No se pudo identificar al usuario encargado en el token.";
+                }
+            }
+            else
+            {
+                // Si no está autenticado, redirigir al login
+                Navigation.NavigateTo("/login");
             }
         }
         catch (Exception ex)
         {
-            // Capturar la excepción completa ayuda a depurar (stacktrace)
             error = ex.ToString();
         }
         finally
