@@ -37,6 +37,7 @@
             label1 = new Label();
             cambiarComplejoBoton = new Button();
             btnCerrarSesion = new Button();
+            button1 = new Button();
             SuspendLayout();
             // 
             // bienvenido
@@ -140,11 +141,23 @@
             btnCerrarSesion.UseVisualStyleBackColor = true;
             btnCerrarSesion.Click += btnCerrarSesion_Click_1;
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            button1.Location = new Point(37, 242);
+            button1.Name = "button1";
+            button1.Size = new Size(188, 33);
+            button1.TabIndex = 13;
+            button1.Text = "Horarios";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // MenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(485, 426);
+            Controls.Add(button1);
             Controls.Add(btnCerrarSesion);
             Controls.Add(cambiarComplejoBoton);
             Controls.Add(btnVerCancha);
@@ -174,5 +187,6 @@
         private Label label1;
         private Button cambiarComplejoBoton;
         private Button btnCerrarSesion;
+        private Button button1;
     }
 }
