@@ -105,11 +105,15 @@ namespace API
         {
             return await GetAsync<List<PrecioDTO>>($"complejos/{idComplejo}/canchas/{nroCancha}/precios");
         }
+        public static async Task<PrecioDTO?> ObtenerUltimoPrecioAsync(int idComplejo, int nroCancha)
+        {
+            return await GetAsync<PrecioDTO?>($"complejos/{idComplejo}/canchas/{nroCancha}/precio");
+        }
 
-        public static async Task<PrecioDTO?> ObtenerPrecioPorFechaAsync(int idComplejo, int nroCancha, DateOnly fechaDesde)
+        public static async Task<bool> FechaDesdeExistsAsync(int idComplejo, int nroCancha, DateOnly fechaDesde)
         {
             string fechaFormateada = fechaDesde.ToString("yyyy-MM-dd");
-            return await GetAsync<PrecioDTO>($"complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaFormateada}");
+            return await GetAsync<bool>($"complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaFormateada}");
         }
 
         public static async Task<PrecioDTO?> CrearPrecioAsync(int idComplejo, int nroCancha, PrecioCrearDTO dto)

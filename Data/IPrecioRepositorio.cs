@@ -13,7 +13,7 @@ namespace Data
        
         Task<Precio?> GetAsync(int comjplejoId, int nro, DateOnly fechaDesde);
         Task<IEnumerable<Precio>> GetAllAsync(int id, int nro);
-       
-        Task<bool> FechaDesdeExistsAsync(DateOnly fechaDesde);
+        Task<bool> FechaDesdeExistsAsync(int complejoId, int canchaNro, DateOnly fechaDesde);
+        Task<Precio?> UltimoPrecio(int comjplejoId, int nro);
     }
 }

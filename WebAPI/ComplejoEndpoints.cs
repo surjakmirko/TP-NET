@@ -226,18 +226,16 @@ namespace WebAPI
                 var precios = await precioServicio.GetAllAsync(idComplejo, nroCancha);
                 return Results.Ok(precios);
             });
-
-            app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaDesde}", async (int idComplejo, int nroCancha, DateOnly fechaDesde, IPrecioServicio precioServicio) =>
+            app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precio", async (int idComplejo, int nroCancha, IPrecioServicio precioServicio) =>
             {
-                PrecioDTO? dto = await precioServicio.GetAsync(idComplejo, nroCancha, fechaDesde);
-
-                if (dto == null)
+                PrecioDTO? precio = await precioServicio.GetUltimoPrecioAsync(idComplejo, nroCancha);
+                if (precio == null)
                 {
                     return Results.NotFound();
                 }
-
-                return Results.Ok(dto);
+                return Results.Ok(precio);
             });
+
 
             app.MapPost("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, PrecioCrearDTO dto, IPrecioServicio precioServicio) =>
             {
@@ -250,6 +248,18 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
+            });
+
+            app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaDesde}", async (int idComplejo, int nroCancha, DateOnly fechaDesde, IPrecioServicio precioServicio) =>
+            {
+                bool exists = await precioServicio.FechaDesdeExistsAsync(idComplejo, nroCancha, fechaDesde);
+
+                if (!exists)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(exists);
             });
             app.MapGet("/complejos/buscar", async (string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max, IComplejoServicio complejoServicio) =>
             {
