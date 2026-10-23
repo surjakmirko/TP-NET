@@ -46,6 +46,17 @@ namespace Data
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> CancelarAsync(int id, string? motivoCancelacion)
+        {
+            var turno = await _context.Turnos.FindAsync(id);
+            if (turno == null)
+            {
+                return false;
+            }
+            turno.Cancelar(motivoCancelacion);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> DeleteAsync(int id)
         {
             var turno = await _context.Turnos.FindAsync(id);

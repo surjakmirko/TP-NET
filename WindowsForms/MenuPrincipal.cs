@@ -69,5 +69,13 @@ namespace WindowsForms
         {
             Application.Exit();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Horarios formHorario = new Horarios(_idComplejoSeleccionado);
+            formHorario.ShowDialog();
+            this.Show();
+        }
     }
 }

@@ -1,0 +1,133 @@
+﻿@using System.Globalization
+@using DTOs
+
+<section class="listado-canchas" aria-labelledby="listado-canchas-titulo">
+    <div class="listado-canchas-header">
+        <div>
+            <h2 id="listado-canchas-titulo">Canchas del complejo</h2>
+        </div>
+        <span class="listado-canchas-contador">
+            @Canchas.Count @(Canchas.Count == 1 ? "cancha" : "canchas")
+        </span>
+    </div>
+
+    <div class="tabla-canchas-wrapper">
+        <table class="tabla-canchas">
+            <thead>
+                <tr>
+                    <th scope="col">Nro.</th>
+                    <th scope="col">Deporte</th>
+                    <th scope="col">Precio base</th>
+                    <th scope="col">Precio adicional</th>
+                    <th scope="col">Precio seña</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" class="columna-acciones">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Canchas != null && Canchas.Any())
+                {
+                    @foreach (var cancha in Canchas)
+                    {
+                        var precioActual = cancha.PrecioDTO;
+
+                        <tr @key="cancha.Nro">
+                            <td data-label="Nro.">@cancha.Nro</td>
+                            <td data-label="Deporte" class="deporte-celda">
+                                @(cancha.TipoCancha?.Deporte ?? "Sin definir")
+                            </td>
+                            <td data-label="Precio base">@FormatearPrecio(precioActual?.PrecioBase)</td>
+                            <td data-label="Precio adicional">@FormatearPrecio(precioActual?.PrecioAdicional)</td>
+                            <td data-label="Precio seña">@FormatearPrecio(precioActual?.PrecioSena)</td>
+                            <td data-label="Estado">@(string.IsNullOrEmpty(cancha.Estado) ? "Sin estado" : cancha.Estado)</td>
+                            <td data-label="Acciones" class="acciones-celda">
+                                <button type="button"
+                                        class="accion accion-editar"
+                                        @onclick="() => EditarCancha(cancha)"
+                                        aria-label="@($"Editar cancha {cancha.Nro}")"
+                                        title="Editar cancha">
+                                    ✏️
+                                </button>
+                                <button type="button"
+                                        class="accion accion-precio"
+                                        @onclick="() => AgregarPrecio(cancha)"
+                                        aria-label="@($"Modificar precio de la cancha {cancha.Nro}")"
+                                        title="Modificar precio">
+                                    💲
+                                </button>
+                                <button type="button"
+                                        class="accion accion-inactivar"
+                                        @onclick="() => InactivarCancha(cancha)"
+                                        aria-label="@($"Inactivar cancha {cancha.Nro}")"
+                                        title="@(cancha.Estado == "Inactiva" ? "La cancha ya está inactiva" : "Inactivar cancha")"
+                                        disabled="@(cancha.Estado == "Inactiva")">
+                                    🚫
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colSpan="7" class="canchas-vacio">Todavía no hay canchas cargadas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <button type="button" class="boton-agregar-cancha" @onclick="AgregarCancha">
+        ➕ Agregar otra cancha
+    </button>
+</section>
+
+@code {
+    [Parameter] public List<CanchaDTO> Canchas { get; set; } = new();
+    [Parameter] public EventCallback<CanchaDTO> OnEditar { get; set; }
+    [Parameter] public EventCallback<CanchaDTO> OnAgregarPrecio { get; set; }
+    [Parameter] public EventCallback<CanchaDTO> OnInactivar { get; set; }
+    [Parameter] public EventCallback OnAgregarCancha { get; set; }
+
+    private static readonly CultureInfo CulturaArgentina = new CultureInfo("es-AR");
+
+    private async Task EditarCancha(CanchaDTO cancha)
+    {
+        if (OnEditar.HasDelegate)
+        {
+            await OnEditar.InvokeAsync(cancha);
+        }
+    }
+
+    private async Task AgregarPrecio(CanchaDTO cancha)
+    {
+        if (OnAgregarPrecio.HasDelegate)
+        {
+            await OnAgregarPrecio.InvokeAsync(cancha);
+        }
+    }
+
+    private async Task InactivarCancha(CanchaDTO cancha)
+    {
+        if (OnInactivar.HasDelegate)
+        {
+            await OnInactivar.InvokeAsync(cancha);
+        }
+    }
+
+    private async Task AgregarCancha()
+    {
+        if (OnAgregarCancha.HasDelegate)
+        {
+            await OnAgregarCancha.InvokeAsync();
+        }
+    }
+
+    private string FormatearPrecio(decimal? precio)
+    {
+        if (!precio.HasValue) return "Sin definir";
+
+        // Formatea como moneda local ARS sin decimales ($ 15.000)
+        return precio.Value.ToString("C0", CulturaArgentina);
+    }
+}

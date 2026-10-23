@@ -64,7 +64,7 @@ namespace Data
                 new Usuario(1,"admin@gmail.com", "12345678", BCrypt.Net.BCrypt.HashPassword("admin"), 1, null, null),
                 new Usuario(3,"encargado@gmail.com", "987654321", BCrypt.Net.BCrypt.HashPassword("encargado"), 2, null, null),
                 new Usuario(4, "encargado2@gmail.com", "113355799", BCrypt.Net.BCrypt.HashPassword("encargado2"), 2, null, null),
-                new Usuario(2,"dueño@gmail.com", "22446688", BCrypt.Net.BCrypt.HashPassword("dueño"), 4, null, "20123456789")
+                new Usuario(2,"dueno@gmail.com", "22446688", BCrypt.Net.BCrypt.HashPassword("dueno"), 4, null, "20123456789")
             );
 
             modelBuilder.Entity<TipoUsuario>()

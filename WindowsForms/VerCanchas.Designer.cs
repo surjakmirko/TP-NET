@@ -10,6 +10,7 @@
         private DataGridViewTextBoxColumn colNumero;
         private DataGridViewTextBoxColumn colTipoDeporte;
         private DataGridViewButtonColumn colEditar;
+        private DataGridViewButtonColumn colPrecio;
         private DataGridViewButtonColumn colEliminar;
         private Button btnVolver;
 
@@ -30,6 +31,7 @@
             colNumero = new DataGridViewTextBoxColumn();
             colTipoDeporte = new DataGridViewTextBoxColumn();
             colEditar = new DataGridViewButtonColumn();
+            colPrecio = new DataGridViewButtonColumn();
             colEliminar = new DataGridViewButtonColumn();
             btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCanchas).BeginInit();
@@ -77,12 +79,21 @@
             // 
             // colEliminar
             // 
+            colPrecio.HeaderText = "";
+            colPrecio.Name = "colPrecio";
+            colPrecio.ReadOnly = true;
+            colPrecio.Text = "Precio";
+            colPrecio.UseColumnTextForButtonValue = true;
+            // 
+            // colEliminar
+            // 
             colEliminar.HeaderText = "";
             colEliminar.Name = "colEliminar";
             colEliminar.ReadOnly = true;
             colEliminar.Text = "Eliminar";
             colEliminar.UseColumnTextForButtonValue = true;
             // 
+
             // dgvCanchas
             // 
             dgvCanchas.AllowUserToAddRows = false;
@@ -95,6 +106,7 @@
                 colNumero,
                 colTipoDeporte,
                 colEditar,
+                colPrecio,
                 colEliminar
             });
             dgvCanchas.Location = new Point(20, 50);

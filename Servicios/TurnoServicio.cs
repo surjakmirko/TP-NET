@@ -92,6 +92,10 @@ namespace Servicios
 
             return await turnoRepositorio.UpdateAsync(turno);
         }
+        public async Task<bool> CancelarAsync(int id, string? motivoCancelacion)
+        {
+            return await turnoRepositorio.CancelarAsync(id, motivoCancelacion);
+        }
         public async Task<List<TurnoDTO>> ObtenerPorClienteIdAsync(int idCliente)
         {
             var turnos = await turnoRepositorio.ObtenerPorClienteIdAsync(idCliente);
@@ -103,6 +107,7 @@ namespace Servicios
                 HoraInicio = t.HoraInicio,
                 HoraFin = t.HoraFin,
                 Estado = t.Estado,
+                MotivoCancelacion = t.MotivoCancelacion,
                 CanchaNro = t.CanchaNro,
                 ComplejoId = t.ComplejoId,
                 Complejo = t.Complejo != null ? new ComplejoDTO

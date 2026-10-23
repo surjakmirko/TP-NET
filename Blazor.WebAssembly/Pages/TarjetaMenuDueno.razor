@@ -1,0 +1,46 @@
+﻿<div class="tarjeta-metrica @(EsVerde ? "tarjeta-naranja" : "tarjeta-blanca")">
+
+    <div class="tarjeta-header">
+        <span class="titulo-metrica">@Titulo</span>
+        <div class="icono-contenedor @(EsVerde ? "verde-claro" : "fondo-suave")">
+            @Icono
+        </div>
+    </div>
+
+    <div class="tarjeta-cuerpo">
+        <h2 class="valor-metrica">@Valor</h2>
+
+        @* Subtexto normal o de comparación *@
+        @if (!string.IsNullOrEmpty(Subtitulo))
+        {
+            <p class="subtitulo-metrica">@Subtitulo</p>
+        }
+
+        @* Barra de progreso opcional *@
+        @if (Progreso.HasValue)
+        {
+            <div class="barra-progreso-fondo">
+                <div class="barra-progreso-fill" style="width: @($"{Progreso.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}%")"></div>
+            </div>
+        }
+
+        @* Estado operativo opcional *@
+        @if (!string.IsNullOrEmpty(EstadoNormal))
+        {
+            <p class="subtitulo-metrica estado-normal">
+                <span class="punto-verde"></span> @EstadoNormal
+            </p>
+        }
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public string Titulo { get; set; } = string.Empty;
+    [Parameter] public string Valor { get; set; } = string.Empty;
+    [Parameter] public string? Subtitulo { get; set; }
+    [Parameter] public string Icono { get; set; } = "📊";
+    [Parameter] public bool EsVerde { get; set; } = false;
+    [Parameter] public double? Progreso { get; set; }
+    [Parameter] public string? EstadoNormal { get; set; }
+}

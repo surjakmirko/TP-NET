@@ -1,0 +1,147 @@
+﻿@page "/menu-dueno"
+@using DTOs
+@using API
+@using System.Globalization
+@using System.Security.Claims
+@using Blazor.WebAssembly.Servicios
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+
+@inject NavigationManager Navigation;
+@inject BlazorWasmAuthService AuthService
+
+<main class="contenedor-menuDueño">
+    <div class="partesuperior">
+        <div class="titulos">
+            <h1 class="titulo-menuDueño">Buen Día Dueño</h1>
+            <p>Aquí tienes la información acerca de tus complejos</p>
+        </div>
+        <div class="fecha"></div>
+    </div>
+
+    <div class="contenidoprincipal">
+        <div class="tarjetasMetricas">
+            @* Tarjeta 1: Ingresos Estimados *@
+            <TarjetaMenuDueno 
+                Titulo="Ingresos Estimados Hoy" 
+                Valor="@FormatearMoneda(datos.IngresosEstimados)" 
+                Icono="💵" 
+                EsVerde="true" />
+
+            @* Tarjeta 2: Reservas Totales *@
+            <TarjetaMenuDueno 
+                Titulo="Reservas Totales" 
+                Valor="@datos.CantidadTurnos.ToString()" 
+                Subtitulo="@($"En {datos.CantidadCanchas} canchas disponibles")" 
+                Icono="📅" />
+
+            @* Tarjeta 3: Ocupación Promedio *@
+            <TarjetaMenuDueno 
+                Titulo="Ocupación Promedio" 
+                Valor="@FormatearPorcentaje(datos.OcupacionPorcentaje)" 
+                Progreso="@datos.OcupacionPorcentaje" 
+                Icono="🔥" 
+                EsVerde="true" />
+
+            @* Tarjeta 4: Deporte Top *@
+            <TarjetaMenuDueno 
+                Titulo="Deporte top" 
+                Valor="@(string.IsNullOrWhiteSpace(datos.DeporteEstrellaNombre) ? "Sin reservas" : datos.DeporteEstrellaNombre)" 
+                Subtitulo="@(string.IsNullOrWhiteSpace(datos.DeporteEstrellaNombre) ? "0 reservas hoy" : $"{datos.DeporteEstrellaReservas} reservas hoy")" 
+                Icono="⚽" />
+        </div>
+
+        <div class="infoComplejos">
+            <div class="seccion-header">
+                <h2>Mis Complejos</h2>
+                <span class="sub-hint">Selecciona uno para gestionar horarios y detalles</span>
+            </div>
+
+            <div class="grilla-complejos">
+                @if (complejos != null)
+                {
+                    @foreach (var complejo in complejos)
+                    {
+                        <TarjetaMenuDuenoComplejo 
+                            Id="@complejo.Id"
+                            Nombre="@complejo.Nombre"
+                            Direccion="@complejo.Direccion"
+                            Ciudad="@complejo.NombreLocalidad"
+                            Deportes="complejo.Deportes"
+                            CanchasDisponibles="@complejo.CantidadCanchas" />
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="reportesFinancieros">
+            <div class="reportes-header">
+                <h2>Reportes Financieros</h2>
+                <span class="sub-hint">Estadísticas de tus complejos actualizadas</span>
+            </div>
+            <div></div>
+        </div>
+    </div>
+</main>
+
+@code {
+    private List<ComplejoTarjetaDTO> complejos = new();
+    private DashboardDuenoDTO datos = new();
+    private bool cargando = true;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // 1. Obtener el estado de autenticación del usuario actual
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                // 2. Extraer el ID del dueño desde los claims (NameIdentifier)
+                var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (int.TryParse(idClaim, out var idDueno))
+                {
+                    // 3. Cargar los complejos del dueño y las métricas del dashboard en paralelo
+                    var taskComplejos = ComplejoApiClient.ObtenerPorDuenoAsync(idDueno);
+                    var taskDatos = DashboardApiClient.ObtenerMetricasDuenoAsync(idDueno);
+
+                    await Task.WhenAll(taskComplejos, taskDatos);
+
+                    complejos = await taskComplejos ?? new List<ComplejoTarjetaDTO>();
+                    datos = await taskDatos ?? new DashboardDuenoDTO();
+                }
+                else
+                {
+                    error = "No se pudo identificar al usuario dueño en el token.";
+                }
+            }
+            else
+            {
+                // Si no está autenticado, redirigir al login
+                Navigation.NavigateTo("/login");
+            }
+        }
+        catch (Exception ex)
+        {
+            error = $"Ocurrió un error al cargar los datos: {ex.Message}";
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private static string FormatearMoneda(decimal valor)
+    {
+        return $"${valor.ToString("N0", CultureInfo.GetCultureInfo("es-AR"))}";
+    }
+
+    private static string FormatearPorcentaje(double valor)
+    {
+        return $"{valor.ToString("0.#", CultureInfo.GetCultureInfo("es-AR"))}%";
+    }
+}

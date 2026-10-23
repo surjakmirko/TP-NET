@@ -12,7 +12,7 @@ namespace Servicios
         Task<IEnumerable<ComplejoDTO>> GetAllAsync();
         Task<bool> UpdateAsync(ComplejoDTO dto);
 
-        Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno);
+        Task<IEnumerable<ComplejoTarjetaDTO>> GetByDuenoAsync(int idDueno);
 
         Task<ComplejoDTO?> GetByEncargadoAsync(int idDueno);
 

@@ -10,5 +10,6 @@ namespace Servicios
         Task<CanchaDTO?> GetAsync(int id, int nro);
         Task<IEnumerable<CanchaDTO>> GetAllAsync(int id);
         Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nro);
+        Task<bool> InactivoAsync(int complejoId, int nro);
     }
 }

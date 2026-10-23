@@ -1,0 +1,409 @@
+@using DTOs
+@using API
+
+@if (IsOpen)
+{
+    <div class="modal-cancha-overlay" @onclick="Cerrar">
+        <div class="modal-cancha" role="dialog" aria-modal="true" @onclick:stopPropagation="true">
+            <div class="modal-cancha-header">
+                <h3>@Titulo</h3>
+                <button type="button" class="modal-cancha-cerrar" @onclick="Cerrar" disabled="@procesando" aria-label="Cerrar">
+                    ✕
+                </button>
+            </div>
+
+            @if (Tipo == "INACTIVAR")
+            {
+                <div class="modal-cancha-body">
+                    <p class="modal-cancha-texto">
+                        ¿Querés inactivar la cancha <strong>@Cancha?.Nro</strong>?
+                    </p>
+                    <p class="modal-cancha-hint">
+                        La cancha dejará de estar disponible para reservas, pero no se eliminará del complejo.
+                    </p>
+
+                    @if (!string.IsNullOrWhiteSpace(MensajeError))
+                    {
+                        <div class="modal-cancha-error">@MensajeError</div>
+                    }
+
+                    <div class="modal-cancha-acciones">
+                        <button type="button" class="btn-modal-cancelar" @onclick="Cerrar" disabled="@procesando">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn-modal-peligro" @onclick="ConfirmarInactivar" disabled="@procesando">
+                            @(procesando ? "Inactivando..." : "Inactivar cancha")
+                        </button>
+                    </div>
+                </div>
+            }
+            else if (Tipo == "PRECIO")
+            {
+                <EditForm Model="formPrecio" OnValidSubmit="ConfirmarPrecio" class="modal-cancha-body">
+                    <p class="modal-cancha-hint">
+                        @if (Cancha?.PrecioDTO != null)
+                        {
+                            <span>Último precio registrado el @FormatearFecha(Cancha.PrecioDTO.FechaDesde).</span>
+                        }
+                        else
+                        {
+                            <span>Esta cancha todavía no tiene un precio registrado.</span>
+                        }
+                    </p>
+
+                    <div class="modal-cancha-grilla">
+                        <div class="modal-cancha-campo">
+                            <label for="modal-precio-base">Precio base</label>
+                            <input id="modal-precio-base" type="number" step="0.01" min="0.01" @bind="formPrecio.PrecioBase" />
+                        </div>
+
+                        <div class="modal-cancha-campo">
+                            <label for="modal-precio-adicional">Precio adicional</label>
+                            <input id="modal-precio-adicional" type="number" step="0.01" min="0.01" @bind="formPrecio.PrecioAdicional" />
+                        </div>
+
+                        <div class="modal-cancha-campo">
+                            <label for="modal-precio-sena">Precio seña</label>
+                            <input id="modal-precio-sena" type="number" step="0.01" min="0.01" @bind="formPrecio.PrecioSena" />
+                        </div>
+
+                        <div class="modal-cancha-campo">
+                            <label for="modal-precio-fecha">Fecha desde</label>
+                            <input id="modal-precio-fecha" type="date" min="@FechaMinima" @bind="formPrecio.FechaDesde" />
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(MensajeError))
+                    {
+                        <div class="modal-cancha-error">@MensajeError</div>
+                    }
+
+                    <div class="modal-cancha-acciones">
+                        <button type="button" class="btn-modal-cancelar" @onclick="Cerrar" disabled="@procesando">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-modal-primario" disabled="@procesando">
+                            @(procesando ? "Guardando..." : "Guardar precio")
+                        </button>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <EditForm Model="formCancha" OnValidSubmit="ConfirmarCancha" class="modal-cancha-body">
+                    <div class="modal-cancha-grilla">
+                        <div class="modal-cancha-campo">
+                            <label for="modal-cancha-nro">Número de cancha</label>
+                            <input id="modal-cancha-nro" type="number" min="1" @bind="formCancha.Nro" disabled="@(Tipo == "EDITAR")" />
+                        </div>
+
+                        <div class="modal-cancha-campo">
+                            <label for="modal-cancha-tipo">Tipo de cancha</label>
+                            <select id="modal-cancha-tipo" @bind="formCancha.TipoCanchaId" disabled="@cargandoTipos">
+                                <option value="0">Seleccioná un deporte</option>
+                                @foreach (var tipo in tiposCancha)
+                                {
+                                    <option value="@tipo.Id">@tipo.Deporte</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    @if (cargandoTipos)
+                    {
+                        <p class="modal-cancha-hint">Cargando tipos de cancha...</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(MensajeError))
+                    {
+                        <div class="modal-cancha-error">@MensajeError</div>
+                    }
+
+                    <div class="modal-cancha-acciones">
+                        <button type="button" class="btn-modal-cancelar" @onclick="Cerrar" disabled="@procesando">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-modal-primario" disabled="@(procesando || cargandoTipos)">
+                            @(procesando ? "Guardando..." : "Guardar cancha")
+                        </button>
+                    </div>
+                </EditForm>
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public string Tipo { get; set; } = string.Empty;
+    [Parameter] public CanchaDTO? Cancha { get; set; }
+    [Parameter] public int ComplejoId { get; set; }
+    [Parameter] public List<CanchaDTO> CanchasExistentes { get; set; } = new();
+    [Parameter] public string? ErrorExterno { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<PayloadCanchaModal> OnConfirmar { get; set; }
+
+    private readonly List<TipoCanchaDTO> tiposCancha = new();
+    private CanchaCrearDTO formCancha = new();
+    private PrecioCrearDTO formPrecio = new();
+    private string? errorLocal;
+    private bool procesando;
+    private bool cargandoTipos;
+
+    private bool inicializado;
+    private string? tipoInicializado;
+    private int nroInicializado;
+
+    private string Titulo => Tipo switch
+    {
+        "CREAR" => "Nueva cancha",
+        "EDITAR" => $"Editar cancha {Cancha?.Nro}",
+        "PRECIO" => $"Modificar precio · Cancha {Cancha?.Nro}",
+        "INACTIVAR" => $"Inactivar cancha {Cancha?.Nro}",
+        _ => "Cancha"
+    };
+
+    private string MensajeError => !string.IsNullOrWhiteSpace(errorLocal)
+        ? errorLocal
+        : ErrorExterno ?? string.Empty;
+
+    private string FechaMinima => DateTime.Today.ToString("yyyy-MM-dd");
+
+    private static string FormatearFecha(DateOnly fecha)
+    {
+        return fecha.ToString("dd/MM/yyyy");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!IsOpen)
+        {
+            inicializado = false;
+            procesando = false;
+            errorLocal = null;
+            return;
+        }
+
+        if (inicializado && tipoInicializado == Tipo && nroInicializado == (Cancha?.Nro ?? 0))
+        {
+            return;
+        }
+
+        inicializado = true;
+        tipoInicializado = Tipo;
+        nroInicializado = Cancha?.Nro ?? 0;
+        errorLocal = null;
+        procesando = false;
+
+        if (Tipo == "CREAR" || Tipo == "EDITAR")
+        {
+            await CargarTiposCanchaAsync();
+
+            if (Tipo == "EDITAR" && Cancha != null)
+            {
+                formCancha = new CanchaCrearDTO
+                {
+                    Nro = Cancha.Nro,
+                    TipoCanchaId = Cancha.TipoCanchaId
+                };
+            }
+            else
+            {
+                int sugerido = CanchasExistentes.Any() ? CanchasExistentes.Max(c => c.Nro) + 1 : 1;
+                formCancha = new CanchaCrearDTO
+                {
+                    Nro = sugerido,
+                    TipoCanchaId = tiposCancha.FirstOrDefault()?.Id ?? 0
+                };
+            }
+        }
+        else if (Tipo == "PRECIO" && Cancha != null)
+        {
+            var precio = Cancha.PrecioDTO;
+            formPrecio = new PrecioCrearDTO
+            {
+                PrecioBase = precio?.PrecioBase ?? 0,
+                PrecioAdicional = precio?.PrecioAdicional ?? 0,
+                PrecioSena = precio?.PrecioSena ?? 0,
+                FechaDesde = DateOnly.FromDateTime(DateTime.Today)
+            };
+        }
+    }
+
+    private async Task CargarTiposCanchaAsync()
+    {
+        if (tiposCancha.Count > 0)
+        {
+            return;
+        }
+
+        cargandoTipos = true;
+        try
+        {
+            var tipos = await TipoCanchaApiClient.ObtenerTodosAsync();
+            if (tipos != null)
+            {
+                tiposCancha.AddRange(tipos);
+            }
+        }
+        catch (Exception ex)
+        {
+            errorLocal = $"No se pudieron cargar los tipos de cancha: {ex.Message}";
+        }
+        finally
+        {
+            cargandoTipos = false;
+        }
+    }
+
+    private async Task ConfirmarCancha()
+    {
+        errorLocal = null;
+
+        int nro = Tipo == "EDITAR" ? (Cancha?.Nro ?? formCancha.Nro) : formCancha.Nro;
+
+        if (nro <= 0)
+        {
+            errorLocal = "Ingresá un número de cancha válido.";
+            return;
+        }
+
+        if (formCancha.TipoCanchaId <= 0)
+        {
+            errorLocal = "Seleccioná un tipo de cancha.";
+            return;
+        }
+
+        bool duplicada = CanchasExistentes.Any(c =>
+            c.Nro == nro && (Tipo != "EDITAR" || c.Nro != Cancha?.Nro));
+
+        if (duplicada)
+        {
+            errorLocal = "Ya existe una cancha con ese número en el complejo.";
+            return;
+        }
+
+        procesando = true;
+        try
+        {
+            var payload = new PayloadCanchaModal
+            {
+                TipoAccion = Tipo,
+                CanchaNro = Cancha?.Nro ?? 0,
+                DatosCancha = new CanchaCrearDTO
+                {
+                    Nro = nro,
+                    ComplejoId = ComplejoId,
+                    TipoCanchaId = formCancha.TipoCanchaId
+                }
+            };
+
+            await OnConfirmar.InvokeAsync(payload);
+        }
+        finally
+        {
+            procesando = false;
+        }
+    }
+
+    private async Task ConfirmarPrecio()
+    {
+        errorLocal = null;
+
+        if (formPrecio.PrecioBase <= 0 || formPrecio.PrecioAdicional <= 0 || formPrecio.PrecioSena <= 0)
+        {
+            errorLocal = "Todos los precios deben ser mayores a cero.";
+            return;
+        }
+
+
+
+        var fechaDesde = formPrecio.FechaDesde;
+        var hoy = DateOnly.FromDateTime(DateTime.Today);
+        if (fechaDesde == default)
+        {
+            errorLocal = "Seleccioná una fecha válida.";
+            return;
+        }
+
+        if (fechaDesde < hoy)
+        {
+            errorLocal = "La fecha desde debe ser hoy o una fecha futura.";
+            return;
+        }
+
+        if (Cancha == null)
+        {
+            errorLocal = "No se seleccionó ninguna cancha.";
+            return;
+        }
+
+        procesando = true;
+        try
+        {
+            var precios = await ComplejoApiClient.ObtenerPreciosAsync(ComplejoId, Cancha.Nro);
+            if (precios != null && precios.Any(p => p.FechaDesde == fechaDesde))
+            {
+                errorLocal = "Ya existe un precio para esa fecha. Elegí otra fecha.";
+                return;
+            }
+
+            var payload = new PayloadCanchaModal
+            {
+                TipoAccion = "PRECIO",
+                CanchaNro = Cancha.Nro,
+                DatosPrecioCrear = new PrecioCrearDTO
+                {
+                    PrecioBase = formPrecio.PrecioBase,
+                    PrecioAdicional = formPrecio.PrecioAdicional,
+                    PrecioSena = formPrecio.PrecioSena,
+                    FechaDesde = fechaDesde
+                }
+            };
+
+            await OnConfirmar.InvokeAsync(payload);
+        }
+        catch (Exception ex)
+        {
+            errorLocal = ex.Message;
+        }
+        finally
+        {
+            procesando = false;
+        }
+    }
+
+    private async Task ConfirmarInactivar()
+    {
+        if (Cancha == null)
+        {
+            return;
+        }
+
+        errorLocal = null;
+        procesando = true;
+        try
+        {
+            await OnConfirmar.InvokeAsync(new PayloadCanchaModal
+            {
+                TipoAccion = "INACTIVAR",
+                CanchaNro = Cancha.Nro
+            });
+        }
+        finally
+        {
+            procesando = false;
+        }
+    }
+
+    private async Task Cerrar()
+    {
+        if (procesando)
+        {
+            return;
+        }
+
+        await OnClose.InvokeAsync();
+    }
+}

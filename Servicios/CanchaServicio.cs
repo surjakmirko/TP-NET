@@ -16,7 +16,7 @@ namespace Servicios
         public async Task<CanchaDTO> AddAsync(CanchaCrearDTO dto, int complejoId)
         {
 
-            Cancha cancha = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId);
+            Cancha cancha = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId,"Activa");
 
             await canchaRepositorio.AddAsync(cancha);
 
@@ -24,10 +24,11 @@ namespace Servicios
             {
                 ComplejoId = complejoId,
                 Nro = dto.Nro,
-                TipoCanchaId = dto.TipoCanchaId
+                TipoCanchaId = dto.TipoCanchaId,
+                Estado = "Activa"
             };
         }
-
+        //nunca borramos
         public async Task<bool> DeleteAsync(int id, int nro)
         {
             return await canchaRepositorio.DeleteAsync(id, nro);
@@ -41,13 +42,14 @@ namespace Servicios
 
             // Obtenemos el precio más reciente filtrando la colección de la Entidad
             var ultimoPrecio = cancha.Precios
-                .OrderByDescending(p => p.FechaDesde) // o p.Id / p.Fecha
+                .OrderByDescending(p => p.FechaDesde) 
                 .FirstOrDefault();
 
             return new CanchaDTO
             {
                 Nro = cancha.Nro,
                 ComplejoId = cancha.ComplejoId,
+                Estado = cancha.Estado,
                 Deporte = cancha.TipoCancha?.Deporte,
                 Precio = ultimoPrecio?.PrecioBase ?? 0
             };
@@ -61,6 +63,7 @@ namespace Servicios
             {
                 ComplejoId = cancha.ComplejoId,
                 Nro = cancha.Nro,
+                Estado = cancha.Estado,
                 Deporte = cancha.TipoCancha?.Deporte,
                 TipoCanchaId = cancha.TipoCanchaId,
                 Turnos = cancha.Turnos?.Select(t => new TurnoDTO
@@ -86,8 +89,14 @@ namespace Servicios
         }
         public async Task<bool> UpdateAsync(CanchaCrearDTO dto, int complejoId, int nroOriginal)
         {
-            Cancha canchaNueva = new Cancha(dto.Nro, dto.TipoCanchaId, complejoId);
+            Cancha canchaNueva = new Cancha(nroOriginal, dto.TipoCanchaId, complejoId);
             return await canchaRepositorio.UpdateAsync(canchaNueva, nroOriginal);
+        }
+
+        public async Task<bool> InactivoAsync(int complejoId,int nro)
+        {
+            var resultado = await canchaRepositorio.InavilitarCanchaAsync(complejoId, nro);
+            return resultado;
         }
     }
 }

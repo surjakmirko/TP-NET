@@ -1,4 +1,5 @@
-﻿using Modelo.Dominio;
+﻿using Microsoft.EntityFrameworkCore;
+using Modelo.Dominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Data
         Task<Cancha?> GetAsync(int id,int nro);
         Task<IEnumerable<Cancha>> GetAllAsync(int id);
         Task<bool> UpdateAsync(Cancha cancha, int nro);
+        Task<bool> InavilitarCanchaAsync(int complejoId, int nro);
+        
     }
 }

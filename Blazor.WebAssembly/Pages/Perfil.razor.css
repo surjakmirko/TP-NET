@@ -101,3 +101,112 @@
     gap: 1.5rem;
     margin-top: 1rem;
 }
+
+/* Modal de cancelación */
+.modal-cancelacion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(3px);
+}
+
+.modal-cancelacion-contenido {
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    padding: 1.75rem;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+    .modal-cancelacion-contenido h2 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .modal-cancelacion-contenido > p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #475569;
+    }
+
+.modal-cancelacion-detalle {
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+    .modal-cancelacion-detalle p {
+        margin: 0.2rem 0;
+        font-size: 0.9rem;
+    }
+
+.modal-cancelacion-error {
+    margin: 0.75rem 0 0 0;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.modal-cancelacion-botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.btn-confirmar-cancelacion {
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #dc2626;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-confirmar-cancelacion:hover:not(:disabled) {
+        background-color: #b91c1c;
+    }
+
+.btn-volver-cancelacion {
+    padding: 0.65rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-volver-cancelacion:hover:not(:disabled) {
+        background-color: #e2e8f0;
+    }
+
+    .btn-confirmar-cancelacion:disabled,
+    .btn-volver-cancelacion:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
