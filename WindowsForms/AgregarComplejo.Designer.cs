@@ -17,116 +17,99 @@
 
         private void InitializeComponent()
         {
-            lblTitulo = new System.Windows.Forms.Label();
-            lblNombre = new System.Windows.Forms.Label();
-            txtNombre = new System.Windows.Forms.TextBox();
-            lblDireccion = new System.Windows.Forms.Label();
-            txtDireccion = new System.Windows.Forms.TextBox();
-            lblEncargadoId = new System.Windows.Forms.Label();
-            txtEncargadoId = new System.Windows.Forms.TextBox();
-            lblLocalidadId = new System.Windows.Forms.Label();
-            txtLocalidadId = new System.Windows.Forms.TextBox();
-            lblDueñoId = new System.Windows.Forms.Label();
-            txtDueñoId = new System.Windows.Forms.TextBox();
-            btnGuardar = new System.Windows.Forms.Button();
-            btnCancelar = new System.Windows.Forms.Button();
+            lblTitulo = new Label();
+            lblNombre = new Label();
+            txtNombre = new TextBox();
+            lblDireccion = new Label();
+            txtDireccion = new TextBox();
+            lblEncargadoId = new Label();
+            lblLocalidadId = new Label();
+            lblDueñoId = new Label();
+            btnGuardar = new Button();
+            btnCancelar = new Button();
+            nudIdEncargado = new NumericUpDown();
+            nudIdLocalidad = new NumericUpDown();
+            nudIdDueno = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)nudIdEncargado).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudIdLocalidad).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudIdDueno).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            lblTitulo.Location = new System.Drawing.Point(20, 15);
+            lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new System.Drawing.Size(180, 25);
+            lblTitulo.Size = new Size(175, 25);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Agregar Complejo";
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new System.Drawing.Point(25, 60);
+            lblNombre.Location = new Point(12, 60);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new System.Drawing.Size(54, 15);
+            lblNombre.Size = new Size(54, 15);
             lblNombre.TabIndex = 1;
             lblNombre.Text = "Nombre:";
             // 
             // txtNombre
             // 
-            txtNombre.Location = new System.Drawing.Point(120, 57);
+            txtNombre.Location = new Point(120, 57);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new System.Drawing.Size(200, 23);
+            txtNombre.Size = new Size(200, 23);
             txtNombre.TabIndex = 2;
             // 
             // lblDireccion
             // 
             lblDireccion.AutoSize = true;
-            lblDireccion.Location = new System.Drawing.Point(25, 95);
+            lblDireccion.Location = new Point(12, 95);
             lblDireccion.Name = "lblDireccion";
-            lblDireccion.Size = new System.Drawing.Size(60, 15);
+            lblDireccion.Size = new Size(60, 15);
             lblDireccion.TabIndex = 3;
             lblDireccion.Text = "Dirección:";
             // 
             // txtDireccion
             // 
-            txtDireccion.Location = new System.Drawing.Point(120, 92);
+            txtDireccion.Location = new Point(120, 92);
             txtDireccion.Name = "txtDireccion";
-            txtDireccion.Size = new System.Drawing.Size(200, 23);
+            txtDireccion.Size = new Size(200, 23);
             txtDireccion.TabIndex = 4;
             // 
             // lblEncargadoId
             // 
             lblEncargadoId.AutoSize = true;
-            lblEncargadoId.Location = new System.Drawing.Point(25, 130);
+            lblEncargadoId.Location = new Point(12, 130);
             lblEncargadoId.Name = "lblEncargadoId";
-            lblEncargadoId.Size = new System.Drawing.Size(80, 15);
+            lblEncargadoId.Size = new Size(80, 15);
             lblEncargadoId.TabIndex = 5;
             lblEncargadoId.Text = "ID Encargado:";
-            // 
-            // txtEncargadoId
-            // 
-            txtEncargadoId.Location = new System.Drawing.Point(120, 127);
-            txtEncargadoId.Name = "txtEncargadoId";
-            txtEncargadoId.Size = new System.Drawing.Size(200, 23);
-            txtEncargadoId.TabIndex = 6;
             // 
             // lblLocalidadId
             // 
             lblLocalidadId.AutoSize = true;
-            lblLocalidadId.Location = new System.Drawing.Point(25, 165);
+            lblLocalidadId.Location = new Point(12, 165);
             lblLocalidadId.Name = "lblLocalidadId";
-            lblLocalidadId.Size = new System.Drawing.Size(75, 15);
+            lblLocalidadId.Size = new Size(75, 15);
             lblLocalidadId.TabIndex = 7;
             lblLocalidadId.Text = "ID Localidad:";
-            // 
-            // txtLocalidadId
-            // 
-            txtLocalidadId.Location = new System.Drawing.Point(120, 162);
-            txtLocalidadId.Name = "txtLocalidadId";
-            txtLocalidadId.Size = new System.Drawing.Size(200, 23);
-            txtLocalidadId.TabIndex = 8;
             // 
             // lblDueñoId
             // 
             lblDueñoId.AutoSize = true;
-            lblDueñoId.Location = new System.Drawing.Point(25, 200);
+            lblDueñoId.Location = new Point(12, 200);
             lblDueñoId.Name = "lblDueñoId";
-            lblDueñoId.Size = new System.Drawing.Size(59, 15);
+            lblDueñoId.Size = new Size(59, 15);
             lblDueñoId.TabIndex = 9;
             lblDueñoId.Text = "ID Dueño:";
             // 
-            // txtDueñoId
-            // 
-            txtDueñoId.Location = new System.Drawing.Point(120, 197);
-            txtDueñoId.Name = "txtDueñoId";
-            txtDueñoId.Size = new System.Drawing.Size(200, 23);
-            txtDueñoId.TabIndex = 10;
-            // 
             // btnGuardar
             // 
-            btnGuardar.Location = new System.Drawing.Point(120, 245);
+            btnGuardar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnGuardar.Location = new Point(243, 258);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new System.Drawing.Size(95, 30);
+            btnGuardar.Size = new Size(95, 30);
             btnGuardar.TabIndex = 11;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -134,35 +117,62 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new System.Drawing.Point(225, 245);
+            btnCancelar.Location = new Point(142, 258);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new System.Drawing.Size(95, 30);
+            btnCancelar.Size = new Size(95, 30);
             btnCancelar.TabIndex = 12;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
             // 
+            // nudIdEncargado
+            // 
+            nudIdEncargado.Location = new Point(187, 128);
+            nudIdEncargado.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nudIdEncargado.Name = "nudIdEncargado";
+            nudIdEncargado.Size = new Size(133, 23);
+            nudIdEncargado.TabIndex = 13;
+            // 
+            // nudIdLocalidad
+            // 
+            nudIdLocalidad.Location = new Point(187, 163);
+            nudIdLocalidad.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nudIdLocalidad.Name = "nudIdLocalidad";
+            nudIdLocalidad.Size = new Size(133, 23);
+            nudIdLocalidad.TabIndex = 14;
+            // 
+            // nudIdDueno
+            // 
+            nudIdDueno.Location = new Point(187, 198);
+            nudIdDueno.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nudIdDueno.Name = "nudIdDueno";
+            nudIdDueno.Size = new Size(133, 23);
+            nudIdDueno.TabIndex = 15;
+            // 
             // AgregarComplejo
             // 
-            ClientSize = new System.Drawing.Size(350, 300);
+            ClientSize = new Size(350, 300);
+            Controls.Add(nudIdDueno);
+            Controls.Add(nudIdLocalidad);
+            Controls.Add(nudIdEncargado);
             Controls.Add(lblTitulo);
             Controls.Add(lblNombre);
             Controls.Add(txtNombre);
             Controls.Add(lblDireccion);
             Controls.Add(txtDireccion);
             Controls.Add(lblEncargadoId);
-            Controls.Add(txtEncargadoId);
             Controls.Add(lblLocalidadId);
-            Controls.Add(txtLocalidadId);
             Controls.Add(lblDueñoId);
-            Controls.Add(txtDueñoId);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "AgregarComplejo";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "TurnoLibre - Nuevo Complejo";
+            ((System.ComponentModel.ISupportInitialize)nudIdEncargado).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudIdLocalidad).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudIdDueno).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -175,12 +185,12 @@
         public System.Windows.Forms.Label lblDireccion;
         public System.Windows.Forms.TextBox txtDireccion;
         public System.Windows.Forms.Label lblEncargadoId;
-        public System.Windows.Forms.TextBox txtEncargadoId;
         public System.Windows.Forms.Label lblLocalidadId;
-        public System.Windows.Forms.TextBox txtLocalidadId;
         public System.Windows.Forms.Label lblDueñoId;
-        public System.Windows.Forms.TextBox txtDueñoId;
         public System.Windows.Forms.Button btnGuardar;
         public System.Windows.Forms.Button btnCancelar;
+        private NumericUpDown nudIdEncargado;
+        private NumericUpDown nudIdLocalidad;
+        private NumericUpDown nudIdDueno;
     }
 }
