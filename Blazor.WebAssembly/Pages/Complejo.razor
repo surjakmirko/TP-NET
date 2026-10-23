@@ -1,0 +1,400 @@
+﻿@page "/complejo/{Id:int}"
+@using System.Globalization
+@using DTOs
+@using API
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+@if (cargando)
+{
+    <p>Cargando complejo...</p>
+}
+else if (complejo == null)
+{
+    <div class="alert alert-warning">No se encontró el complejo solicitado.</div>
+}
+else
+{
+    <div class="complejoDueño-container">
+        @if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <div class="alert alert-danger my-2">@mensajeError</div>
+        }
+
+        <div class="complejoDueño-header">
+            <TarjetaDatosComplejoMenu Complejo="complejo" OnGuardar="HandleGuardarComplejo" />
+        </div>
+
+        <div class="complejoDueño-body">
+            <div class="grilla-canchas">
+                <ListadoCanchas Canchas="complejo.Canchas" 
+                                OnEditar="HandleEditarCancha" 
+                                OnAgregarPrecio="HandleAgregarPrecioCancha" 
+                                OnInactivar="HandleInactivarCancha"
+                                OnAgregarCancha="HandleAgregarCancha" />
+            </div>
+
+            @* Sección Horarios Centrada *@
+            <div class="contenedor-horarios-centrado">
+                <div class="complejoDueño-horarios">
+                    <div class="horarios-header-acciones">
+                        <div>
+                            <h2 class="complejoDueño-horarios-subtitulo">Horarios del Club</h2>
+                        </div>
+                        @if (!modoEdicionHorario)
+                        {
+                            <button type="button" class="btn-agregar-horario" @onclick="HandleIniciarAgregarHorario">
+                                ➕ Agregar horario
+                            </button>
+                        }
+                    </div>
+
+                    @* Formulario Inline para Crear / Editar Horario *@
+                    @if (modoEdicionHorario)
+                    {
+                        <EditForm Model="formHorario" OnValidSubmit="HandleGuardarHorario" class="form-horario-inline">
+                            <div class="form-campo">
+                                <label>Día</label>
+                                <select @bind="diaEditando" disabled="@esEdicionHorario">
+                                    @for (int i = 1; i < diasSemana.Length; i++)
+                                    {
+                                        <option value="@i">@diasSemana[i]</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-campo">
+                                <label>Apertura</label>
+                                <input type="time" @bind="formHorario.HoraApertura" required />
+                            </div>
+                            <div class="form-campo">
+                                <label>Cierre</label>
+                                <input type="time" @bind="formHorario.HoraCierre" required />
+                            </div>
+                            <div class="form-acciones">
+                                <button type="submit" class="btn-guardar-horario" title="Guardar">
+                                    ✔
+                                </button>
+                                <button type="button" class="btn-cancelar-horario" @onclick="() => modoEdicionHorario = false" title="Cancelar">
+                                    ✖
+                                </button>
+                            </div>
+                        </EditForm>
+                    }
+
+                    @* Lista de Horarios *@
+                    <div class="complejoDueño-listado">
+                        @if (complejo.Horarios != null && complejo.Horarios.Any())
+                        {
+                            @foreach (var horario in complejo.Horarios)
+                            {
+                                <div class="horario-fila" @key="@($"{horario.ComplejoId}-{horario.NroDia}")">
+                                    <strong>@ObtenerNombreDia(horario.NroDia)</strong>
+                                    <div class="horario-info-acciones">
+                                        <span>@FormatearHora(horario.HoraApertura) a @FormatearHora(horario.HoraCierre)</span>
+                                        <button type="button" 
+                                                class="accion-horario accion-editar" 
+                                                @onclick="() => HandleIniciarEditarHorario(horario)" 
+                                                title="Editar">
+                                            ✏️
+                                        </button>
+                                        <button type="button" 
+                                                class="accion-horario accion-borrar" 
+                                                @onclick="() => HandleBorrarHorario(horario.NroDia)" 
+                                                title="Borrar">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="horarios-vacio">No hay horarios cargados para este club.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="grilla-reportes-propios"></div>
+        </div>
+
+        <NavLink href="/menu-dueno" class="link-volver">&larr; Volver</NavLink>
+
+        @* Modal de Cancha *@
+        <ModalCanchaDueno IsOpen="modalCanchaIsOpen" 
+                          Tipo="@modalCanchaTipo" 
+                          Cancha="modalCanchaSeleccionada"
+                          ComplejoId="Id"
+                          CanchasExistentes="complejo.Canchas"
+                          ErrorExterno="@modalCanchaError"
+                          OnClose="HandleCerrarModalCancha" 
+                          OnConfirmar="HandleConfirmarModalCancha" />
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private ComplejoDTO? complejo;
+    private bool cargando = true;
+    private string mensajeError = string.Empty;
+
+    // Nombres de los días de la semana (Índice 1 = Lunes)
+    private readonly string[] diasSemana = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+
+    // Modal Canchas State
+    private bool modalCanchaIsOpen = false;
+    private string modalCanchaTipo = string.Empty;
+    private CanchaDTO? modalCanchaSeleccionada;
+    private string modalCanchaError = string.Empty;
+
+    // Horarios State & Form
+    private bool modoEdicionHorario = false;
+    private bool esEdicionHorario = false;
+    private int diaEditando = 1;
+    private FormHorarioModel formHorario = new();
+
+    public class FormHorarioModel
+    {
+        public TimeOnly HoraApertura { get; set; } = new TimeOnly(9, 0);
+        public TimeOnly HoraCierre { get; set; } = new TimeOnly(23, 0);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await CargarComplejoAsync();
+    }
+
+    private async Task CargarComplejoAsync()
+    {
+        cargando = true;
+        mensajeError = string.Empty;
+        try
+        {
+            complejo = await ComplejoApiClient.ObtenerPorIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al cargar el complejo: {ex.Message}";
+            complejo = null;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private async Task RecargarComplejoAsync()
+    {
+        try
+        {
+            complejo = await ComplejoApiClient.ObtenerPorIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al actualizar la información: {ex.Message}";
+        }
+    }
+
+    // --- HANDLERS CANCHAS ---
+    private void HandleAgregarCancha()
+    {
+        modalCanchaTipo = "CREAR";
+        modalCanchaSeleccionada = null;
+        modalCanchaError = string.Empty;
+        modalCanchaIsOpen = true;
+    }
+
+    private void HandleEditarCancha(CanchaDTO cancha)
+    {
+        modalCanchaTipo = "EDITAR";
+        modalCanchaSeleccionada = cancha;
+        modalCanchaError = string.Empty;
+        modalCanchaIsOpen = true;
+    }
+
+    private void HandleAgregarPrecioCancha(CanchaDTO cancha)
+    {
+        modalCanchaTipo = "PRECIO";
+        modalCanchaSeleccionada = cancha;
+        modalCanchaError = string.Empty;
+        modalCanchaIsOpen = true;
+    }
+
+    private void HandleInactivarCancha(CanchaDTO cancha)
+    {
+        modalCanchaTipo = "INACTIVAR";
+        modalCanchaSeleccionada = cancha;
+        modalCanchaError = string.Empty;
+        modalCanchaIsOpen = true;
+    }
+
+    private void HandleCerrarModalCancha()
+    {
+        modalCanchaIsOpen = false;
+        modalCanchaSeleccionada = null;
+        modalCanchaError = string.Empty;
+    }
+
+    private async Task HandleConfirmarModalCancha(PayloadCanchaModal payload)
+    {
+        try
+        {
+            modalCanchaError = string.Empty;
+
+            if (payload.TipoAccion == "CREAR")
+            {
+                await ComplejoApiClient.CrearCanchaAsync(Id, payload.DatosCancha);
+            }
+            else if (payload.TipoAccion == "EDITAR")
+            {
+                await ComplejoApiClient.ActualizarCanchaAsync(Id, payload.CanchaNro, payload.DatosCancha);
+            }
+            else if (payload.TipoAccion == "PRECIO")
+            {
+                await ComplejoApiClient.CrearPrecioAsync(Id, payload.CanchaNro, payload.DatosPrecioCrear);
+            }
+            else if (payload.TipoAccion == "INACTIVAR")
+            {
+                await ComplejoApiClient.InactivarCanchaAsync(Id, payload.CanchaNro);
+            }
+
+            await RecargarComplejoAsync();
+            HandleCerrarModalCancha();
+        }
+        catch (Exception ex)
+        {
+            modalCanchaError = ex.Message;
+        }
+    }
+
+    // --- HANDLERS HORARIOS ---
+    private void HandleIniciarAgregarHorario()
+    {
+        var horariosExistentes = complejo?.Horarios ?? new List<HorarioDTO>();
+        
+        // Buscar el primer día libre (de 1 a 7)
+        int diaLibre = 1;
+        for (int i = 1; i <= 7; i++)
+        {
+            if (!horariosExistentes.Any(h => h.NroDia == i))
+            {
+                diaLibre = i;
+                break;
+            }
+        }
+
+        esEdicionHorario = false;
+        modoEdicionHorario = true;
+        diaEditando = diaLibre;
+        formHorario = new FormHorarioModel
+        {
+            HoraApertura = new TimeOnly(9, 0),
+            HoraCierre = new TimeOnly(23, 0)
+        };
+    }
+
+    private void HandleIniciarEditarHorario(HorarioDTO horario)
+    {
+        esEdicionHorario = true;
+        modoEdicionHorario = true;
+        diaEditando = horario.NroDia;
+        
+        formHorario = new FormHorarioModel
+        {
+            HoraApertura = ParsearHora(horario.HoraApertura),
+            HoraCierre = ParsearHora(horario.HoraCierre)
+        };
+    }
+
+    private async Task HandleGuardarHorario()
+    {
+        try
+        {
+            var dto = new HorarioCrearDTO
+            {
+                NroDia = diaEditando,
+                HoraApertura = formHorario.HoraApertura,
+                HoraCierre = formHorario.HoraCierre
+            };
+
+            if (esEdicionHorario)
+            {
+                var dto2 = new HorarioEditarDTO
+                {
+                    HoraApertura = formHorario.HoraApertura,
+                    HoraCierre = formHorario.HoraCierre
+                };
+                await ComplejoApiClient.ActualizarHorarioAsync(Id, diaEditando, dto2);
+            }
+            else
+            {
+                await ComplejoApiClient.CrearHorarioAsync(Id, dto);
+            }
+
+            await RecargarComplejoAsync();
+            modoEdicionHorario = false;
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+    }
+
+    private async Task HandleBorrarHorario(int nroDia)
+    {
+        string nombreDia = ObtenerNombreDia(nroDia);
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de eliminar el horario del día {nombreDia}?");
+        
+        if (!confirmado) return;
+
+        try
+        {
+            await ComplejoApiClient.EliminarHorarioAsync(Id, nroDia);
+            await RecargarComplejoAsync();
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+    }
+
+    private async Task HandleGuardarComplejo(ComplejoDTO datosActualizados)
+    {
+        try
+        {
+            await ComplejoApiClient.ActualizarComplejoAsync(datosActualizados);
+            await RecargarComplejoAsync();
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al actualizar los datos del complejo: {ex.Message}";
+        }
+    }
+
+    // --- HELPERS ---
+    private string ObtenerNombreDia(int nroDia)
+    {
+        return (nroDia >= 1 && nroDia < diasSemana.Length) ? diasSemana[nroDia] : "-";
+    }
+
+    private string FormatearHora(object? valor)
+    {
+        if (valor == null) return "-";
+        string texto = valor.ToString() ?? "";
+        if (TimeOnly.TryParse(texto, out var time))
+        {
+            return time.ToString("HH:mm");
+        }
+        return texto;
+    }
+
+    private TimeOnly ParsearHora(object? valor)
+    {
+        if (valor != null && TimeOnly.TryParse(valor.ToString(), out var time))
+        {
+            return time;
+        }
+        return new TimeOnly(9, 0);
+    }
+}

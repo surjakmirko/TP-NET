@@ -20,9 +20,9 @@ namespace API
         }
 
         //CREAR ENDPOINT PARA OBTENER COMPLEJOS POR DUEÑO
-        public static async Task<List<ComplejoDTO>?> ObtenerPorDuenoAsync(int idDueno)
+        public static async Task<List<ComplejoTarjetaDTO>?> ObtenerPorDuenoAsync(int idDueno)
         {
-            return await GetAsync<List<ComplejoDTO>>($"complejos/dueno/{idDueno}");
+            return await GetAsync<List<ComplejoTarjetaDTO>>($"complejos/dueno/{idDueno}");
         }
 
         public static async Task<ComplejoDTO?> CrearComplejoAsync(ComplejoCrearDTO dto)
@@ -97,6 +97,11 @@ namespace API
         public static async Task EliminarCanchaAsync(int idComplejo, int nro)
         {
             await DeleteAsync($"complejos/{idComplejo}/canchas/{nro}");
+        }
+
+        public static async Task InactivarCanchaAsync(int idComplejo, int nro)
+        {
+            await PatchAsync($"complejos/{idComplejo}/canchas/{nro}/inactivar");
         }
 
         //PRECIOS

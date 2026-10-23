@@ -207,6 +207,18 @@ namespace WebAPI
                 }
             });
 
+            app.MapPatch("/complejos/{idComplejo}/canchas/{nro}/inactivar", async (int idComplejo, int nro, ICanchaServicio canchaServicio) =>
+            {
+                var inactivada = await canchaServicio.InactivoAsync(idComplejo, nro);
+
+                if (!inactivada)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.NoContent();
+            });
+
             app.MapDelete("/complejos/{idComplejo}/canchas/{nro}", async (int idComplejo, int nro, ICanchaServicio canchaServicio) =>
             {
                 var deleted = await canchaServicio.DeleteAsync(idComplejo, nro);
@@ -253,11 +265,6 @@ namespace WebAPI
             app.MapGet("/complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaDesde}", async (int idComplejo, int nroCancha, DateOnly fechaDesde, IPrecioServicio precioServicio) =>
             {
                 bool exists = await precioServicio.FechaDesdeExistsAsync(idComplejo, nroCancha, fechaDesde);
-
-                if (!exists)
-                {
-                    return Results.NotFound();
-                }
 
                 return Results.Ok(exists);
             });

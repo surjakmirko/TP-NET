@@ -4,6 +4,23 @@
 
 <div class="tarjeta-complejo">
     <div class="tarjeta-img-contenedor">
+        @if (EsCancelable)
+        {
+            <button type="button"
+                    class="btn-cancelar-turno"
+                    title="Cancelar turno"
+                    aria-label="Cancelar turno"
+                    @onclick="SolicitarCancelacion">
+                <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+                    <path d="M6 6 L18 18 M18 6 L6 18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round" />
+                </svg>
+            </button>
+        }
+
         <img src="@ImgSrc"
              alt="@Turno?.ComplejoId"
              @onerror="HandleErrorImage"
@@ -29,12 +46,26 @@
 @code {
     [Parameter]
     public TurnoDTO? Turno { get; set; }
+
+    [Parameter]
+    public EventCallback<TurnoDTO> OnSolicitarCancelacion { get; set; }
+
     private const string ImagenFallo = "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=600";
     private string ImgSrc { get; set; } = string.Empty;
+
+    private bool EsCancelable =>
+        Turno != null && string.Equals(Turno.Estado, "Reservado", StringComparison.OrdinalIgnoreCase);
 
     protected override void OnParametersSet()
     {
      
+    }
+
+    private async Task SolicitarCancelacion()
+    {
+        if (Turno == null) return;
+
+        await OnSolicitarCancelacion.InvokeAsync(Turno);
     }
 
     private void HandleErrorImage()

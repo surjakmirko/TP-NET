@@ -11,6 +11,10 @@ namespace API
         {
             return await GetAsync<List<TurnoDTO>>($"turnos/cliente/{idCliente}");
         }
+        public static async Task CancelarTurnoAsync(int id, string? motivoCancelacion = null)
+        {
+            await PutAsync($"turnos/{id}/cancelar", new CancelarTurnoDTO { MotivoCancelacion = motivoCancelacion });
+        }
 
     }
 }

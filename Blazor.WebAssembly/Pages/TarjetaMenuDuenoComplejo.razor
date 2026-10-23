@@ -1,0 +1,43 @@
+﻿<div class="tarjeta-complejo">
+    @* Imagen del complejo (comentada al igual que en React) *@
+    @* 
+    <div class="complejo-imagen-wrapper">
+        <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=600&q=80" 
+             alt="@Nombre" 
+             class="complejo-img" />
+        <span class="badge-activo">Abierto</span>
+    </div> 
+    *@
+
+    @* Información del complejo *@
+    <div class="complejo-contenido">
+        <div>
+            <h3 class="complejo-nombre">@Nombre</h3>
+            <p class="complejo-direccion">📍 @Direccion @Ciudad</p>
+            <p class="complejo-detalles">
+                🎾 @(Deportes != null && Deportes.Any() ? string.Join(", ", Deportes) : "Sin deportes") &bull; <strong>@CanchasDisponibles canchas</strong>
+            </p>
+        </div>
+
+        @* Botón de acción *@
+        <button type="button" class="btn-ver-detalle" @onclick="NavegarAComplejo">
+            Ver Complejo &rarr;
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Nombre { get; set; } = string.Empty;
+    [Parameter] public string Direccion { get; set; } = string.Empty;
+    [Parameter] public string Ciudad { get; set; } = string.Empty;
+    [Parameter] public List<string> Deportes { get; set; } = new();
+    [Parameter] public int CanchasDisponibles { get; set; }
+    
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private void NavegarAComplejo()
+    {
+        Navigation.NavigateTo($"/complejo/{Id}");
+    }
+}

@@ -78,6 +78,15 @@ namespace Modelo.Dominio
         {
             MotivoCancelacion = motivoCancelacion;
         }
+
+        public void Cancelar(string? motivoCancelacion = null)
+        {
+            if (!string.Equals(Estado, "Reservado", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("Solo se pueden cancelar turnos en estado 'Reservado'.");
+
+            Estado = "Cancelado";
+            MotivoCancelacion = motivoCancelacion;
+        }
         public void SetClienteId(int id)
         {
             if (id <= 0)

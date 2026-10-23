@@ -71,7 +71,7 @@
             <div class="grid-turnos">
                 @foreach (var turno in turnos.Take(3))
                 {
-                    <TarjetaTurno Turno="@turno" />
+                    <TarjetaTurno Turno="@turno" OnSolicitarCancelacion="SolicitarCancelacion" />
                 }
             </div>
         }
@@ -84,6 +84,36 @@
     <button type="button" class="btn-primario" @onclick="CerrarSesion">Cerrar Sesión</button>
 </section>
 
+@if (turnoACancelar != null)
+{
+    <div class="modal-cancelacion-overlay" @onclick="CerrarModalCancelacion">
+        <div class="modal-cancelacion-contenido" @onclick:stopPropagation="true">
+            <h2>Cancelar turno</h2>
+            <p>¿Estás seguro que querés cancelar este turno?</p>
+
+            <div class="modal-cancelacion-detalle">
+                <p><strong>@turnoACancelar.Complejo?.Nombre</strong></p>
+                <p>Cancha N° @turnoACancelar.CanchaNro</p>
+                <p>@FormatearFecha(turnoACancelar.Fecha) · @FormatearHora(turnoACancelar.HoraInicio) hs</p>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(errorCancelacion))
+            {
+                <p class="modal-cancelacion-error">@errorCancelacion</p>
+            }
+
+            <div class="modal-cancelacion-botones">
+                <button type="button" class="btn-confirmar-cancelacion" disabled="@cancelandoTurno" @onclick="ConfirmarCancelacion">
+                    @(cancelandoTurno ? "Cancelando..." : "Sí, cancelar")
+                </button>
+                <button type="button" class="btn-volver-cancelacion" disabled="@cancelandoTurno" @onclick="CerrarModalCancelacion">
+                    Volver
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     private UsuarioDTO usuario = new();
     private int clienteId;
@@ -92,6 +122,9 @@
     private PersonaFisicaDTO originalPersona = new();
     private List<TurnoDTO> turnos = new();
     private bool isEditing = false;
+    private TurnoDTO? turnoACancelar;
+    private bool cancelandoTurno;
+    private string? errorCancelacion;
 
     protected override async Task OnInitializedAsync()
     {
@@ -168,6 +201,54 @@
         {
             StateHasChanged(); 
         }
+    }
+
+    private void SolicitarCancelacion(TurnoDTO turno)
+    {
+        errorCancelacion = null;
+        turnoACancelar = turno;
+    }
+
+    private void CerrarModalCancelacion()
+    {
+        if (cancelandoTurno) return;
+
+        turnoACancelar = null;
+        errorCancelacion = null;
+    }
+
+    private async Task ConfirmarCancelacion()
+    {
+        if (turnoACancelar == null || cancelandoTurno) return;
+
+        cancelandoTurno = true;
+        errorCancelacion = null;
+
+        try
+        {
+            await TurnoApiClient.CancelarTurnoAsync(turnoACancelar.Id);
+            turnoACancelar = null;
+            await BuscarTurnos();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cancelar el turno: {ex.Message}");
+            errorCancelacion = "No se pudo cancelar el turno. Intentá nuevamente.";
+        }
+        finally
+        {
+            cancelandoTurno = false;
+        }
+    }
+
+    private string FormatearFecha(DateOnly fecha)
+    {
+        return fecha.ToString("dd/MM/yyyy");
+    }
+
+    private string FormatearHora(TimeOnly hora)
+    {
+        return hora.ToString("HH:mm");
     }
 
     private async Task ActualizarCambios()
