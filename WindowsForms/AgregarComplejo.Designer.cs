@@ -165,10 +165,10 @@
             Controls.Add(lblDueñoId);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "AgregarComplejo";
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "TurnoLibre - Nuevo Complejo";
             ((System.ComponentModel.ISupportInitialize)nudIdEncargado).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudIdLocalidad).EndInit();

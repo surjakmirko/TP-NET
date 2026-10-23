@@ -37,7 +37,6 @@
             iniciarSesión = new Button();
             titulo = new Label();
             pictureBox1 = new PictureBox();
-            subtitulo = new Label();
             mostrarPassword = new Button();
             botonCancelar = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -45,7 +44,7 @@
             // 
             // botonCancelar
             // 
-            botonCancelar.Location = new Point(233, 264);
+            botonCancelar.Location = new Point(85, 192);
             botonCancelar.Name = "botonCancelar";
             botonCancelar.Size = new Size(75, 23);
             botonCancelar.TabIndex = 8;
@@ -56,22 +55,22 @@
             // usuario
             // 
             usuario.AutoSize = true;
-            usuario.Location = new Point(135, 138);
+            usuario.Location = new Point(85, 65);
             usuario.Name = "usuario";
-            usuario.Size = new Size(59, 20);
+            usuario.Size = new Size(49, 15);
             usuario.TabIndex = 0;
             usuario.Text = "Usuario";
             // 
             // usuarioCaja
             // 
-            usuarioCaja.Location = new Point(135, 156);
+            usuarioCaja.Location = new Point(85, 83);
             usuarioCaja.Name = "usuarioCaja";
             usuarioCaja.Size = new Size(175, 23);
             usuarioCaja.TabIndex = 1;
             // 
             // contraseñaCaja
             // 
-            contraseñaCaja.Location = new Point(135, 224);
+            contraseñaCaja.Location = new Point(85, 151);
             contraseñaCaja.Name = "contraseñaCaja";
             contraseñaCaja.Size = new Size(173, 23);
             contraseñaCaja.TabIndex = 3;
@@ -80,15 +79,16 @@
             // contraseña
             // 
             contraseña.AutoSize = true;
-            contraseña.Location = new Point(135, 206);
+            contraseña.Location = new Point(85, 133);
             contraseña.Name = "contraseña";
-            contraseña.Size = new Size(83, 20);
+            contraseña.Size = new Size(69, 15);
             contraseña.TabIndex = 2;
             contraseña.Text = "Contraseña";
             // 
             // iniciarSesión
             // 
-            iniciarSesión.Location = new Point(130, 264);
+            iniciarSesión.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            iniciarSesión.Location = new Point(166, 192);
             iniciarSesión.Name = "iniciarSesión";
             iniciarSesión.Size = new Size(97, 23);
             iniciarSesión.TabIndex = 4;
@@ -100,7 +100,7 @@
             // 
             titulo.AutoSize = true;
             titulo.Font = new Font("Segoe UI", 16F);
-            titulo.Location = new Point(110, 48);
+            titulo.Location = new Point(64, 19);
             titulo.Name = "titulo";
             titulo.Size = new Size(255, 30);
             titulo.TabIndex = 5;
@@ -110,27 +110,16 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(44, 38);
+            pictureBox1.Location = new Point(9, 9);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(60, 60);
+            pictureBox1.Size = new Size(49, 49);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 7;
             pictureBox1.TabStop = false;
             // 
-            // subtitulo
-            // 
-            subtitulo.AutoSize = true;
-            subtitulo.Font = new Font("Segoe UI", 11F);
-            subtitulo.Location = new Point(130, 107);
-            subtitulo.Name = "subtitulo";
-            subtitulo.Size = new Size(170, 20);
-            subtitulo.TabIndex = 9;
-            subtitulo.Text = "Ingrese sus credenciales:";
-            subtitulo.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // mostrarPassword
             // 
-            mostrarPassword.Location = new Point(314, 224);
+            mostrarPassword.Location = new Point(264, 151);
             mostrarPassword.Name = "mostrarPassword";
             mostrarPassword.Size = new Size(35, 23);
             mostrarPassword.TabIndex = 10;
@@ -140,9 +129,8 @@
             // 
             // LoginForm
             // 
-            ClientSize = new Size(478, 403);
+            ClientSize = new Size(358, 252);
             Controls.Add(mostrarPassword);
-            Controls.Add(subtitulo);
             Controls.Add(botonCancelar);
             Controls.Add(pictureBox1);
             Controls.Add(titulo);
@@ -151,9 +139,12 @@
             Controls.Add(contraseña);
             Controls.Add(usuarioCaja);
             Controls.Add(usuario);
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Login";
             Load += LoginForm_Load_1;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
@@ -172,7 +163,6 @@
         private Label titulo;
         private PictureBox pictureBox1;
         private Button botonCancelar;
-        private Label subtitulo;
         private Button mostrarPassword;
     }
 }

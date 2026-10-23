@@ -57,7 +57,7 @@ namespace WindowsForms
 
         private async void btnAgregar_Click(object sender, EventArgs e)
         {
-            
+
             using (var formCrearPrecio = new PrecioCanchaCrearForm(_idComplejo, _nroCancha))
             {
                 var result = formCrearPrecio.ShowDialog();
@@ -66,7 +66,6 @@ namespace WindowsForms
                     await CargarDatosPrecio();
                 }
             }
-            
         }
     }
 }

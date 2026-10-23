@@ -40,53 +40,57 @@
             // lblDia
             // 
             lblDia.AutoSize = true;
-            lblDia.Location = new Point(357, 76);
+            lblDia.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblDia.Location = new Point(12, 9);
             lblDia.Name = "lblDia";
-            lblDia.Size = new Size(38, 15);
+            lblDia.Size = new Size(139, 25);
             lblDia.TabIndex = 0;
-            lblDia.Text = "label1";
+            lblDia.Text = "Editar Horario";
             // 
             // dateTimePicker1
             // 
             dateTimePicker1.CustomFormat = "HH:mm";
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.Location = new Point(280, 110);
+            dateTimePicker1.Location = new Point(138, 51);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.ShowUpDown = true;
-            dateTimePicker1.Size = new Size(200, 23);
+            dateTimePicker1.Size = new Size(102, 23);
             dateTimePicker1.TabIndex = 1;
+            dateTimePicker1.Value = new DateTime(2026, 10, 23, 9, 0, 0, 0);
             // 
             // dateTimePicker2
             // 
             dateTimePicker2.CustomFormat = "HH:mm";
             dateTimePicker2.Format = DateTimePickerFormat.Custom;
-            dateTimePicker2.Location = new Point(280, 162);
+            dateTimePicker2.Location = new Point(138, 80);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.ShowUpDown = true;
-            dateTimePicker2.Size = new Size(200, 23);
+            dateTimePicker2.Size = new Size(102, 23);
             dateTimePicker2.TabIndex = 2;
+            dateTimePicker2.Value = new DateTime(2026, 10, 23, 23, 0, 0, 0);
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(192, 116);
+            label1.Location = new Point(12, 57);
             label1.Name = "label1";
-            label1.Size = new Size(82, 15);
+            label1.Size = new Size(85, 15);
             label1.TabIndex = 3;
-            label1.Text = "Hora Apertura";
+            label1.Text = "Hora Apertura:";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(192, 162);
+            label2.Location = new Point(12, 86);
             label2.Name = "label2";
-            label2.Size = new Size(67, 15);
+            label2.Size = new Size(70, 15);
             label2.TabIndex = 4;
-            label2.Text = "Hora Cierre";
+            label2.Text = "Hora Cierre:";
             // 
             // button1
             // 
-            button1.Location = new Point(357, 237);
+            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button1.Location = new Point(165, 119);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 5;
@@ -96,7 +100,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(276, 237);
+            btnCancelar.Location = new Point(84, 119);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 6;
@@ -108,7 +112,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(258, 159);
             Controls.Add(btnCancelar);
             Controls.Add(button1);
             Controls.Add(label2);
@@ -116,8 +120,11 @@
             Controls.Add(dateTimePicker2);
             Controls.Add(dateTimePicker1);
             Controls.Add(lblDia);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "EditarHorario";
-            Text = "EditarHorario";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Editar Horario";
             Load += EditarHorario_Load;
             ResumeLayout(false);
             PerformLayout();

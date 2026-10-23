@@ -34,34 +34,35 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblTitulo.Location = new Point(20, 15);
+            lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(142, 28);
+            lblTitulo.Size = new Size(133, 25);
             lblTitulo.TabIndex = 6;
             lblTitulo.Text = "Editar Cancha";
             // 
             // lblNumeroCancha
             // 
             lblNumeroCancha.AutoSize = true;
-            lblNumeroCancha.Location = new Point(46, 55);
+            lblNumeroCancha.Location = new Point(12, 54);
             lblNumeroCancha.Name = "lblNumeroCancha";
-            lblNumeroCancha.Size = new Size(81, 20);
+            lblNumeroCancha.Size = new Size(67, 15);
             lblNumeroCancha.TabIndex = 5;
             lblNumeroCancha.Text = "N° Cancha:";
             // 
             // lblTipoDeporte
             // 
             lblTipoDeporte.AutoSize = true;
-            lblTipoDeporte.Location = new Point(20, 90);
+            lblTipoDeporte.Location = new Point(12, 84);
             lblTipoDeporte.Name = "lblTipoDeporte";
-            lblTipoDeporte.Size = new Size(101, 20);
+            lblTipoDeporte.Size = new Size(78, 15);
             lblTipoDeporte.TabIndex = 3;
             lblTipoDeporte.Text = "Tipo Deporte:";
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(104, 135);
+            btnGuardar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnGuardar.Location = new Point(185, 119);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 25);
             btnGuardar.TabIndex = 1;
@@ -71,7 +72,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(185, 135);
+            btnCancelar.Location = new Point(104, 119);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 25);
             btnCancelar.TabIndex = 0;
@@ -83,21 +84,21 @@
             // 
             cmbTipoCancha.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoCancha.FormattingEnabled = true;
-            cmbTipoCancha.Location = new Point(127, 87);
+            cmbTipoCancha.Location = new Point(155, 81);
             cmbTipoCancha.Name = "cmbTipoCancha";
-            cmbTipoCancha.Size = new Size(141, 28);
+            cmbTipoCancha.Size = new Size(105, 23);
             cmbTipoCancha.TabIndex = 1;
             // 
             // nroCanchaUpDown
             // 
-            nroCanchaUpDown.Location = new Point(133, 54);
+            nroCanchaUpDown.Location = new Point(155, 52);
             nroCanchaUpDown.Name = "nroCanchaUpDown";
-            nroCanchaUpDown.Size = new Size(46, 27);
+            nroCanchaUpDown.Size = new Size(105, 23);
             nroCanchaUpDown.TabIndex = 7;
             // 
             // EditarCanchaForm
             // 
-            ClientSize = new Size(284, 181);
+            ClientSize = new Size(277, 158);
             Controls.Add(nroCanchaUpDown);
             Controls.Add(cmbTipoCancha);
             Controls.Add(btnCancelar);

@@ -160,10 +160,10 @@
             Controls.Add(txtPassword);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "AgregarDueno";
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "TurnoLibre - Nuevo Dueño";
             ResumeLayout(false);
             PerformLayout();

@@ -39,7 +39,7 @@
             // 
             lblDireccion.AutoSize = true;
             lblDireccion.Font = new Font("Segoe UI", 15F);
-            lblDireccion.Location = new Point(12, 48);
+            lblDireccion.Location = new Point(23, 72);
             lblDireccion.Name = "lblDireccion";
             lblDireccion.Size = new Size(65, 28);
             lblDireccion.TabIndex = 1;
@@ -49,7 +49,7 @@
             // 
             lblLocalidad.AutoSize = true;
             lblLocalidad.Font = new Font("Segoe UI", 15F);
-            lblLocalidad.Location = new Point(12, 109);
+            lblLocalidad.Location = new Point(23, 133);
             lblLocalidad.Name = "lblLocalidad";
             lblLocalidad.Size = new Size(65, 28);
             lblLocalidad.TabIndex = 2;
@@ -59,7 +59,7 @@
             // 
             lblHorarios.AutoSize = true;
             lblHorarios.Font = new Font("Segoe UI", 15F);
-            lblHorarios.Location = new Point(12, 170);
+            lblHorarios.Location = new Point(23, 194);
             lblHorarios.Name = "lblHorarios";
             lblHorarios.Size = new Size(65, 28);
             lblHorarios.TabIndex = 3;

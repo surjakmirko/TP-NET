@@ -44,51 +44,52 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(283, 66);
+            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(215, 15);
+            label1.Size = new Size(239, 25);
             label1.TabIndex = 0;
-            label1.Text = "Precio actual de la cancha seleccionada";
+            label1.Text = "Precio actual de la cancha";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(190, 121);
+            label2.Location = new Point(12, 51);
             label2.Name = "label2";
-            label2.Size = new Size(67, 15);
+            label2.Size = new Size(70, 15);
             label2.TabIndex = 1;
-            label2.Text = "Precio Base";
+            label2.Text = "Precio Base:";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(190, 153);
+            label3.Location = new Point(12, 80);
             label3.Name = "label3";
-            label3.Size = new Size(93, 15);
+            label3.Size = new Size(96, 15);
             label3.TabIndex = 2;
-            label3.Text = "Precio Adicional";
+            label3.Text = "Precio Adicional:";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(190, 185);
+            label4.Location = new Point(12, 109);
             label4.Name = "label4";
-            label4.Size = new Size(68, 15);
+            label4.Size = new Size(71, 15);
             label4.TabIndex = 3;
-            label4.Text = "Precio Seña";
+            label4.Text = "Precio Seña:";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(190, 214);
+            label5.Location = new Point(12, 138);
             label5.Name = "label5";
-            label5.Size = new Size(116, 15);
+            label5.Size = new Size(119, 15);
             label5.TabIndex = 4;
-            label5.Text = "Ultima Actualizacion";
+            label5.Text = "Ultima Actualizacion:";
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(283, 256);
+            btnVolver.Location = new Point(140, 175);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 5;
@@ -98,7 +99,8 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(379, 256);
+            btnAgregar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAgregar.Location = new Point(221, 175);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 10;
@@ -108,41 +110,41 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(379, 118);
+            textBox1.Location = new Point(179, 48);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(100, 23);
+            textBox1.Size = new Size(117, 23);
             textBox1.TabIndex = 11;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(379, 150);
+            textBox2.Location = new Point(179, 77);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
-            textBox2.Size = new Size(100, 23);
+            textBox2.Size = new Size(117, 23);
             textBox2.TabIndex = 12;
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(379, 179);
+            textBox3.Location = new Point(179, 106);
             textBox3.Name = "textBox3";
             textBox3.ReadOnly = true;
-            textBox3.Size = new Size(100, 23);
+            textBox3.Size = new Size(117, 23);
             textBox3.TabIndex = 13;
             // 
             // textBox4
             // 
-            textBox4.Location = new Point(379, 211);
+            textBox4.Location = new Point(179, 135);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
-            textBox4.Size = new Size(100, 23);
+            textBox4.Size = new Size(117, 23);
             textBox4.TabIndex = 14;
             // 
             // PrecioCanchaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(308, 214);
             Controls.Add(textBox4);
             Controls.Add(textBox3);
             Controls.Add(textBox2);
@@ -154,8 +156,11 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "PrecioCanchaForm";
-            Text = "PrecioCanchaForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Precio Cancha";
             Load += PrecioCanchaForm_Load;
             ResumeLayout(false);
             PerformLayout();

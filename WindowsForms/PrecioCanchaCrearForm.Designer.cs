@@ -44,7 +44,8 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(449, 246);
+            btnAgregar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAgregar.Location = new Point(293, 160);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 21;
@@ -54,7 +55,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(368, 246);
+            btnCancelar.Location = new Point(212, 160);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 20;
@@ -65,68 +66,69 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(226, 208);
+            label4.Location = new Point(12, 118);
             label4.Name = "label4";
-            label4.Size = new Size(68, 15);
+            label4.Size = new Size(71, 15);
             label4.TabIndex = 18;
-            label4.Text = "Precio Seña";
+            label4.Text = "Precio Seña:";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(226, 176);
+            label3.Location = new Point(12, 89);
             label3.Name = "label3";
-            label3.Size = new Size(93, 15);
+            label3.Size = new Size(96, 15);
             label3.TabIndex = 17;
-            label3.Text = "Precio Adicional";
+            label3.Text = "Precio Adicional:";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(226, 144);
+            label2.Location = new Point(12, 60);
             label2.Name = "label2";
-            label2.Size = new Size(67, 15);
+            label2.Size = new Size(70, 15);
             label2.TabIndex = 16;
-            label2.Text = "Precio Base";
+            label2.Text = "Precio Base:";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(319, 89);
+            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(215, 15);
+            label1.Size = new Size(356, 25);
             label1.TabIndex = 15;
             label1.Text = "Precio actual de la cancha seleccionada";
             // 
             // precioBase
             // 
-            precioBase.Location = new Point(382, 142);
+            precioBase.Location = new Point(230, 58);
             precioBase.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
             precioBase.Name = "precioBase";
-            precioBase.Size = new Size(120, 23);
+            precioBase.Size = new Size(138, 23);
             precioBase.TabIndex = 22;
             // 
             // precioAdicional
             // 
-            precioAdicional.Location = new Point(382, 171);
+            precioAdicional.Location = new Point(230, 87);
             precioAdicional.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
             precioAdicional.Name = "precioAdicional";
-            precioAdicional.Size = new Size(120, 23);
+            precioAdicional.Size = new Size(138, 23);
             precioAdicional.TabIndex = 23;
             // 
             // precioSeña
             // 
-            precioSeña.Location = new Point(382, 200);
+            precioSeña.Location = new Point(230, 116);
             precioSeña.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
             precioSeña.Name = "precioSeña";
-            precioSeña.Size = new Size(120, 23);
+            precioSeña.Size = new Size(138, 23);
             precioSeña.TabIndex = 24;
             // 
             // PrecioCanchaCrearForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(387, 197);
             Controls.Add(precioSeña);
             Controls.Add(precioAdicional);
             Controls.Add(precioBase);
@@ -136,8 +138,11 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "PrecioCanchaCrearForm";
-            Text = "PrecioCanchaCrearForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Crear Precios Canchas";
             ((System.ComponentModel.ISupportInitialize)precioBase).EndInit();
             ((System.ComponentModel.ISupportInitialize)precioAdicional).EndInit();
             ((System.ComponentModel.ISupportInitialize)precioSeña).EndInit();

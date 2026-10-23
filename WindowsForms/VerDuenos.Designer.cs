@@ -70,6 +70,7 @@
             // 
             // btnAgregarDueno
             // 
+            btnAgregarDueno.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAgregarDueno.Location = new Point(797, 521);
             btnAgregarDueno.Name = "btnAgregarDueno";
             btnAgregarDueno.Size = new Size(115, 28);
@@ -85,11 +86,11 @@
             Controls.Add(btnVolver);
             Controls.Add(lblTitulo);
             Controls.Add(dgvDuenos);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "VerDuenos";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "TurnoLibre - Listado de Dueños";
+            Text = "Listado de Dueños";
             Load += VerDuenos_Load;
             ((System.ComponentModel.ISupportInitialize)dgvDuenos).EndInit();
             ResumeLayout(false);
