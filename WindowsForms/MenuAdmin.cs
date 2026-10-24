@@ -41,5 +41,15 @@ namespace WindowsForms
             }
             this.Show();
         }
+
+        private void btnRanking_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            using (FormRankingLocalidades formRanking = new FormRankingLocalidades())
+            {
+                formRanking.ShowDialog();
+            }
+            this.Show();
+        }
     }
 }

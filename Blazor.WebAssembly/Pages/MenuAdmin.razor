@@ -1,0 +1,11 @@
+@page "/menu-admin"
+@inject NavigationManager Navigation
+
+<main class="contenedor-menuAdmin">
+    <h1 class="titulo-menuAdmin">Menú admin</h1>
+    <div class="contenedor-menuAdmin-boton">
+        <button class="boton-menuAdmin" @onclick='() => Navigation.NavigateTo("/administrar-complejos")'>Gestionar complejos</button>
+        <button class="boton-menuAdmin" @onclick='() => Navigation.NavigateTo("/administrar-usuarios")'>Gestionar usuarios</button>
+        <button class="boton-menuAdmin" @onclick='() => Navigation.NavigateTo("/reporte-localidades")'>Ranking de localidades</button>
+    </div>
+</main>

@@ -1,0 +1,120 @@
+.reporte-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.reporte-card {
+  background: var(--color-blanco, #ffffff);
+  border-radius: 16px;
+  border: 1px solid var(--color-borde, #e2e8f0);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+.reporte-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reporte-titulo-box h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-texto, #0f172a);
+  margin: 0;
+}
+
+.btn-volver {
+  background-color: var(--color-fondo, #f8fafc);
+  color: var(--color-texto-secundario, #334155);
+  border: 1px solid var(--color-borde-gris, #cbd5e1);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-volver:hover {
+  background-color: var(--color-fondo-gris, #f1f5f9);
+}
+
+.reporte-grafico {
+  width: 100%;
+  margin-bottom: 28px;
+  background: var(--color-fondo, #f8fafc);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-borde, #e2e8f0);
+}
+
+.reporte-tabla-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.reporte-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.reporte-tabla thead tr {
+  background-color: var(--color-fondo, #f8fafc);
+}
+
+.reporte-tabla th {
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-texto-gris, #64748b);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-borde, #e2e8f0);
+}
+
+.reporte-tabla td {
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario, #334155);
+  border-bottom: 1px solid var(--color-fondo-gris, #f1f5f9);
+  vertical-align: middle;
+}
+
+.col-pos {
+  width: 60px;
+  color: var(--color-texto-gris, #64748b);
+  font-weight: 600;
+}
+
+.col-localidad {
+  font-weight: 600;
+  color: var(--color-texto, #0f172a);
+}
+
+.col-cantidad {
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-primario, #ee5801);
+}
+
+.reporte-estado {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-texto-gris, #64748b);
+}
+
+@media (max-width: 640px) {
+  .reporte-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .reporte-titulo-box h2 {
+    font-size: 1.25rem;
+  }
+}

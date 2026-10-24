@@ -1,0 +1,159 @@
+@page "/crear-usuario"
+@using DTOs
+@using API
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<main class="crear-usuario-contenedor">
+    <h2 class="crear-usuario-titulo">
+        Crear nuevo @(tipoUsuarioId == 4 ? "dueño" : "encargado")
+    </h2>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+        <button type="button" class="crear-usuario-boton" style="margin-top: 0; background-color: @(tipoUsuarioId == 4 ? "#ee5801" : "#888")" @onclick="() => tipoUsuarioId = 4">
+            Dueño
+        </button>
+        <button type="button" class="crear-usuario-boton" style="margin-top: 0; background-color: @(tipoUsuarioId == 2 ? "#ee5801" : "#888")" @onclick="() => tipoUsuarioId = 2">
+            Encargado
+        </button>
+    </div>
+
+    <EditForm Model="formData" OnValidSubmit="HandlePreSubmit" class="crear-usuario-form">
+        <DataAnnotationsValidator />
+
+        <div class="crear-usuario-campo">
+            <label>Email:</label>
+            <InputText type="email" @bind-Value="formData.Email" required />
+        </div>
+
+        <div class="crear-usuario-campo">
+            <label>Teléfono:</label>
+            <InputText type="text" @bind-Value="formData.Telefono" required />
+        </div>
+
+        <div class="crear-usuario-campo">
+            <label>Contraseña:</label>
+            <InputText type="password" @bind-Value="formData.Password" required />
+        </div>
+
+        @if (tipoUsuarioId == 4)
+        {
+            <div class="crear-usuario-campo">
+                <label>CUIT:</label>
+                <InputText type="text" @bind-Value="formData.Cuit" placeholder="Ej: 30-12345678-9" required />
+            </div>
+
+            <div class="crear-usuario-campo">
+                <label>Razón Social:</label>
+                <InputText type="text" @bind-Value="formData.RazonSocial" placeholder="Ej: Complejos Deportivos S.A." required />
+            </div>
+        }
+
+        <button class="crear-usuario-boton" type="submit" disabled="@cargando">
+            Crear @(tipoUsuarioId == 4 ? "Dueño" : "Encargado")
+        </button>
+    </EditForm>
+</main>
+
+@if (mostrarModal)
+{
+    <div class="modal-overlay-usuario">
+        <div class="modal-confirmacion-contenido-usuario">
+            <h2>Verificar datos</h2>
+
+            <p><strong>Rol:</strong> @(tipoUsuarioId == 4 ? "Dueño (ID 4)" : "Encargado (ID 2)")</p>
+            <p><strong>Email:</strong> @formData.Email</p>
+            <p><strong>Teléfono:</strong> @formData.Telefono</p>
+
+            @if (tipoUsuarioId == 4)
+            {
+                <hr class="modal-divisor-usuario" />
+                <p><strong>CUIT:</strong> @formData.Cuit</p>
+                <p><strong>Razón Social:</strong> @formData.RazonSocial</p>
+            }
+
+            <div class="modal-acciones-usuario">
+                <button type="button" class="btn-modal-cancelar-usuario" @onclick="() => mostrarModal = false" disabled="@cargando">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-modal-confirmar-usuario" @onclick="HandleConfirmarCreacion" disabled="@cargando">
+                    @(cargando ? "Guardando..." : "Confirmar y Crear")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private int tipoUsuarioId = 4;
+    private FormModel formData = new();
+    private bool mostrarModal = false;
+    private bool cargando = false;
+
+    private void HandlePreSubmit()
+    {
+        mostrarModal = true;
+    }
+
+    private async Task HandleConfirmarCreacion()
+    {
+        cargando = true;
+
+        try
+        {
+            string? cuitAsociado = null;
+
+            if (tipoUsuarioId == 4)
+            {
+                cuitAsociado = formData.Cuit;
+
+                try
+                {
+                    await PersonaJuridicaApiClient.CrearPersonaJuridicaAsync(new PersonaJuridicaDTO
+                    {
+                        Cuit = formData.Cuit ?? string.Empty,
+                        Razon_Social = formData.RazonSocial ?? string.Empty
+                    });
+                }
+                catch
+                {
+                    Console.WriteLine("Persona jurídica ya registrada previamente, asociando CUIT directamente.");
+                }
+            }
+
+            var payloadUsuario = new UsuarioCrearDTO
+            {
+                Email = formData.Email ?? string.Empty,
+                Telefono = formData.Telefono ?? string.Empty,
+                Password = formData.Password ?? string.Empty,
+                TipoUsuarioId = tipoUsuarioId,
+                PersonaJuridicaCuit = cuitAsociado ?? string.Empty,
+                PersonaFisicaDni = string.Empty
+            };
+
+            await UsuarioApiClient.CrearUsuarioAsync(payloadUsuario);
+
+            mostrarModal = false;
+            await JSRuntime.InvokeVoidAsync("alert", $"¡{(tipoUsuarioId == 4 ? "Dueño" : "Encargado")} creado con éxito!");
+            Navigation.NavigateTo("/administrar-usuarios");
+        }
+        catch (Exception ex)
+        {
+            mostrarModal = false;
+            await JSRuntime.InvokeVoidAsync("alert", "Error al crear el usuario: " + ex.Message);
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    public class FormModel
+    {
+        public string? Email { get; set; }
+        public string? Telefono { get; set; }
+        public string? Password { get; set; }
+        public string? Cuit { get; set; }
+        public string? RazonSocial { get; set; }
+    }
+}

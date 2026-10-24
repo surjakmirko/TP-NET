@@ -127,7 +127,16 @@ namespace Servicios
                 NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty
             };
         }
-
+        public async Task<List<LocalidadRankingDTO>> GetRankingLocalidadesAsync()
+        {
+            var datos = await complejoRepositorio.GetRankingLocalidadesAsync();
+            return datos.Select((item, index) => new LocalidadRankingDTO
+            {
+                Posicion = index + 1,
+                NombreLocalidad = item.Localidad,
+                CantidadComplejos = item.Cantidad
+            }).ToList();
+        }
         public async Task<IEnumerable<ComplejoDTO>> GetAllAsync()
         {
             var complejos = await complejoRepositorio.GetAllAsync();

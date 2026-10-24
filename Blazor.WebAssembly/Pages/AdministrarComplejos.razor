@@ -1,0 +1,117 @@
+@page "/administrar-complejos"
+@using DTOs
+@using API
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<main class="admin-complejos-page">
+  <div class="admin-complejos-card">
+    <div class="admin-complejos-header">
+      <div class="admin-complejos-titulo-box">
+        <h2>Complejos</h2>
+        <span class="admin-complejos-badge">
+          @complejosFiltrados.Count() @(complejosFiltrados.Count() == 1 ? "complejo" : "complejos")
+        </span>
+      </div>
+
+      <button class="btn-nuevo-complejo" @onclick='() => Navigation.NavigateTo("/crear-complejo")'>
+        + Nuevo complejo
+      </button>
+    </div>
+
+    <div class="admin-complejos-toolbar">
+      <input type="text" class="input-busqueda-complejo" placeholder="Buscar complejo por nombre..." @bind="busqueda" @bind:event="oninput" />
+    </div>
+
+    <div class="admin-complejos-tabla-container">
+      @if (cargando)
+      {
+        <div class="admin-estado-tabla">Cargando complejos...</div>
+      }
+      else if (complejosFiltrados.Count() == 0)
+      {
+        <div class="admin-estado-tabla">
+          @(string.IsNullOrEmpty(busqueda) ? "No hay complejos registrados." : "No se encontraron complejos con ese nombre.")
+        </div>
+      }
+      else
+      {
+        <table class="admin-complejos-tabla">
+          <thead>
+            <tr>
+              <th>Nro.</th>
+              <th>Nombre</th>
+              <th>Dirección</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var complejo in complejosFiltrados)
+            {
+              <tr @key="complejo.Id">
+                <td class="col-id">#@complejo.Id</td>
+                <td class="col-nombre">@complejo.Nombre</td>
+                <td class="col-direccion">@complejo.Direccion</td>
+                <td class="col-acciones">
+                  <div class="acciones-contenedor">
+                    <button class="btn-tabla-accion btn-tabla-eliminar" @onclick="() => HandleEliminar(complejo.Id)">
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</main>
+
+@code {
+    private List<ComplejoDTO> complejos = new();
+    private string busqueda = string.Empty;
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var data = await ComplejoApiClient.ObtenerTodosAsync();
+            if (data != null)
+            {
+                complejos = data;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching complejos: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private IEnumerable<ComplejoDTO> complejosFiltrados =>
+        string.IsNullOrEmpty(busqueda)
+            ? complejos
+            : complejos.Where(c => c.Nombre != null && c.Nombre.ToLower().Contains(busqueda.ToLower()));
+
+    private async Task HandleEliminar(int id)
+    {
+        var confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de eliminar este complejo?");
+        if (!confirmado) return;
+
+        try
+        {
+            await ComplejoApiClient.EliminarComplejoAsync(id);
+            complejos = complejos.Where(c => c.Id != id).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting complejo: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "No se pudo eliminar el complejo.");
+        }
+    }
+}

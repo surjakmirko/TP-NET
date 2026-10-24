@@ -1,0 +1,137 @@
+@page "/administrar-usuarios"
+@using DTOs
+@using API
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<main class="admin-usuarios-page">
+  <div class="admin-usuarios-card">
+    <div class="admin-usuarios-header">
+      <div class="admin-usuarios-titulo-box">
+        <h2>Usuarios</h2>
+        <span class="admin-usuarios-badge">
+          @usuariosFiltrados.Count() @(usuariosFiltrados.Count() == 1 ? "usuario" : "usuarios")
+        </span>
+      </div>
+
+      <button class="btn-nuevo-usuario" @onclick='() => Navigation.NavigateTo("/crear-usuario")'>
+        + Nuevo usuario
+      </button>
+    </div>
+
+    <div class="admin-usuarios-toolbar">
+      <input type="text" class="input-busqueda-usuario" placeholder="Buscar por email o teléfono..." @bind="busqueda" @bind:event="oninput" />
+    </div>
+
+    <div class="admin-usuarios-tabla-container">
+      @if (cargando)
+      {
+        <div class="admin-estado-tabla">Cargando usuarios...</div>
+      }
+      else if (usuariosFiltrados.Count() == 0)
+      {
+        <div class="admin-estado-tabla">
+          @(string.IsNullOrEmpty(busqueda) ? "No hay usuarios registrados." : "No se encontraron usuarios con ese criterio.")
+        </div>
+      }
+      else
+      {
+        <table class="admin-usuarios-tabla">
+          <thead>
+            <tr>
+              <th>Nro.</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th class="text-center"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var u in usuariosFiltrados)
+            {
+              <tr @key="u.Id">
+                <td class="col-id">#@u.Id</td>
+                <td class="col-email">@u.Email</td>
+                <td class="col-telefono">@(string.IsNullOrEmpty(u.Telefono) ? "-" : u.Telefono)</td>
+                <td>
+                  <span class="badge-rol badge-rol-@u.TipoUsuarioId">
+                    @ObtenerNombreRol(u.TipoUsuarioId)
+                  </span>
+                </td>
+                <td class="col-acciones">
+                  <div class="acciones-contenedor">
+                    <button class="btn-tabla-accion btn-tabla-eliminar" @onclick="() => HandleEliminar(u.Id)">
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</main>
+
+@code {
+    private List<UsuarioDTO> usuarios = new();
+    private string busqueda = string.Empty;
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var data = await UsuarioApiClient.GetAllAsync();
+            if (data != null)
+            {
+                usuarios = data;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching usuarios: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private IEnumerable<UsuarioDTO> usuariosFiltrados => 
+        string.IsNullOrEmpty(busqueda)
+            ? usuarios
+            : usuarios.Where(u => 
+                (u.Email != null && u.Email.ToLower().Contains(busqueda.ToLower())) ||
+                (u.Telefono != null && u.Telefono.Contains(busqueda)));
+
+    private async Task HandleEliminar(int id)
+    {
+        var confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de eliminar este usuario?");
+        if (!confirmado) return;
+
+        try
+        {
+            await UsuarioApiClient.EliminarUsuarioAsync(id);
+            usuarios = usuarios.Where(u => u.Id != id).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting usuario: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "No se pudo eliminar el usuario.");
+        }
+    }
+
+    private string ObtenerNombreRol(int tipoUsuarioId)
+    {
+        return tipoUsuarioId switch
+        {
+            1 => "Admin",
+            2 => "Encargado",
+            3 => "Cliente",
+            4 => "Dueño",
+            _ => "Usuario"
+        };
+    }
+}

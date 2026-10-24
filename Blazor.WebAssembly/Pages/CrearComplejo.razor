@@ -1,0 +1,211 @@
+@page "/crear-complejo"
+@using DTOs
+@using API
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<main class='crear-complejo-contenedor'>
+    <h2 class='crear-complejo-titulo'>Crear nuevo complejo</h2>
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="mensaje-error">@error</div>
+    }
+    <EditForm Model="formData" OnValidSubmit="HandleSubmit" class='crear-complejo-form'>
+        <DataAnnotationsValidator />
+
+        <div class='crear-complejo-campo'>
+            <label>Nombre:</label>
+            <InputText @bind-Value="formData.Nombre" required />
+        </div>
+        <div class='crear-complejo-campo'>
+            <label>Dirección:</label>
+            <InputText @bind-Value="formData.Direccion" required />
+        </div>
+        <div class='crear-complejo-campo'>
+            <label>Localidad:</label>
+            <InputSelect @bind-Value="formData.LocalidadId" required>
+                <option value="0" disabled>Seleccione una localidad</option>
+                @foreach (var loc in localidades)
+                {
+                    <option value="@loc.Id">@loc.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+        <div class='crear-complejo-campo'>
+            <label>ID dueño:</label>
+            <InputText @bind-Value="formData.DuenoIdStr" placeholder="ID del dueño" />
+        </div>
+        <div class='crear-complejo-campo'>
+            <label>ID encargado:</label>
+            <InputText @bind-Value="formData.EncargadoIdStr" placeholder="ID del encargado" />
+        </div>
+        <button class="crear-complejo-boton" type="submit" disabled="@cargando">
+            @(cargando ? "Verificando..." : "Crear Complejo")
+        </button>
+    </EditForm>
+</main>
+
+@if (mostrarModal && datosConfirmacion != null)
+{
+    <div class="modal-overlay-complejo">
+        <div class="modal-confirmacion-contenido-complejo">
+            <h2>Verificar datos del complejo</h2>
+
+            <p><strong>Nombre:</strong> @datosConfirmacion.Nombre</p>
+            <p><strong>Dirección:</strong> @datosConfirmacion.Direccion</p>
+            <p><strong>Localidad:</strong> @datosConfirmacion.LocalidadNombre</p>
+
+            <hr class="modal-divisor-complejo" />
+
+            <p><strong>Dueño (ID: @datosConfirmacion.DuenoId):</strong></p>
+            <p class="modal-subtexto-complejo">@datosConfirmacion.DuenoEmail</p>
+
+            <p><strong>Encargado (ID: @datosConfirmacion.EncargadoId):</strong></p>
+            <p class="modal-subtexto-complejo">@datosConfirmacion.EncargadoEmail</p>
+
+            <div class="modal-acciones-complejo">
+                <button type="button" class="btn-modal-cancelar-complejo" @onclick="() => mostrarModal = false" disabled="@cargando">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-modal-confirmar-complejo" @onclick="HandleConfirmarCreacion" disabled="@cargando">
+                    @(cargando ? "Guardando..." : "Confirmar y Crear")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<LocalidadDTO> localidades = new();
+    private FormModel formData = new();
+    private bool mostrarModal = false;
+    private DatosConfirmacion? datosConfirmacion;
+    private bool cargando = false;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var data = await LocalidadApiClient.ObtenerTodosAsync();
+            if (data != null)
+            {
+                localidades = data.OrderBy(l => l.Nombre).ToList();
+                if (localidades.Count > 0)
+                {
+                    formData.LocalidadId = localidades[0].Id;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando localidades: {ex.Message}");
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        cargando = true;
+        error = string.Empty;
+
+        try
+        {
+            if (!int.TryParse(formData.DuenoIdStr, out int duenoId))
+            {
+                error = "ID de dueño inválido";
+                return;
+            }
+            if (!int.TryParse(formData.EncargadoIdStr, out int encargadoId))
+            {
+                error = "ID de encargado inválido";
+                return;
+            }
+
+            var dueno = await UsuarioApiClient.GetByIdAsync(duenoId);
+            var encargado = await UsuarioApiClient.GetByIdAsync(encargadoId);
+
+            if (dueno == null || encargado == null)
+            {
+                error = "No se encontró el dueño o el encargado con los IDs ingresados";
+                return;
+            }
+
+            var localidadSel = localidades.FirstOrDefault(l => l.Id == formData.LocalidadId);
+
+            datosConfirmacion = new DatosConfirmacion
+            {
+                Nombre = formData.Nombre ?? string.Empty,
+                Direccion = formData.Direccion ?? string.Empty,
+                LocalidadId = formData.LocalidadId,
+                LocalidadNombre = localidadSel?.Nombre ?? formData.LocalidadId.ToString(),
+                DuenoId = duenoId,
+                DuenoEmail = dueno.Email ?? string.Empty,
+                EncargadoId = encargadoId,
+                EncargadoEmail = encargado.Email ?? string.Empty
+            };
+
+            mostrarModal = true;
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message ?? "Error al verificar las IDs de dueño o encargado";
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private async Task HandleConfirmarCreacion()
+    {
+        cargando = true;
+        error = string.Empty;
+
+        try
+        {
+            var payload = new ComplejoCrearDTO
+            {
+                Nombre = formData.Nombre ?? string.Empty,
+                Direccion = formData.Direccion ?? string.Empty,
+                LocalidadId = formData.LocalidadId,
+                DueñoId = int.Parse(formData.DuenoIdStr ?? "0"),
+                EncargadoId = int.Parse(formData.EncargadoIdStr ?? "0")
+            };
+
+            await ComplejoApiClient.CrearComplejoAsync(payload);
+            mostrarModal = false;
+            await JSRuntime.InvokeVoidAsync("alert", "¡Complejo registrado con éxito!");
+            Navigation.NavigateTo("/administrar-complejos");
+        }
+        catch (Exception ex)
+        {
+            mostrarModal = false;
+            await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    public class FormModel
+    {
+        public string? Nombre { get; set; }
+        public string? Direccion { get; set; }
+        public int LocalidadId { get; set; }
+        public string? DuenoIdStr { get; set; }
+        public string? EncargadoIdStr { get; set; }
+    }
+
+    public class DatosConfirmacion
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public int LocalidadId { get; set; }
+        public string LocalidadNombre { get; set; } = string.Empty;
+        public int DuenoId { get; set; }
+        public string DuenoEmail { get; set; } = string.Empty;
+        public int EncargadoId { get; set; }
+        public string EncargadoEmail { get; set; } = string.Empty;
+    }
+}

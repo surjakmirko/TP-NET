@@ -34,6 +34,7 @@
             duenoTitulo = new Label();
             btnVerDuenos = new Button();
             btnCerrarSesion = new Button();
+            btnRanking = new Button();
             SuspendLayout();
             // 
             // tituloMenuAdmin
@@ -89,7 +90,7 @@
             // btnCerrarSesion
             // 
             btnCerrarSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCerrarSesion.Location = new Point(215, 213);
+            btnCerrarSesion.Location = new Point(215, 258);
             btnCerrarSesion.Name = "btnCerrarSesion";
             btnCerrarSesion.Size = new Size(95, 26);
             btnCerrarSesion.TabIndex = 7;
@@ -97,11 +98,22 @@
             btnCerrarSesion.UseVisualStyleBackColor = true;
             btnCerrarSesion.Click += btnCerrarSesion_Click;
             // 
+            // btnRanking
+            // 
+            btnRanking.Location = new Point(25, 164);
+            btnRanking.Name = "btnRanking";
+            btnRanking.Size = new Size(115, 35);
+            btnRanking.TabIndex = 8;
+            btnRanking.Text = "Ver Ranking";
+            btnRanking.UseVisualStyleBackColor = true;
+            btnRanking.Click += btnRanking_Click;
+            // 
             // MenuAdmin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(322, 251);
+            ClientSize = new Size(322, 296);
+            Controls.Add(btnRanking);
             Controls.Add(btnCerrarSesion);
             Controls.Add(duenoTitulo);
             Controls.Add(btnVerDuenos);
@@ -124,5 +136,6 @@
         private Label duenoTitulo;
         private Button btnVerDuenos;
         private Button btnCerrarSesion;
+        private Button btnRanking;
     }
 }
