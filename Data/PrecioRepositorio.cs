@@ -31,11 +31,22 @@ namespace Data
                 .Where(p => (p.ComplejoId == complejoId && p.CanchaNro == nro))
                 .ToListAsync();
         }
-        
-        public async Task<bool> FechaDesdeExistsAsync(DateOnly fechaDesde)
+
+        public async Task<Precio?> UltimoPrecio(int complejoId, int canchaNro)
         {
             return await _context.Precios
-                .AnyAsync(p => p.FechaDesde == fechaDesde);
+                .Where(p => p.ComplejoId == complejoId && p.CanchaNro == canchaNro)
+                .OrderByDescending(p => p.FechaDesde) 
+                .FirstOrDefaultAsync();             
         }
+        public async Task<bool> FechaDesdeExistsAsync(int complejoId, int canchaNro, DateOnly fechaDesde)
+        {
+            return await _context.Precios
+                .AnyAsync(p => p.ComplejoId == complejoId
+                            && p.CanchaNro == canchaNro
+                            && p.FechaDesde == fechaDesde);
+        }
+
+
     }
 }

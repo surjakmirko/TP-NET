@@ -45,6 +45,24 @@ namespace Servicios
                 CanchaNro = precio.CanchaNro
             };  
         }
+
+        public async Task<PrecioDTO?> GetUltimoPrecioAsync(int complejoId, int nro)
+        {
+            Precio? precio = await precioRepositorio.UltimoPrecio(complejoId, nro);
+
+            if (precio == null)
+                return null;
+
+            return new PrecioDTO
+            {
+                PrecioBase = precio.PrecioBase,
+                PrecioAdicional = precio.PrecioAdicional,
+                PrecioSena = precio.PrecioSena,
+                FechaDesde = precio.FechaDesde,
+                ComplejoId = precio.ComplejoId,
+                CanchaNro = precio.CanchaNro
+            };
+        }
         public async Task<IEnumerable<PrecioDTO>> GetAllAsync(int complejoId,int nro)
         {
             var precios = await precioRepositorio.GetAllAsync(complejoId,nro);
@@ -59,6 +77,10 @@ namespace Servicios
                 CanchaNro = precio.CanchaNro
             }).ToList();
         }
-       
+        public async Task<bool> FechaDesdeExistsAsync(int complejoId, int canchaNro, DateOnly fechaDesde)
+        {
+            return await precioRepositorio.FechaDesdeExistsAsync(complejoId, canchaNro, fechaDesde);
+        }
+
     }
 }

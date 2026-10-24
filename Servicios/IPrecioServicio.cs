@@ -12,5 +12,7 @@ namespace Servicios
         Task<PrecioDTO> AddAsync(PrecioCrearDTO dto, int complejoId, int nroCancha);
         Task<PrecioDTO?> GetAsync(int compleojoId,int nro,DateOnly FechaDesde);
         Task<IEnumerable<PrecioDTO>> GetAllAsync(int complejopId,int nro);
+        Task<bool> FechaDesdeExistsAsync(int complejoId, int canchaNro, DateOnly fechaDesde);
+        Task<PrecioDTO?> GetUltimoPrecioAsync(int complejoId, int nro);
     }
 }

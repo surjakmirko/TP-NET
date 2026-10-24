@@ -18,8 +18,6 @@ namespace DTOs
         public List<CanchaDTO> Canchas { get; set; } = new();
         public List<HorarioDTO> Horarios { get; set; } = new();
 
-
-
     }
 
     public class ComplejoCrearDTO
@@ -30,5 +28,15 @@ namespace DTOs
         public int LocalidadId { get; set; }
         public int DueñoId { get; set; }
 
+    }
+
+    public class ComplejoTarjetaDTO
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public string NombreLocalidad { get; set; } = string.Empty;
+        public int CantidadCanchas { get; set; }
+        public List<string> Deportes { get; set; } = new();
     }
 }

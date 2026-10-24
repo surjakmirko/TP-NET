@@ -94,3 +94,39 @@
     color: #334155;
     font-weight: 500;
 }
+
+/* Botón de cancelar sobre la imagen */
+.btn-cancelar-turno {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background-color: #dc2626;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+    .btn-cancelar-turno svg {
+        display: block;
+        pointer-events: none;
+    }
+
+    .btn-cancelar-turno:hover {
+        background-color: #b91c1c;
+        transform: scale(1.08);
+    }
+
+    .btn-cancelar-turno:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+    }

@@ -20,9 +20,9 @@ namespace API
         }
 
         //CREAR ENDPOINT PARA OBTENER COMPLEJOS POR DUEÑO
-        public static async Task<List<ComplejoDTO>?> ObtenerPorDuenoAsync(int idDueno)
+        public static async Task<List<ComplejoTarjetaDTO>?> ObtenerPorDuenoAsync(int idDueno)
         {
-            return await GetAsync<List<ComplejoDTO>>($"complejos/dueno/{idDueno}");
+            return await GetAsync<List<ComplejoTarjetaDTO>>($"complejos/dueno/{idDueno}");
         }
 
         public static async Task<ComplejoDTO?> CrearComplejoAsync(ComplejoCrearDTO dto)
@@ -99,17 +99,26 @@ namespace API
             await DeleteAsync($"complejos/{idComplejo}/canchas/{nro}");
         }
 
+        public static async Task InactivarCanchaAsync(int idComplejo, int nro)
+        {
+            await PatchAsync($"complejos/{idComplejo}/canchas/{nro}/inactivar");
+        }
+
         //PRECIOS
 
         public static async Task<List<PrecioDTO>?> ObtenerPreciosAsync(int idComplejo, int nroCancha)
         {
             return await GetAsync<List<PrecioDTO>>($"complejos/{idComplejo}/canchas/{nroCancha}/precios");
         }
+        public static async Task<PrecioDTO?> ObtenerUltimoPrecioAsync(int idComplejo, int nroCancha)
+        {
+            return await GetAsync<PrecioDTO?>($"complejos/{idComplejo}/canchas/{nroCancha}/precio");
+        }
 
-        public static async Task<PrecioDTO?> ObtenerPrecioPorFechaAsync(int idComplejo, int nroCancha, DateOnly fechaDesde)
+        public static async Task<bool> FechaDesdeExistsAsync(int idComplejo, int nroCancha, DateOnly fechaDesde)
         {
             string fechaFormateada = fechaDesde.ToString("yyyy-MM-dd");
-            return await GetAsync<PrecioDTO>($"complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaFormateada}");
+            return await GetAsync<bool>($"complejos/{idComplejo}/canchas/{nroCancha}/precios/{fechaFormateada}");
         }
 
         public static async Task<PrecioDTO?> CrearPrecioAsync(int idComplejo, int nroCancha, PrecioCrearDTO dto)

@@ -34,49 +34,54 @@
             cmbTipoCancha = new ComboBox();
             btnAceptar = new Button();
             btnCancelar = new Button();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)nroCancha).BeginInit();
             SuspendLayout();
             // 
             // nroCanchaLabel
             // 
             nroCanchaLabel.AutoSize = true;
-            nroCanchaLabel.Location = new Point(12, 33);
+            nroCanchaLabel.Location = new Point(12, 43);
             nroCanchaLabel.Name = "nroCanchaLabel";
-            nroCanchaLabel.Size = new Size(137, 20);
+            nroCanchaLabel.Size = new Size(111, 15);
             nroCanchaLabel.TabIndex = 0;
             nroCanchaLabel.Text = "Numero de cancha:";
             nroCanchaLabel.Click += label1_Click;
             // 
             // nroCancha
             // 
-            nroCancha.Location = new Point(155, 33);
+            nroCancha.Location = new Point(148, 43);
+            nroCancha.Margin = new Padding(3, 2, 3, 2);
             nroCancha.Name = "nroCancha";
-            nroCancha.Size = new Size(49, 27);
+            nroCancha.Size = new Size(133, 23);
             nroCancha.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 81);
+            label1.Location = new Point(12, 79);
             label1.Name = "label1";
-            label1.Size = new Size(120, 20);
+            label1.Size = new Size(93, 15);
             label1.TabIndex = 2;
             label1.Text = "Tipo de deporte:";
             // 
             // cmbTipoCancha
             // 
             cmbTipoCancha.FormattingEnabled = true;
-            cmbTipoCancha.Location = new Point(138, 78);
+            cmbTipoCancha.Location = new Point(148, 76);
+            cmbTipoCancha.Margin = new Padding(3, 2, 3, 2);
             cmbTipoCancha.Name = "cmbTipoCancha";
-            cmbTipoCancha.Size = new Size(151, 28);
+            cmbTipoCancha.Size = new Size(133, 23);
             cmbTipoCancha.TabIndex = 3;
             // 
             // btnAceptar
             // 
             btnAceptar.DialogResult = DialogResult.OK;
-            btnAceptar.Location = new Point(73, 143);
+            btnAceptar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAceptar.Location = new Point(199, 114);
+            btnAceptar.Margin = new Padding(3, 2, 3, 2);
             btnAceptar.Name = "btnAceptar";
-            btnAceptar.Size = new Size(94, 29);
+            btnAceptar.Size = new Size(82, 22);
             btnAceptar.TabIndex = 4;
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = true;
@@ -85,28 +90,44 @@
             // btnCancelar
             // 
             btnCancelar.DialogResult = DialogResult.Cancel;
-            btnCancelar.Location = new Point(209, 143);
+            btnCancelar.Location = new Point(111, 114);
+            btnCancelar.Margin = new Padding(3, 2, 3, 2);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(94, 29);
+            btnCancelar.Size = new Size(82, 22);
             btnCancelar.TabIndex = 5;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label2.Location = new Point(12, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(116, 25);
+            label2.TabIndex = 6;
+            label2.Text = "Alta Cancha";
+            // 
             // AltaCancha
             // 
             AcceptButton = btnAceptar;
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancelar;
-            ClientSize = new Size(375, 211);
+            ClientSize = new Size(293, 152);
+            Controls.Add(label2);
             Controls.Add(btnCancelar);
             Controls.Add(btnAceptar);
             Controls.Add(cmbTipoCancha);
             Controls.Add(label1);
             Controls.Add(nroCancha);
             Controls.Add(nroCanchaLabel);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
             Name = "AltaCancha";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "AltaCancha";
             Load += AltaCancha_Load;
             ((System.ComponentModel.ISupportInitialize)nroCancha).EndInit();
@@ -122,5 +143,6 @@
         private ComboBox cmbTipoCancha;
         private Button btnAceptar;
         private Button btnCancelar;
+        private Label label2;
     }
 }

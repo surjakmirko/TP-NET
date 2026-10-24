@@ -30,6 +30,10 @@ namespace Data.Migrations
                     b.Property<int>("Nro")
                         .HasColumnType("int");
 
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TipoCanchaId")
                         .HasColumnType("int");
 
@@ -1433,7 +1437,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Email = "admin@gmail.com",
-                            Password = "$2a$11$zl4GOSzveR7bq6Yl7Wd/U.jy2SW/Sofyr0C/WODRFa4DTqGGBRNwe",
+                            Password = "$2a$11$jun95TTLoS5js710EgaZoeXX3tLSWxmyD3YLCN5EKYyQZ2p/Cx3pK",
                             Telefono = "12345678",
                             TipoUsuarioId = 1
                         },
@@ -1441,7 +1445,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             Email = "encargado@gmail.com",
-                            Password = "$2a$11$ZUIPGkgfZrfsmDBWt7dUpepdW//yJwwi0kBUZSzpDLfI8lhye8E0e",
+                            Password = "$2a$11$FY6yO2.rhgBfyHmijurc8.9xjbsaX.p6uy/nXRap23lEYYAr1IETO",
                             Telefono = "987654321",
                             TipoUsuarioId = 2
                         },
@@ -1449,15 +1453,15 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             Email = "encargado2@gmail.com",
-                            Password = "$2a$11$2NF2MzRcz8cie87iRxStRuvyy8cH46DReWMUREY1ocx0JHmGonQym",
+                            Password = "$2a$11$iC0uyQgaESKPi4eqOhOVw.d8Tc8H.yPbGgeEqQ6rVo/JyozTFYdeG",
                             Telefono = "113355799",
                             TipoUsuarioId = 2
                         },
                         new
                         {
                             Id = 2,
-                            Email = "dueño@gmail.com",
-                            Password = "$2a$11$GTnfCLpOGQoqFgqMBkW8Ruj7CE4i3MM8nMGdx3RvqvDb7SMJu5NIe",
+                            Email = "dueno@gmail.com",
+                            Password = "$2a$11$VLqd0K/bGUq21tC.tyVfZ.Jhp5QJZxGARAJSqMNS9YdMMDlH8AP8C",
                             PersonaJuridicaCuit = "20123456789",
                             Telefono = "22446688",
                             TipoUsuarioId = 4

@@ -62,18 +62,19 @@ namespace Data
                 return false;
             }
 
-           
-            if (nroOriginal != cancha.Nro)
-            {
-                _context.Canchas.Remove(existingCancha);
-                await _context.Canchas.AddAsync(cancha);
-            }
-            else
-            {
-               
-                existingCancha.SetTipoCanchaId(cancha.TipoCanchaId);
-            }
+            existingCancha.SetTipoCanchaId(cancha.TipoCanchaId);
 
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> InavilitarCanchaAsync(int complejoId, int nro)
+        {
+            Cancha? cancha = await GetAsync(complejoId, nro);
+            if(cancha == null)
+            {
+                return false;
+            }
+            cancha.Inavilitar();
             await _context.SaveChangesAsync();
             return true;
         }

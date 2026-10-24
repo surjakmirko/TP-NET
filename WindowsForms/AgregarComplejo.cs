@@ -15,29 +15,20 @@ namespace WindowsForms
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
                 string.IsNullOrWhiteSpace(txtDireccion.Text) ||
-                string.IsNullOrWhiteSpace(txtEncargadoId.Text) ||
-                string.IsNullOrWhiteSpace(txtLocalidadId.Text) ||
-                string.IsNullOrWhiteSpace(txtDueñoId.Text))
+                int.IsPositive((int)nudIdEncargado.Value) ||
+                int.IsPositive((int)nudIdLocalidad.Value) ||
+                int.IsPositive((int)nudIdDueno.Value))
             {
                 MessageBox.Show("Por favor, completa todos los campos.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            if (!int.TryParse(txtEncargadoId.Text, out int encargadoId) ||
-                !int.TryParse(txtLocalidadId.Text, out int localidadId) ||
-                !int.TryParse(txtDueñoId.Text, out int dueñoId))
-            {
-                MessageBox.Show("Los campos de ID deben ser valores numéricos enteros.", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             ComplejoCrearDTO nuevoComplejo = new ComplejoCrearDTO
             {
                 Nombre = txtNombre.Text.Trim(),
                 Direccion = txtDireccion.Text.Trim(),
-                EncargadoId = encargadoId,
-                LocalidadId = localidadId,
-                DueñoId = dueñoId
+                EncargadoId = (int)nudIdEncargado.Value,
+                LocalidadId = (int)nudIdLocalidad.Value,
+                DueñoId = (int)nudIdDueno.Value
             };
 
             try

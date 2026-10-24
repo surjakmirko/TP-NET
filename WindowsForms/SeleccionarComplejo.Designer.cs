@@ -43,15 +43,16 @@
             // seleccionarComplejoTitulo
             // 
             seleccionarComplejoTitulo.AutoSize = true;
-            seleccionarComplejoTitulo.Font = new Font("Segoe UI", 18F);
+            seleccionarComplejoTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             seleccionarComplejoTitulo.Location = new Point(215, 9);
             seleccionarComplejoTitulo.Name = "seleccionarComplejoTitulo";
-            seleccionarComplejoTitulo.Size = new Size(245, 32);
+            seleccionarComplejoTitulo.Size = new Size(260, 32);
             seleccionarComplejoTitulo.TabIndex = 1;
             seleccionarComplejoTitulo.Text = "Seleccionar Complejo";
             // 
             // btnCerrarSesión
             // 
+            btnCerrarSesión.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnCerrarSesión.Location = new Point(551, 408);
             btnCerrarSesión.Name = "btnCerrarSesión";
             btnCerrarSesión.Size = new Size(111, 30);

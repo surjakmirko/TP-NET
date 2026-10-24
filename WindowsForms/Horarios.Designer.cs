@@ -40,9 +40,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(21, 9);
+            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(126, 15);
+            label1.Size = new Size(212, 25);
             label1.TabIndex = 0;
             label1.Text = "Horarios del Complejo";
             // 
@@ -50,7 +51,7 @@
             // 
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(21, 62);
+            dataGridView1.Location = new Point(12, 59);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(628, 291);
             dataGridView1.TabIndex = 1;
@@ -58,9 +59,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(21, 359);
+            button1.Location = new Point(12, 356);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(93, 23);
             button1.TabIndex = 2;
             button1.Text = "Volver";
             button1.UseVisualStyleBackColor = true;
@@ -68,7 +69,8 @@
             // 
             // button2
             // 
-            button2.Location = new Point(574, 33);
+            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button2.Location = new Point(565, 30);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 3;
@@ -78,7 +80,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(493, 359);
+            button3.Location = new Point(484, 356);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 4;
@@ -88,7 +90,8 @@
             // 
             // button4
             // 
-            button4.Location = new Point(574, 359);
+            button4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button4.Location = new Point(565, 356);
             button4.Name = "button4";
             button4.Size = new Size(75, 23);
             button4.TabIndex = 5;
@@ -100,15 +103,18 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(656, 390);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(dataGridView1);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "Horarios";
-            Text = "Horarios";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Horarios Complejo";
             Load += Horarios_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);

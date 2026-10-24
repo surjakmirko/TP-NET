@@ -139,6 +139,7 @@ namespace WindowsForms
             // 
             // btnAgregarComplejo
             // 
+            btnAgregarComplejo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAgregarComplejo.Location = new Point(791, 519);
             btnAgregarComplejo.Name = "btnAgregarComplejo";
             btnAgregarComplejo.Size = new Size(125, 28);
@@ -154,11 +155,11 @@ namespace WindowsForms
             Controls.Add(btnVolver);
             Controls.Add(lblTitulo);
             Controls.Add(dgvComplejos);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "VerComplejos";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "TurnoLibre - Listado de Complejos";
+            Text = "Listado de Complejos";
             Load += VerComplejos_Load;
             ((ISupportInitialize)dgvComplejos).EndInit();
             ResumeLayout(false);

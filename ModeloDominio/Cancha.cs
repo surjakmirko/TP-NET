@@ -14,6 +14,7 @@ namespace Modelo.Dominio
         public int TipoCanchaId { get; private set; }
 
         public TipoCancha TipoCancha { get;  set; }
+        public string Estado { get; private set; } = "Activa";
 
         public int ComplejoId { get; private set; }
         public Complejo Complejo { get; set; } = null!;
@@ -21,11 +22,14 @@ namespace Modelo.Dominio
         public ICollection<Precio> Precios { get; set; } = new List<Precio>();
 
 
-        public Cancha(int nro, int tipoCanchaId, int complejoId)
+        public Cancha(int nro, int tipoCanchaId, int complejoId, string estado = "Activa")
         {
             SetNro(nro);
             SetComplejoId(complejoId);
             SetTipoCanchaId(tipoCanchaId);
+            SetEstado(estado);
+
+
         }
 
         public void SetTipoCanchaId(int tipoCanchaId)
@@ -34,8 +38,22 @@ namespace Modelo.Dominio
                 throw new ArgumentException("El id del tipo de cancha debe ser mayor que 0", nameof(tipoCanchaId));
             TipoCanchaId = tipoCanchaId;
         }
+        public void SetEstado(string estado)
+        {
+            if (string.IsNullOrWhiteSpace(estado))
+                throw new ArgumentException("El estado no puede estar vacío.", nameof(estado));
 
-    
+            Estado = estado;
+        }
+        public void Inavilitar()
+        {
+            if(this.Estado == "Inactiva")
+            {
+                return;
+            }
+            Estado = "Inactiva";
+        }
+
 
         public void SetComplejoId(int complejoId)
         {

@@ -104,6 +104,14 @@
                 {
                     Navigation.NavigateTo("/menu-encargado");
                 }
+                else if( roleClaim == "4" || string.Equals(roleClaim, "Dueño", StringComparison.OrdinalIgnoreCase))
+                {
+                    Navigation.NavigateTo("/menu-dueno");
+                }
+                else if (roleClaim == "1" || string.Equals(roleClaim, "Administrador", StringComparison.OrdinalIgnoreCase))
+                {
+                    Navigation.NavigateTo("/menu-admin");
+                }
                 else
                 {
                     Navigation.NavigateTo(RedirectTo);

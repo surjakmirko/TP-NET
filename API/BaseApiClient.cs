@@ -72,5 +72,12 @@ namespace API
             var response = await client.PutAsJsonAsync(endpoint, data);
             HandleResponseError(response);
         }
+
+        protected static async Task PatchAsync(string endpoint)
+        {
+            using var client = await CreateHttpClientAsync();
+            var response = await client.PatchAsync(endpoint, new StringContent(string.Empty));
+            HandleResponseError(response);
+        }
     }
 }

@@ -58,7 +58,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AplicacionDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Inyección de dependencias (Repositorios y Servicios)
+// Inyecci�n de dependencias (Repositorios y Servicios)
 builder.Services.AddScoped<ITipoUsuarioRepositorio, TipoUsuarioRepositorio>();
 builder.Services.AddScoped<ITipoUsuarioServicio, TipoUsuarioServicio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
@@ -69,6 +69,8 @@ builder.Services.AddScoped<IPersonaJuridicaRepositorio, PersonaJuridicaRepositor
 builder.Services.AddScoped<IPersonaJuridicaServicio, PersonaJuridicaServicio>();
 builder.Services.AddScoped<IComplejoRepositorio, ComplejoRepositorio>();
 builder.Services.AddScoped<IComplejoServicio, ComplejoServicio>();
+builder.Services.AddScoped<IDashboardRepositorio, DashboardRepositorio>();
+builder.Services.AddScoped<IDashboardServicio, DashboardServicio>();
 builder.Services.AddScoped<IHorarioRepositorio, HorarioRepositorio>();
 builder.Services.AddScoped<IHorarioServicio, HorarioServicio>();
 builder.Services.AddScoped<IPrecioRepositorio, PrecioRepositorio>();
@@ -100,6 +102,7 @@ app.MapTipoUsuarioEndpoints();
 app.MapPersonaFisicaEndpoints();
 app.MapPersonaJuridicaEndpoints();
 app.MapComplejoEndpoints();
+app.MapDashboardEndpoints();
 app.MapTipoCanchaEndpoints();
 app.MapTipoTurnoEndpoints();
 app.MapProvinciaEndpoints();

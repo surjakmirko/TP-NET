@@ -10,6 +10,7 @@
         private DataGridViewTextBoxColumn colNumero;
         private DataGridViewTextBoxColumn colTipoDeporte;
         private DataGridViewButtonColumn colEditar;
+        private DataGridViewButtonColumn colPrecio;
         private DataGridViewButtonColumn colEliminar;
         private Button btnVolver;
 
@@ -26,10 +27,8 @@
         {
             lblTitulo = new Label();
             dgvCanchas = new DataGridView();
-            colId = new DataGridViewTextBoxColumn();
-            colNumero = new DataGridViewTextBoxColumn();
-            colTipoDeporte = new DataGridViewTextBoxColumn();
             colEditar = new DataGridViewButtonColumn();
+            colPrecio = new DataGridViewButtonColumn();
             colEliminar = new DataGridViewButtonColumn();
             btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCanchas).BeginInit();
@@ -45,27 +44,20 @@
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Listado de Canchas";
             // 
-            // colId
+            // dgvCanchas
             // 
-            colId.DataPropertyName = "Id";
-            colId.HeaderText = "ID";
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            colId.Visible = false; // Oculto si no necesitás mostrarlo en pantalla
-            // 
-            // colNumero
-            // 
-            colNumero.DataPropertyName = "Nro";
-            colNumero.HeaderText = "N° Cancha";
-            colNumero.Name = "colNumero";
-            colNumero.ReadOnly = true;
-            // 
-            // colTipoDeporte
-            // 
-            colTipoDeporte.DataPropertyName = "NombreTipoCancha"; // Nombre de la propiedad en CanchaDTO
-            colTipoDeporte.HeaderText = "Tipo Deporte";
-            colTipoDeporte.Name = "colTipoDeporte";
-            colTipoDeporte.ReadOnly = true;
+            dgvCanchas.AllowUserToAddRows = false;
+            dgvCanchas.AllowUserToDeleteRows = false;
+            dgvCanchas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCanchas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCanchas.Columns.AddRange(new DataGridViewColumn[] { colEditar, colPrecio, colEliminar });
+            dgvCanchas.Location = new Point(20, 50);
+            dgvCanchas.MultiSelect = false;
+            dgvCanchas.Name = "dgvCanchas";
+            dgvCanchas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCanchas.Size = new Size(600, 280);
+            dgvCanchas.TabIndex = 1;
+            dgvCanchas.CellClick += dgvCanchas_CellClick;
             // 
             // colEditar
             // 
@@ -75,6 +67,14 @@
             colEditar.Text = "Editar";
             colEditar.UseColumnTextForButtonValue = true;
             // 
+            // colPrecio
+            // 
+            colPrecio.HeaderText = "";
+            colPrecio.Name = "colPrecio";
+            colPrecio.ReadOnly = true;
+            colPrecio.Text = "Precio";
+            colPrecio.UseColumnTextForButtonValue = true;
+            // 
             // colEliminar
             // 
             colEliminar.HeaderText = "";
@@ -82,28 +82,6 @@
             colEliminar.ReadOnly = true;
             colEliminar.Text = "Eliminar";
             colEliminar.UseColumnTextForButtonValue = true;
-            // 
-            // dgvCanchas
-            // 
-            dgvCanchas.AllowUserToAddRows = false;
-            dgvCanchas.AllowUserToDeleteRows = false;
-            dgvCanchas.AutoGenerateColumns = false; // Desactivado desde el inicio
-            dgvCanchas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvCanchas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanchas.Columns.AddRange(new DataGridViewColumn[] {
-                colId,
-                colNumero,
-                colTipoDeporte,
-                colEditar,
-                colEliminar
-            });
-            dgvCanchas.Location = new Point(20, 50);
-            dgvCanchas.MultiSelect = false;
-            dgvCanchas.Name = "dgvCanchas";
-            dgvCanchas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCanchas.Size = new Size(600, 280);
-            dgvCanchas.TabIndex = 1;
-            dgvCanchas.CellClick += dgvCanchas_CellClick;
             // 
             // btnVolver
             // 
@@ -121,11 +99,11 @@
             Controls.Add(btnVolver);
             Controls.Add(lblTitulo);
             Controls.Add(dgvCanchas);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "VerCanchas";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "TurnoLibre - Listado de Canchas";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Listado de Canchas";
             Load += VerCanchas_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCanchas).EndInit();
             ResumeLayout(false);

@@ -1,0 +1,153 @@
+﻿
+@using DTOs
+@if (Complejo != null)
+{
+    <div class="tarjeta-datos-complejo-menu">
+        <div class="tarjeta-datos-complejo-menu-header">
+            <div class="tarjeta-datos-complejo-menu-info-principal">
+                <div class="tarjeta-datos-complejo-menu-icono">
+                    🏢
+                </div>
+                <div>
+                    <h1 class="tarjeta-datos-complejo-menu-titulo">@Complejo.Nombre</h1>
+                    <span class="tarjeta-datos-complejo-menu-subtitulo">Información del complejo</span>
+                </div>
+            </div>
+
+            @if (!editando)
+            {
+                <button type="button"
+                        class="btn-editar-datos-complejo"
+                        @onclick="() => editando = true"
+                        title="Editar datos del complejo">
+                    ✏️ <span>Editar</span>
+                </button>
+            }
+        </div>
+
+        @if (!editando)
+        {
+            @* --- MODO LECTURA --- *@
+            <div class="tarjeta-datos-complejo-menu-detalles">
+                <div class="item-detalle-datos-complejo">
+                    <span class="icono-detalle-datos-complejo">📍</span>
+                    <span>
+                        @Complejo.Direccion, @(string.IsNullOrEmpty(Complejo.NombreLocalidad) ? "Sin localidad" : Complejo.NombreLocalidad)
+                    </span>
+                </div>
+
+                <div class="item-detalle-datos-complejo">
+                    <span class="icono-detalle-datos-complejo">📞</span>
+                    <span>@(string.IsNullOrEmpty(Telefono) ? "Sin teléfono" : Telefono)</span>
+                </div>
+
+                <div class="item-detalle-datos-complejo">
+                    <span>
+                        @(string.IsNullOrEmpty(Instagram) ? "Sin Instagram" : $"@{Instagram.Replace("@", "")}")
+                    </span>
+                </div>
+            </div>
+        }
+        else
+        {
+            @* --- MODO EDICIÓN --- *@
+            <EditForm Model="formModel" OnValidSubmit="HandleSubmit" class="form-editar-datos-complejo">
+                <div class="grilla-form-datos-complejo">
+                    <div class="campo-datos-complejo">
+                        <label>Nombre del Complejo</label>
+                        <input type="text" @bind-value="formModel.Nombre" required />
+                    </div>
+
+                    <div class="campo-datos-complejo">
+                        <label>Dirección</label>
+                        <input type="text" @bind-value="formModel.Direccion" required />
+                    </div>
+
+                    <div class="campo-datos-complejo">
+                        <label>Teléfono</label>
+                        <input type="text" @bind-value="formModel.Telefono" placeholder="Ej: 3444123123" />
+                    </div>
+
+                    <div class="campo-datos-complejo">
+                        <label>Instagram</label>
+                        <input type="text" @bind-value="formModel.Instagram" placeholder="Ej: usuario_club" />
+                    </div>
+                </div>
+
+                <div class="acciones-form-datos-complejo">
+                    <button type="submit" class="btn-guardar-datos-complejo" title="Guardar cambios">
+                        ✔ Guardar
+                    </button>
+                    <button type="button" class="btn-cancelar-datos-complejo" @onclick="HandleCancelar" title="Cancelar">
+                        ✖ Cancelar
+                    </button>
+                </div>
+            </EditForm>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public ComplejoDTO? Complejo { get; set; }
+    [Parameter] public EventCallback<ComplejoDTO> OnGuardar { get; set; }
+
+    // Propiedades adicionales si Telefono e Instagram están fuera del DTO base
+    [Parameter] public string Telefono { get; set; } = string.Empty;
+    [Parameter] public string Instagram { get; set; } = string.Empty;
+
+    private bool editando = false;
+    private FormComplejoModel formModel = new();
+
+    public class FormComplejoModel
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
+        public string Instagram { get; set; } = string.Empty;
+    }
+
+    protected override void OnParametersSet()
+    {
+        CargarFormulario();
+    }
+
+    private void CargarFormulario()
+    {
+        if (Complejo != null)
+        {
+            formModel = new FormComplejoModel
+            {
+                Nombre = Complejo.Nombre ?? string.Empty,
+                Direccion = Complejo.Direccion ?? string.Empty,
+                Telefono = Telefono,
+                Instagram = Instagram
+            };
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (Complejo != null)
+        {
+            // Actualizamos la entidad con los valores del formulario
+            Complejo.Nombre = formModel.Nombre;
+            Complejo.Direccion = formModel.Direccion;
+
+            // Si tenés Teléfono e Instagram dentro del DTO, se asignan directamente:
+            // Complejo.Telefono = formModel.Telefono;
+            // Complejo.Instagram = formModel.Instagram;
+
+            if (OnGuardar.HasDelegate)
+            {
+                await OnGuardar.InvokeAsync(Complejo);
+            }
+        }
+        editando = false;
+    }
+
+    private void HandleCancelar()
+    {
+        CargarFormulario();
+        editando = false;
+    }
+}

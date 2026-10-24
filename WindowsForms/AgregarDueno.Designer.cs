@@ -17,83 +17,136 @@
 
         private void InitializeComponent()
         {
-            lblTitulo = new System.Windows.Forms.Label();
-            lblRazonSocial = new System.Windows.Forms.Label();
-            txtRazonSocial = new System.Windows.Forms.TextBox();
-            lblCuit = new System.Windows.Forms.Label();
-            txtCuit = new System.Windows.Forms.TextBox();
-            lblEmail = new System.Windows.Forms.Label();
-            txtEmail = new System.Windows.Forms.TextBox();
-            lblTelefono = new System.Windows.Forms.Label();
-            txtTelefono = new System.Windows.Forms.TextBox();
-            lblPassword = new System.Windows.Forms.Label();
-            txtPassword = new System.Windows.Forms.TextBox();
-            btnGuardar = new System.Windows.Forms.Button();
-            btnCancelar = new System.Windows.Forms.Button();
+            lblTitulo = new Label();
+            lblRazonSocial = new Label();
+            txtRazonSocial = new TextBox();
+            lblCuit = new Label();
+            txtCuit = new TextBox();
+            lblEmail = new Label();
+            txtEmail = new TextBox();
+            lblTelefono = new Label();
+            txtTelefono = new TextBox();
+            lblPassword = new Label();
+            txtPassword = new TextBox();
+            btnGuardar = new Button();
+            btnCancelar = new Button();
             SuspendLayout();
-
+            // 
             // lblTitulo
+            // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            lblTitulo.Location = new System.Drawing.Point(20, 15);
+            lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitulo.Location = new Point(12, 9);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new System.Drawing.Size(220, 25);
+            lblTitulo.Size = new Size(257, 25);
+            lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Agregar Dueño (P. Jurídica)";
-
-            // Razon Social
+            // 
+            // lblRazonSocial
+            // 
             lblRazonSocial.AutoSize = true;
-            lblRazonSocial.Location = new System.Drawing.Point(25, 60);
+            lblRazonSocial.Location = new Point(12, 57);
+            lblRazonSocial.Name = "lblRazonSocial";
+            lblRazonSocial.Size = new Size(76, 15);
+            lblRazonSocial.TabIndex = 1;
             lblRazonSocial.Text = "Razón Social:";
-            txtRazonSocial.Location = new System.Drawing.Point(125, 57);
-            txtRazonSocial.Size = new System.Drawing.Size(200, 23);
-
-            // CUIT
+            // 
+            // txtRazonSocial
+            // 
+            txtRazonSocial.Location = new Point(148, 54);
+            txtRazonSocial.Name = "txtRazonSocial";
+            txtRazonSocial.Size = new Size(200, 23);
+            txtRazonSocial.TabIndex = 2;
+            // 
+            // lblCuit
+            // 
             lblCuit.AutoSize = true;
-            lblCuit.Location = new System.Drawing.Point(25, 95);
+            lblCuit.Location = new Point(12, 92);
+            lblCuit.Name = "lblCuit";
+            lblCuit.Size = new Size(35, 15);
+            lblCuit.TabIndex = 3;
             lblCuit.Text = "CUIT:";
-            txtCuit.Location = new System.Drawing.Point(125, 92);
-            txtCuit.Size = new System.Drawing.Size(200, 23);
-
-            // Email
+            // 
+            // txtCuit
+            // 
+            txtCuit.Location = new Point(148, 89);
+            txtCuit.Name = "txtCuit";
+            txtCuit.Size = new Size(200, 23);
+            txtCuit.TabIndex = 4;
+            // 
+            // lblEmail
+            // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new System.Drawing.Point(25, 130);
+            lblEmail.Location = new Point(12, 127);
+            lblEmail.Name = "lblEmail";
+            lblEmail.Size = new Size(39, 15);
+            lblEmail.TabIndex = 5;
             lblEmail.Text = "Email:";
-            txtEmail.Location = new System.Drawing.Point(125, 127);
-            txtEmail.Size = new System.Drawing.Size(200, 23);
-
-            // Teléfono
+            // 
+            // txtEmail
+            // 
+            txtEmail.Location = new Point(148, 124);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new Size(200, 23);
+            txtEmail.TabIndex = 6;
+            // 
+            // lblTelefono
+            // 
             lblTelefono.AutoSize = true;
-            lblTelefono.Location = new System.Drawing.Point(25, 165);
+            lblTelefono.Location = new Point(12, 162);
+            lblTelefono.Name = "lblTelefono";
+            lblTelefono.Size = new Size(55, 15);
+            lblTelefono.TabIndex = 7;
             lblTelefono.Text = "Teléfono:";
-            txtTelefono.Location = new System.Drawing.Point(125, 162);
-            txtTelefono.Size = new System.Drawing.Size(200, 23);
-
-            // Password
+            // 
+            // txtTelefono
+            // 
+            txtTelefono.Location = new Point(148, 159);
+            txtTelefono.Name = "txtTelefono";
+            txtTelefono.Size = new Size(200, 23);
+            txtTelefono.TabIndex = 8;
+            // 
+            // lblPassword
+            // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new System.Drawing.Point(25, 200);
+            lblPassword.Location = new Point(12, 197);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(70, 15);
+            lblPassword.TabIndex = 9;
             lblPassword.Text = "Contraseña:";
-            txtPassword.Location = new System.Drawing.Point(125, 197);
+            // 
+            // txtPassword
+            // 
+            txtPassword.Location = new Point(148, 194);
+            txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new System.Drawing.Size(200, 23);
-
+            txtPassword.Size = new Size(200, 23);
+            txtPassword.TabIndex = 10;
+            // 
             // btnGuardar
-            btnGuardar.Location = new System.Drawing.Point(125, 245);
+            // 
+            btnGuardar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnGuardar.Location = new Point(253, 253);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new System.Drawing.Size(95, 30);
+            btnGuardar.Size = new Size(95, 30);
+            btnGuardar.TabIndex = 11;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
-
+            // 
             // btnCancelar
-            btnCancelar.Location = new System.Drawing.Point(230, 245);
+            // 
+            btnCancelar.Location = new Point(148, 253);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new System.Drawing.Size(95, 30);
+            btnCancelar.Size = new Size(95, 30);
+            btnCancelar.TabIndex = 12;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
-
-            // Formulario AgregarDueno
-            ClientSize = new System.Drawing.Size(360, 295);
+            // 
+            // AgregarDueno
+            // 
+            ClientSize = new Size(360, 295);
             Controls.Add(lblTitulo);
             Controls.Add(lblRazonSocial);
             Controls.Add(txtRazonSocial);
@@ -107,11 +160,10 @@
             Controls.Add(txtPassword);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
-
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "AgregarDueno";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "TurnoLibre - Nuevo Dueño";
             ResumeLayout(false);
             PerformLayout();

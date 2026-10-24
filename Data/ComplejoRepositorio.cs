@@ -26,11 +26,13 @@ namespace Data
         public async Task<Complejo?> GetAsync(int id)
         {
             return await _context.Complejos
-                .Include(c => c.Localidad)
-                .Include(c => c.Dueño)
-                    .ThenInclude(d => d.PersonaJuridica)
-                .Include(c => c.Encargado)
-                .FirstOrDefaultAsync(c => c.Id == id);
+            .Include(c => c.Localidad)
+              .Include(c => c.Horarios)                     // Include para Horarios
+                .Include(c => c.Canchas)                      // Include para Canchas
+                    .ThenInclude(ca => ca.TipoCancha)        // Relación con TipoCancha
+        .Include(c => c.Canchas)
+            .ThenInclude(ca => ca.Precios)           // Relación con Precios
+        .FirstOrDefaultAsync(c => c.Id == id);
         }
 
 
@@ -77,7 +79,12 @@ namespace Data
 
         public async Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno)
         {
-            return await _context.Complejos.Where(c => c.DueñoId == idDueno).ToListAsync();
+            return await _context.Complejos
+                .Include(c => c.Localidad)
+                .Include(c => c.Canchas)
+                    .ThenInclude(ca => ca.TipoCancha) 
+                .Where(c => c.DueñoId == idDueno)
+                .ToListAsync();
         }
 
         public async Task<Complejo?> GetComplejosByIdEncargado(int idEncargado)
@@ -89,7 +96,7 @@ namespace Data
                     .ThenInclude(can => can.Turnos)
                 .Include(c => c.Canchas)
                     .ThenInclude(can => can.TipoCancha)
-                .FirstOrDefaultAsync(c => c.EncargadoId == idEncargado);
+                 .FirstOrDefaultAsync(c => c.EncargadoId == idEncargado);
         }
 
 

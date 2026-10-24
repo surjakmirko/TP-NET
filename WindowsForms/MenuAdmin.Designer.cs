@@ -40,7 +40,7 @@
             // 
             tituloMenuAdmin.AutoSize = true;
             tituloMenuAdmin.Font = new Font("Segoe UI", 15F);
-            tituloMenuAdmin.Location = new Point(119, 9);
+            tituloMenuAdmin.Location = new Point(99, 18);
             tituloMenuAdmin.Name = "tituloMenuAdmin";
             tituloMenuAdmin.Size = new Size(125, 28);
             tituloMenuAdmin.TabIndex = 0;
@@ -48,7 +48,7 @@
             // 
             // btnVerComplejos
             // 
-            btnVerComplejos.Location = new Point(31, 123);
+            btnVerComplejos.Location = new Point(25, 123);
             btnVerComplejos.Name = "btnVerComplejos";
             btnVerComplejos.Size = new Size(115, 35);
             btnVerComplejos.TabIndex = 1;
@@ -60,7 +60,7 @@
             // 
             complejoTitulo.AutoSize = true;
             complejoTitulo.Font = new Font("Segoe UI", 15F);
-            complejoTitulo.Location = new Point(40, 68);
+            complejoTitulo.Location = new Point(34, 68);
             complejoTitulo.Name = "complejoTitulo";
             complejoTitulo.Size = new Size(97, 28);
             complejoTitulo.TabIndex = 2;
@@ -70,7 +70,7 @@
             // 
             duenoTitulo.AutoSize = true;
             duenoTitulo.Font = new Font("Segoe UI", 15F);
-            duenoTitulo.Location = new Point(243, 68);
+            duenoTitulo.Location = new Point(206, 68);
             duenoTitulo.Name = "duenoTitulo";
             duenoTitulo.Size = new Size(70, 28);
             duenoTitulo.TabIndex = 5;
@@ -78,7 +78,7 @@
             // 
             // btnVerDuenos
             // 
-            btnVerDuenos.Location = new Point(221, 123);
+            btnVerDuenos.Location = new Point(184, 123);
             btnVerDuenos.Name = "btnVerDuenos";
             btnVerDuenos.Size = new Size(115, 35);
             btnVerDuenos.TabIndex = 4;
@@ -88,7 +88,8 @@
             // 
             // btnCerrarSesion
             // 
-            btnCerrarSesion.Location = new Point(256, 294);
+            btnCerrarSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCerrarSesion.Location = new Point(215, 213);
             btnCerrarSesion.Name = "btnCerrarSesion";
             btnCerrarSesion.Size = new Size(95, 26);
             btnCerrarSesion.TabIndex = 7;
@@ -100,7 +101,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(363, 332);
+            ClientSize = new Size(322, 251);
             Controls.Add(btnCerrarSesion);
             Controls.Add(duenoTitulo);
             Controls.Add(btnVerDuenos);

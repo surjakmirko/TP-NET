@@ -56,6 +56,24 @@ namespace WebAPI
                     return Results.BadRequest(new { error = ex.Message });
                 }
             });
+            app.MapPut("/turnos/{id}/cancelar", async (int id, CancelarTurnoDTO dto, ITurnoServicio turnoServicio) =>
+            {
+                try
+                {
+                    var cancelado = await turnoServicio.CancelarAsync(id, dto.MotivoCancelacion);
+
+                    if (!cancelado)
+                    {
+                        return Results.NotFound();
+                    }
+
+                    return Results.NoContent();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
             app.MapDelete("/turnos/{id}", async (int id, ITurnoServicio turnoServicio) =>
             {
                 var deleted = await turnoServicio.DeleteAsync(id);

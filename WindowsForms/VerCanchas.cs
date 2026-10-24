@@ -71,6 +71,7 @@ namespace WindowsForms
 
             if (nombreColumna == "colEditar")
             {
+
                 using (var formEditar = new EditarCanchaForm(_idComplejo, nroCancha))
                 {
                     var result = formEditar.ShowDialog();
@@ -92,6 +93,17 @@ namespace WindowsForms
                 if (confirm == DialogResult.Yes)
                 {
                     await EjecutarEliminacionCanchaAsync(nroCancha);
+                }
+            }
+            else if (nombreColumna == "colPrecio")
+            {
+                using (var formPrecio = new PrecioCanchaForm(_idComplejo, nroCancha))
+                {
+                    var result = formPrecio.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        await CargarCanchasPorComplejoAsync();
+                    }
                 }
             }
         }

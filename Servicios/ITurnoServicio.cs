@@ -10,6 +10,7 @@ namespace Servicios
         Task<TurnoDTO?> GetAsync(int id);
         Task<IEnumerable<TurnoDTO>> GetAllAsync();
         Task<bool> UpdateAsync(TurnoDTO dto);
+        Task<bool> CancelarAsync(int id, string? motivoCancelacion);
         Task<List<TurnoDTO>> ObtenerPorClienteIdAsync(int idCliente);
     }
 }

@@ -52,21 +52,60 @@ namespace Servicios
                 EncargadoId = complejo.EncargadoId,
                 NombreLocalidad = complejo.Localidad.Nombre,
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
-                NombreEncargado = complejo.Encargado?.Email ?? string.Empty
+                NombreEncargado = complejo.Encargado?.Email ?? string.Empty,
+                Canchas = complejo.Canchas?.Select(ca => new CanchaDTO
+                {
+                    Nro = ca.Nro,
+                    ComplejoId = ca.ComplejoId,
+                    TipoCanchaId = ca.TipoCanchaId,
+                    Deporte = ca.TipoCancha?.Deporte ?? string.Empty,
+                    Estado = ca.Estado,
+
+                    // Asignamos únicamente el ÚLTIMO Precio a la propiedad individual PrecioDTO
+                    PrecioDTO = ca.Precios?
+                .OrderByDescending(p => p.FechaDesde) // O p.FechaDesde / p.Id según tu modelo de la BD
+                .Select(p => new PrecioDTO
+                {
+                    FechaDesde = p.FechaDesde,
+                    PrecioBase = p.PrecioBase,
+                    PrecioAdicional = p.PrecioAdicional,
+                    PrecioSena = p.PrecioSena
+                })
+                .FirstOrDefault(),
+
+                    TipoCancha = ca.TipoCancha != null ? new TipoCanchaDTO
+                    {
+                        Id = ca.TipoCancha.Id,
+                        Deporte = ca.TipoCancha.Deporte
+                    } : null
+                }).ToList() ?? new List<CanchaDTO>(),
+
+                // Mapeo de Horarios
+                Horarios = complejo.Horarios?.Select(h => new HorarioDTO
+                {
+                    ComplejoId = h.ComplejoId,
+                    NroDia = h.NroDia,
+                    HoraApertura = h.HoraApertura,
+                    HoraCierre = h.HoraCierre
+                }).ToList() ?? new List<HorarioDTO>()
             };
         }
 
-        public async Task<IEnumerable<ComplejoDTO>> GetByDuenoAsync(int idDueno)
+        public async Task<IEnumerable<ComplejoTarjetaDTO>> GetByDuenoAsync(int idDueno)
         {
             var complejos = await complejoRepositorio.GetComplejosByIdDueno(idDueno);
-            return complejos.Select(complejo => new ComplejoDTO
+            return complejos.Select(c => new ComplejoTarjetaDTO
             {
-                Id = complejo.Id,
-                Direccion = complejo.Direccion,
-                Nombre = complejo.Nombre,
-                LocalidadId = complejo.LocalidadId,
-                DueñoId = complejo.DueñoId,
-                EncargadoId = complejo.EncargadoId
+                Id = c.Id,
+                Nombre = c.Nombre,
+                Direccion = c.Direccion,
+                NombreLocalidad = c.Localidad?.Nombre ?? string.Empty,
+                CantidadCanchas = c.Canchas.Count,
+                Deportes = c.Canchas
+            .Where(ca => ca.TipoCancha != null)
+            .Select(ca => ca.TipoCancha.Deporte)
+            .Distinct()
+            .ToList()
             }).ToList();
         }
 

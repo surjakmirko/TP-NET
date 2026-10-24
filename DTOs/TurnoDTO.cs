@@ -31,4 +31,9 @@
         public int CanchaNro { get; set; }
         public DateOnly Fecha { get; set; }
     }
+
+    public class CancelarTurnoDTO
+    {
+        public string? MotivoCancelacion { get; set; }
+    }
 }

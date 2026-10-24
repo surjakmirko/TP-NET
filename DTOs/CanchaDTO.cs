@@ -8,10 +8,11 @@ namespace DTOs
         public int ComplejoId {  get; set; }
         public int TipoCanchaId {  get; set; }
         public string Deporte { get; set; }
+        public string Estado { get; set; }
 
         public decimal Precio { get; set; }
 
-
+        public PrecioDTO? PrecioDTO { get; set; }
 
         public TipoCanchaDTO? TipoCancha { get; set; }
         public List<TurnoDTO> Turnos { get; set; } = new();
@@ -22,6 +23,7 @@ namespace DTOs
         public int Nro { get; set; }
         public int? ComplejoId { get; set; } = null;
         public int TipoCanchaId { get; set; }
+
     }
 
     //DTO PARA MOSTRAR EN WINDOWS FORM VER CANCHAS
