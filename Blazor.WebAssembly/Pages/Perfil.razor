@@ -259,13 +259,9 @@
             await UsuarioApiClient.ActualizarAsync(usuario);
             await PersonaFisicaApiClient.ActualizarAsync(persona);
 
-
-
             ClonarDatosOriginales(); // Actualizamos la copia de respaldo
             isEditing = false;
             StateHasChanged();
-
-
         }
         catch (Exception ex)
         {
@@ -274,8 +270,6 @@
             Console.WriteLine(persona.Nombre);
             Console.WriteLine(persona.Apellido);
             Console.WriteLine(persona.Fecha_Nacimiento);
-
-
 
         }
        
@@ -302,7 +296,7 @@
     private async Task CerrarSesion()
     {
         await AuthService.LogoutAsync();
-        Navigation.NavigateTo("/"); // O a la ruta raíz "/"
+        Navigation.NavigateTo("/", true); // O a la ruta raíz "/"
     }
 
     private void ClonarDatosOriginales()

@@ -13,6 +13,7 @@ namespace Data
         Task<bool> DeleteAsync(int id);
         Task<Complejo?> GetAsync(int id);
         Task<IEnumerable<Complejo>> GetAllAsync();
+        Task<IEnumerable<(string Localidad, int Cantidad)>> GetRankingLocalidadesAsync();
         Task<bool> UpdateAsync(Complejo complejo);
         Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno);
         Task<Complejo> GetComplejosByIdEncargado(int idEncargado);

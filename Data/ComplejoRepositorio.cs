@@ -4,7 +4,7 @@ using Modelo.Dominio;
 
 namespace Data
 {
-    public class ComplejoRepositorio:IComplejoRepositorio
+    public class ComplejoRepositorio : IComplejoRepositorio
     {
         private readonly AplicacionDbContext _context;
 
@@ -21,7 +21,21 @@ namespace Data
                 .Include(c => c.Encargado)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<(string Localidad, int Cantidad)>> GetRankingLocalidadesAsync()
+        {
+            var localidades = await _context.Complejos
+                .Include(c => c.Localidad)
+                .GroupBy(c => c.Localidad.Nombre)
+                .Select(g => new
+                {
+                    Localidad = g.Key,
+                    Cantidad = g.Count()
+                })
+                .OrderByDescending(x => x.Cantidad)
+                .ToListAsync();
 
+            return localidades.Select(x => (x.Localidad, x.Cantidad)).ToList();
+        }
         public async Task<Complejo?> GetAsync(int id)
         {
             return await _context.Complejos

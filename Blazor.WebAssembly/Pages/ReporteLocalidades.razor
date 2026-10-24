@@ -1,0 +1,99 @@
+@page "/reporte-localidades"
+@using API
+@using DTOs
+@inject ComplejoApiClient ComplejoApi
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<main class="reporte-page">
+    <div class="reporte-card">
+        <div class="reporte-header">
+            <div class="reporte-titulo-box">
+                <h2>Ranking de localidades con mayor cantidad de complejos</h2>
+            </div>
+            <button class="btn-volver" @onclick='() => Navigation.NavigateTo("/menu-admin")'>Volver al menú</button>
+        </div>
+
+        @if (cargando)
+        {
+            <div class="reporte-estado">Cargando datos...</div>
+        }
+        else if (ranking.Count == 0)
+        {
+            <div class="reporte-estado">No hay complejos registrados para generar el reporte.</div>
+        }
+        else
+        {
+            <div class="reporte-grafico">
+                <div class="reporte-tabla-container">
+                    <table class="reporte-tabla">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Localidad</th>
+                                <th class="text-center">Cantidad de complejos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ranking.Count; i++)
+                            {
+                                <tr @key="i">
+                                    <td class="col-pos">@((i + 1))</td>
+                                    <td class="col-localidad">@ranking[i].Localidad</td>
+                                    <td class="col-cantidad">@ranking[i].Cantidad</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+        }
+    </div>
+</main>
+
+@code {
+    private List<LocalidadRanking> ranking = new();
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var complejos = await ComplejoApiClient.ObtenerTodosAsync() ?? new();
+            
+            ranking = complejos
+                .Where(c => !string.IsNullOrEmpty(c.NombreLocalidad))
+                .GroupBy(c => c.NombreLocalidad)
+                .Select(g => new LocalidadRanking { Localidad = g.Key, Cantidad = g.Count() })
+                .OrderByDescending(x => x.Cantidad)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar reporte: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && ranking.Count > 0)
+        {
+            await Task.Delay(300);
+            var labels = ranking.Select(r => r.Localidad).ToArray();
+            var valores = ranking.Select(r => r.Cantidad).ToArray();
+            await JS.InvokeVoidAsync("renderBarChart", "chartLocalidades", labels, valores, "Complejos por localidad");
+        }
+    }
+
+    public class LocalidadRanking
+    {
+        public string Localidad { get; set; } = string.Empty;
+        public int Cantidad { get; set; }
+    }
+}

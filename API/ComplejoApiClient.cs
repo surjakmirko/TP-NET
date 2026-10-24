@@ -1,7 +1,8 @@
-﻿using System;
+﻿using DTOs;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
-using DTOs;
 
 namespace API
 {
@@ -13,7 +14,10 @@ namespace API
         {
             return await GetAsync<List<ComplejoDTO>>("complejos");
         }
-
+        public static async Task<List<LocalidadRankingDTO>?> GetRankingLocalidadesAsync()
+        {
+            return await GetAsync<List<LocalidadRankingDTO>>("complejos/ranking-localidades");
+        }
         public static async Task<ComplejoDTO?> ObtenerPorIdAsync(int id)
         {
             return await GetAsync<ComplejoDTO>($"complejos/{id}");

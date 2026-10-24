@@ -46,6 +46,12 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
+            app.MapGet("/complejos/ranking-localidades", async (IComplejoServicio complejoServicio) =>
+            {
+                var ranking = await complejoServicio.GetRankingLocalidadesAsync();
+                return Results.Ok(ranking);
+            });
+
             app.MapPost("/complejos", async (ComplejoCrearDTO dto, IComplejoServicio complejoServicio) =>
             {
                 Console.WriteLine(dto);
