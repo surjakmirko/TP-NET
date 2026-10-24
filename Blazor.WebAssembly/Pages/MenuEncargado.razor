@@ -1,9 +1,9 @@
 ﻿@page "/menu-encargado"
 @using DTOs
-@using API
-@inject ComplejoApiClient ComplejoService
-@using System.Security.Claims
 @using Blazor.WebAssembly.Servicios
+@inject ComplejoApiClient ComplejoApi
+@inject CanchaApiClient CanchaApi
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
@@ -93,7 +93,7 @@ else
                 if (int.TryParse(idClaim, out var idEncargado))
                 {
                     // 3. Pasar el idEncargado al cliente de la API
-                    complejo = await ComplejoApiClient.ObtenerComplejoDelEncargadoAsync(idEncargado);
+                    complejo = await ComplejoApi.ObtenerComplejoDelEncargadoAsync(idEncargado);
 
                     if (complejo == null)
                     {
@@ -101,13 +101,13 @@ else
                     }
                     if (complejo != null)
                     {
-                        var canchasConPrecios = await CanchaApiClient.ObtenerPorComplejoIdAsync(complejo.Id);
+                        var canchasConPrecios = await CanchaApi.ObtenerPorComplejoIdAsync(complejo.Id);
                         if (canchasConPrecios != null)
                         {
                             complejo.Canchas = canchasConPrecios;
                         }
 
-                        var horarios = await ComplejoApiClient.ObtenerHorariosAsync(complejo.Id);
+                        var horarios = await ComplejoApi.ObtenerHorariosAsync(complejo.Id);
                         if (horarios != null)
                         {
                             complejo.Horarios = horarios;

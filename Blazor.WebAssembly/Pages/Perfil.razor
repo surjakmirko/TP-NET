@@ -1,13 +1,14 @@
 ﻿@page "/perfil"
-@using API
-@using API.Client
 @using DTOs
-@using System.Security.Claims
 @using Blazor.WebAssembly.Servicios
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 @inject BlazorWasmAuthService AuthService
+@inject UsuarioApiClient UsuarioApi
+@inject PersonaFisicaApiClient PersonaFisicaApi
+@inject TurnoApiClient TurnoApi
 
 <PageTitle>Mi Perfil</PageTitle>
 
@@ -108,7 +109,7 @@
                 try
                 {
                     // Traemos la información fresca directamente de la base de datos
-                    var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
+                    var usuarioCompleto = await UsuarioApi.GetByIdAsync(clienteId);
 
                     if (usuarioCompleto != null)
                     {
@@ -144,26 +145,27 @@
 
     private async Task BuscarTurnos()
     {
-        try{
-        var listaTurnos = await TurnoApiClient.ObtenerTurnosCliente(clienteId);
+        try
+        {
+            var listaTurnos = await TurnoApi.GetAllAsync();
 
             if (listaTurnos != null && listaTurnos.Any())
-        {
-            
-            turnos = listaTurnos
-                .OrderByDescending(t => t.Fecha) 
-                .Take(3)
-                .ToList();
-        }
+            {
+                turnos = listaTurnos
+                    .Where(t => t.ClienteId == clienteId)
+                    .OrderByDescending(t => t.Fecha) 
+                    .Take(3)
+                    .ToList();
+            }
             else
             {
                 turnos = new List<TurnoDTO>(); 
             }
-           }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al traer datos o turnos del usuario: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al traer datos o turnos del usuario: {ex.Message}");
+        }
         finally
         {
             StateHasChanged(); 
@@ -175,8 +177,8 @@
         try
         {
             // Construimos o actualizamos los DTOs para enviar al backend
-            await UsuarioApiClient.ActualizarAsync(usuario);
-            await PersonaFisicaApiClient.ActualizarAsync(persona);
+            await UsuarioApi.ActualizarUsuarioAsync(usuario);
+            await PersonaFisicaApi.ActualizarAsync(persona);
 
 
 

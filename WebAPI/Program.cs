@@ -38,10 +38,13 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://localhost:7293",
-                "http://localhost:5123"
+                "http://localhost:5131",
+                "https://localhost:7016",
+                "http://localhost:5262"
               )
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -55,7 +58,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AplicacionDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Inyección de dependencias (Repositorios y Servicios)
+// InyecciÃ³n de dependencias (Repositorios y Servicios)
 builder.Services.AddScoped<ITipoUsuarioRepositorio, TipoUsuarioRepositorio>();
 builder.Services.AddScoped<ITipoUsuarioServicio, TipoUsuarioServicio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
@@ -85,11 +88,9 @@ builder.Services.AddScoped<IProvinciaServicio, ProvinciaServicio>();
 
 var app = builder.Build();
 
-
-
+app.UseCors(corsPolicy);
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors(corsPolicy);
 app.UseAuthentication(); 
 app.UseAuthorization();
 
@@ -106,4 +107,4 @@ app.MapLocalidadEndpoints();
 app.MapTurnoEndpoints();
 app.MapAuthEndpoints();
 
-app.Run();  
+app.Run();

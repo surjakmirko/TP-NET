@@ -1,14 +1,14 @@
-﻿using API;
-using API.Client;
+﻿using API.Client;
 using DTOs;
 using Microsoft.JSInterop;
+using Blazor.WebAssembly.Servicios;
 
 namespace Blazor.WebAssembly.Servicios
 {
     public class BlazorWasmAuthService : IAutenticacionService
     {
         private readonly IJSRuntime _jsRuntime;
-        private readonly AutenticacionApi _authClient; // Inyectamos el ApiClient
+        private readonly AutenticacionApi _authClient;
 
         private const string TOKEN_KEY = "auth_token";
         private const string USERNAME_KEY = "auth_username";
@@ -54,7 +54,7 @@ namespace Blazor.WebAssembly.Servicios
             try
             {
                 var request = new LoginDTO { Email = email, Password = password };
-                var response = await AutenticacionApi.LoginAsync(request);
+                var response = await _authClient.LoginAsync(request);
 
                 if (response != null && !string.IsNullOrEmpty(response.Token))
                 {

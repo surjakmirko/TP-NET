@@ -4,7 +4,7 @@ using Modelo.Dominio;
 
 namespace Data
 {
-    public class ComplejoRepositorio:IComplejoRepositorio
+    public class ComplejoRepositorio : IComplejoRepositorio
     {
         private readonly AplicacionDbContext _context;
 
@@ -12,6 +12,7 @@ namespace Data
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Complejo>> GetAllAsync()
         {
             return await _context.Complejos
@@ -25,11 +26,11 @@ namespace Data
         public async Task<Complejo?> GetAsync(int id)
         {
             return await _context.Complejos
-            .Include(c => c.Localidad)
-            .Include(c => c.Dueño)
-                .ThenInclude(d => d.PersonaJuridica)
-            .Include(c => c.Encargado)
-            .FirstOrDefaultAsync(c => c.Id == id); ;
+                .Include(c => c.Localidad)
+                .Include(c => c.Dueño)
+                    .ThenInclude(d => d.PersonaJuridica)
+                .Include(c => c.Encargado)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
 
@@ -73,12 +74,13 @@ namespace Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
         public async Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno)
         {
             return await _context.Complejos.Where(c => c.DueñoId == idDueno).ToListAsync();
         }
 
-        public async Task<Complejo> GetComplejosByIdEncargado(int idEncargado)
+        public async Task<Complejo?> GetComplejosByIdEncargado(int idEncargado)
         {
             return await _context.Complejos
                 .Include(c => c.Horarios)
@@ -87,9 +89,7 @@ namespace Data
                     .ThenInclude(can => can.Turnos)
                 .Include(c => c.Canchas)
                     .ThenInclude(can => can.TipoCancha)
-                 .FirstOrDefaultAsync(c => c.EncargadoId == idEncargado);
-
-
+                .FirstOrDefaultAsync(c => c.EncargadoId == idEncargado);
         }
 
 
@@ -102,16 +102,43 @@ namespace Data
                 .Include(c => c.Encargado)
                 .Include(c => c.Canchas)
                     .ThenInclude(can => can.TipoCancha)
+                .Include(c => c.Canchas)
+                    .ThenInclude(can => can.Precios)
+                .Include(c => c.Horarios)
                 .AsQueryable();
 
+            // 1. Filtro por ciudad (localidad)
             if (!string.IsNullOrWhiteSpace(ciudad))
             {
                 query = query.Where(c => c.Localidad != null && c.Localidad.Nombre.Contains(ciudad));
             }
 
-            if (!string.IsNullOrWhiteSpace(deporte))
+            // 2. Filtro por deporte (TipoCanchaId) - el frontend envía el ID como string
+            if (!string.IsNullOrWhiteSpace(deporte) && int.TryParse(deporte, out int deporteId))
             {
-                query = query.Where(c => c.Canchas.Any(can => can.TipoCancha != null && can.TipoCancha.Deporte.Contains(deporte)));
+                query = query.Where(c => c.Canchas.Any(can => can.TipoCanchaId == deporteId));
+            }
+
+            // 3. Filtro por fecha y hora - verificar que el complejo tenga horario ese día y hora
+            if (!string.IsNullOrWhiteSpace(fecha) && DateOnly.TryParse(fecha, out DateOnly fechaParsed))
+            {
+                int nroDia = (fechaParsed.DayOfWeek == DayOfWeek.Sunday) ? 7 : (int)fechaParsed.DayOfWeek;
+
+                query = query.Where(c => c.Horarios.Any(h => h.NroDia == nroDia));
+
+                if (!string.IsNullOrWhiteSpace(hora) && TimeOnly.TryParse(hora, out TimeOnly horaParsed))
+                {
+                    query = query.Where(c => c.Horarios.Any(h => h.NroDia == nroDia && h.HoraApertura <= horaParsed && h.HoraCierre > horaParsed));
+                }
+            }
+
+            // 4. Filtro por precio (min/max) - verificar que al menos una cancha tenga precio en el rango
+            if (min.HasValue || max.HasValue)
+            {
+                query = query.Where(c => c.Canchas.Any(can => can.Precios.Any(p =>
+                    (!min.HasValue || p.PrecioBase >= min.Value) &&
+                    (!max.HasValue || p.PrecioBase <= max.Value)
+                )));
             }
 
             return await query.ToListAsync();

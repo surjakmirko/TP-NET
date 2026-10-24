@@ -117,10 +117,8 @@ namespace Servicios
 
         public async Task<IEnumerable<ComplejoDTO>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max)
         {
-            // Llamas al repositorio pasándole todos los parámetros de búsqueda
             var complejos = await complejoRepositorio.BuscarAsync(ciudad, deporte, fecha, hora, min, max);
 
-            // Mapeas las entidades resultantes a ComplejoDTO
             return complejos.Select(complejo => new ComplejoDTO
             {
                 Id = complejo.Id,
@@ -131,7 +129,12 @@ namespace Servicios
                 EncargadoId = complejo.EncargadoId,
                 NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
-                NombreEncargado = complejo.Encargado?.Email ?? string.Empty
+                NombreEncargado = complejo.Encargado?.Email ?? string.Empty,
+                PrecioDesde = complejo.Canchas
+                    .SelectMany(c => c.Precios)
+                    .Where(p => p.PrecioBase > 0)
+                    .DefaultIfEmpty()
+                    .Min(p => p?.PrecioBase ?? 0)
             }).ToList();
         }
     }
