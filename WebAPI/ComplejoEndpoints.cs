@@ -1,6 +1,7 @@
 ﻿using DTOs;
 using Modelo.Dominio;
 using Servicios;
+using System.IO;
 
 namespace WebAPI
 {
@@ -65,7 +66,71 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
+                catch (InvalidOperationException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
             });
+
+            app.MapPost("/complejos/{id}/imagen", async (int id, IFormFile imagen, IComplejoServicio complejoServicio) =>
+            {
+                try
+                {
+                    if (imagen == null || imagen.Length == 0)
+                    {
+                        return Results.BadRequest(new { error = "No se envió ninguna imagen" });
+                    }
+
+                    // Validar tipo de archivo
+                    var allowedTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/webp" };
+                    if (!allowedTypes.Contains(imagen.ContentType.ToLower()))
+                    {
+                        return Results.BadRequest(new { error = "Formato de imagen no permitido. Use JPG, PNG o WebP." });
+                    }
+
+                    // Validar tamaño (2MB max)
+                    if (imagen.Length > 2 * 1024 * 1024)
+                    {
+                        return Results.BadRequest(new { error = "La imagen no puede superar 2MB" });
+                    }
+
+                    // Verificar que el complejo existe
+                    var complejo = await complejoServicio.GetAsync(id);
+                    if (complejo == null)
+                    {
+                        return Results.NotFound(new { error = "Complejo no encontrado" });
+                    }
+
+                    // Generar nombre único
+                    var extension = Path.GetExtension(imagen.FileName).ToLower();
+                    var fileName = $"complejo-{id}-{Guid.NewGuid()}{extension}";
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "complejos");
+
+                    // Crear directorio si no existe
+                    Directory.CreateDirectory(uploadPath);
+
+                    var filePath = Path.Combine(uploadPath, fileName);
+
+                    // Guardar archivo
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imagen.CopyToAsync(stream);
+                    }
+
+                    // URL pública
+                    var imagenUrl = $"/images/complejos/{fileName}";
+
+                    complejo.ImagenUrl = imagenUrl;
+                    await complejoServicio.UpdateAsync(complejo);
+
+                    return Results.Ok(new { imagenUrl });
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            }).DisableAntiforgery();
+
             app.MapPut("/complejos", async (ComplejoDTO dto, IComplejoServicio complejoServicio) =>
             {
                 try
@@ -84,6 +149,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = ex.Message });
                 }
             });
+
             app.MapDelete("/complejos/{id}", async (int id, IComplejoServicio complejoServicio) =>
             {
                 var deleted = await complejoServicio.DeleteAsync(id);
@@ -120,7 +186,7 @@ namespace WebAPI
             {
                 try
                 {
-                    HorarioDTO horarioDTO = await horarioServicio.AddAsync(dto,idComplejo);
+                    HorarioDTO horarioDTO = await horarioServicio.AddAsync(dto, idComplejo);
                     return Results.Created($"/complejos/{idComplejo}/horarios/{horarioDTO.NroDia}", horarioDTO);
                 }
                 catch (ArgumentException ex)
@@ -133,7 +199,7 @@ namespace WebAPI
             {
                 try
                 {
-                    var encontrado = await horarioServicio.UpdateAsync(dto,idComplejo,numDia);
+                    var encontrado = await horarioServicio.UpdateAsync(dto, idComplejo, numDia);
 
                     if (!encontrado)
                     {
@@ -160,7 +226,7 @@ namespace WebAPI
                 return Results.NoContent();
             });
 
-            ///Canchas
+            //CANCHAS
 
             app.MapGet("/complejos/{idComplejo}/canchas", async (int idComplejo, ICanchaServicio canchaServicio) =>
             {
@@ -184,7 +250,7 @@ namespace WebAPI
             {
                 try
                 {
-                    CanchaDTO canchaDTO = await canchaServicio.AddAsync(dto,idComplejo);
+                    CanchaDTO canchaDTO = await canchaServicio.AddAsync(dto, idComplejo);
                     return Results.Created($"/complejos/{idComplejo}/canchas/{canchaDTO.Nro}", canchaDTO);
                 }
                 catch (ArgumentException ex)
@@ -197,7 +263,6 @@ namespace WebAPI
             {
                 try
                 {
-                   
                     var encontrado = await canchaServicio.UpdateAsync(dto, idComplejo, nro);
 
                     if (!encontrado)
@@ -254,12 +319,11 @@ namespace WebAPI
                 return Results.Ok(precio);
             });
 
-
             app.MapPost("/complejos/{idComplejo}/canchas/{nroCancha}/precios", async (int idComplejo, int nroCancha, PrecioCrearDTO dto, IPrecioServicio precioServicio) =>
             {
                 try
                 {
-                    PrecioDTO precioDTO = await precioServicio.AddAsync(dto, idComplejo,nroCancha);
+                    PrecioDTO precioDTO = await precioServicio.AddAsync(dto, idComplejo, nroCancha);
                     return Results.Created($"/complejos/{idComplejo}/canchas/{nroCancha}/precios/{precioDTO.FechaDesde:yyyy-MM-dd}", precioDTO);
                 }
                 catch (ArgumentException ex)

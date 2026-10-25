@@ -1,6 +1,8 @@
 @page "/reporte-localidades"
 @using API
 @using DTOs
+@attribute [Authorize(Roles = "Administrador")]
+@using Microsoft.AspNetCore.Authorization
 @inject ComplejoApiClient ComplejoApi
 @inject IJSRuntime JS
 @inject NavigationManager Navigation

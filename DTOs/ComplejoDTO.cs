@@ -8,16 +8,17 @@ namespace DTOs
         public string Direccion { get; set; }
         public int EncargadoId { get; set; }
         public int LocalidadId {  get; set; }
-   
+    
         public int DueñoId {  get; set; }
-
+    
         public string NombreLocalidad { get; set; }
         public string NombreDueño { get; set; }
         public string NombreEncargado { get; set; }
         public decimal PrecioDesde { get; set; }
         public List<CanchaDTO> Canchas { get; set; } = new();
         public List<HorarioDTO> Horarios { get; set; } = new();
-
+        public string? ImagenUrl { get; set; }
+    
     }
 
     public class ComplejoCrearDTO
@@ -27,7 +28,6 @@ namespace DTOs
         public int EncargadoId { get; set; }
         public int LocalidadId { get; set; }
         public int DueñoId { get; set; }
-
     }
 
     public class ComplejoTarjetaDTO
@@ -38,5 +38,6 @@ namespace DTOs
         public string NombreLocalidad { get; set; } = string.Empty;
         public int CantidadCanchas { get; set; }
         public List<string> Deportes { get; set; } = new();
+        public string? ImagenUrl { get; set; }
     }
 }

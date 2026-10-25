@@ -1,45 +1,121 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject Blazor.WebAssembly.Servicios.BlazorWasmAuthService AuthService
 
 <div class="header-caja">
-    <NavLink href="/" Match="NavLinkMatch.All">
-        <img class="logo-header" src="/images/logo.png" alt="Logo" />
-    </NavLink>
+    <!-- LOGO: Redirige según el rol -->
+    <AuthorizeView Roles="Encargado">
+        <Authorized>
+            <NavLink href="/menu-encargado" Match="NavLinkMatch.All">
+                <img class="logo-header" src="/images/logo.png" alt="Logo" />
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Administrador">
+        <Authorized>
+            <NavLink href="/menu-admin" Match="NavLinkMatch.All">
+                <img class="logo-header" src="/images/logo.png" alt="Logo" />
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Dueño">
+        <Authorized>
+            <NavLink href="/menu-dueno" Match="NavLinkMatch.All">
+                <img class="logo-header" src="/images/logo.png" alt="Logo" />
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Administrador, Encargado, Dueño">
+        <NotAuthorized>
+            <NavLink href="/" Match="NavLinkMatch.All">
+                <img class="logo-header" src="/images/logo.png" alt="Logo" />
+            </NavLink>
+        </NotAuthorized>
+    </AuthorizeView>
 
     <nav class="nav-barra">
         <ul class="nav-links">
-            <li class="nav-item-dropdown">
-                <NavLink href="complejos" class="nav-link" Match="NavLinkMatch.Prefix">
-                    Complejos
-                </NavLink>
-            </li>
-            <li>
-                <NavLink href="software" class="nav-link" Match="NavLinkMatch.Prefix">
-                    Software
-                </NavLink>
-            </li>
 
-            <!-- Evalúa automáticamente la autenticación mediante el CustomAuthStateProvider -->
-            <AuthorizeView>
-                <Authorizing>
-                    <li>
-                        <span class="nav-link">Cargando...</span>
-                    </li>
-                </Authorizing>
+            <!-- VISTA EXCLUSIVA DEL ENCARGADO -->
+            <AuthorizeView Roles="Encargado">
                 <Authorized>
                     <li>
-                        <NavLink href="perfil" class="nav-link" Match="NavLinkMatch.Prefix">
-                            Mi Perfil
+                        <NavLink href="menu-encargado" class="nav-link" Match="NavLinkMatch.All">
+                            Menú Encargado
                         </NavLink>
+                    </li>
+                    <li>
+                        <a style="cursor: pointer;" class="nav-link" @onclick="CerrarSesion">Cerrar Sesión</a>
                     </li>
                 </Authorized>
-                <NotAuthorized>
+            </AuthorizeView>
+
+            <!-- VISTA EXCLUSIVA DEL ADMINISTRADOR -->
+            <AuthorizeView Roles="Administrador">
+                <Authorized>
                     <li>
-                        <NavLink href="login" class="nav-link" Match="NavLinkMatch.Prefix">
-                            Iniciar Sesión
+                        <NavLink href="menu-admin" class="nav-link" Match="NavLinkMatch.All">
+                            Menú Admin
                         </NavLink>
                     </li>
+                    <li>
+                        <a style="cursor: pointer;" class="nav-link" @onclick="CerrarSesion">Cerrar Sesión</a>
+                    </li>
+                </Authorized>
+            </AuthorizeView>
+
+            <!-- VISTA EXCLUSIVA DEL DUEÑO -->
+            <AuthorizeView Roles="Dueño">
+                <Authorized>
+                    <li>
+                        <NavLink href="menu-dueno" class="nav-link" Match="NavLinkMatch.All">
+                            Menú Dueño
+                        </NavLink>
+                    </li>
+                    <li>
+                        <a style="cursor: pointer;" class="nav-link" @onclick="CerrarSesion">Cerrar Sesión</a>
+                    </li>
+                </Authorized>
+            </AuthorizeView>
+
+            <!-- VISTA NORMAL (PÚBLICO Y OTROS USUARIOS) -->
+            <AuthorizeView Roles="Administrador, Encargado, Dueño">
+                <NotAuthorized>
+                    <li class="nav-item-dropdown">
+                        <NavLink href="complejos" class="nav-link" Match="NavLinkMatch.Prefix">Complejos</NavLink>
+                    </li>
+                    <li>
+                        <NavLink href="software" class="nav-link" Match="NavLinkMatch.Prefix">Software</NavLink>
+                    </li>
+
+                    <AuthorizeView Context="innerContext">
+                        <Authorizing>
+                            <li><span class="nav-link">Cargando...</span></li>
+                        </Authorizing>
+                        <Authorized>
+                            <li>
+                                <NavLink href="perfil" class="nav-link" Match="NavLinkMatch.Prefix">Mi Perfil</NavLink>
+                            </li>
+                        </Authorized>
+                        <NotAuthorized>
+                            <li>
+                                <NavLink href="login" class="nav-link" Match="NavLinkMatch.Prefix">Iniciar Sesión</NavLink>
+                            </li>
+                        </NotAuthorized>
+                    </AuthorizeView>
                 </NotAuthorized>
             </AuthorizeView>
         </ul>
     </nav>
 </div>
+
+@code {
+    private async Task CerrarSesion()
+    {
+        await AuthService.LogoutAsync();
+        Navigation.NavigateTo("/login", forceLoad: true);
+    }
+}

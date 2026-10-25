@@ -1,6 +1,8 @@
 @page "/crear-usuario"
 @using DTOs
 @using API
+@attribute [Authorize(Roles = "Administrador")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
@@ -48,6 +50,13 @@
                 <InputText type="text" @bind-Value="formData.RazonSocial" placeholder="Ej: Complejos Deportivos S.A." required />
             </div>
         }
+        else if (tipoUsuarioId == 2)
+        {
+            <div class="crear-usuario-campo">
+                <label>DNI (opcional):</label>
+                <InputText type="text" @bind-Value="formData.Dni" placeholder="Ej: 12345678" />
+            </div>
+        }
 
         <button class="crear-usuario-boton" type="submit" disabled="@cargando">
             Crear @(tipoUsuarioId == 4 ? "Dueño" : "Encargado")
@@ -71,6 +80,11 @@
                 <p><strong>CUIT:</strong> @formData.Cuit</p>
                 <p><strong>Razón Social:</strong> @formData.RazonSocial</p>
             }
+            else if (tipoUsuarioId == 2 && !string.IsNullOrWhiteSpace(formData.Dni))
+            {
+                <hr class="modal-divisor-usuario" />
+                <p><strong>DNI:</strong> @formData.Dni</p>
+            }
 
             <div class="modal-acciones-usuario">
                 <button type="button" class="btn-modal-cancelar-usuario" @onclick="() => mostrarModal = false" disabled="@cargando">
@@ -89,9 +103,24 @@
     private FormModel formData = new();
     private bool mostrarModal = false;
     private bool cargando = false;
+    private string error = string.Empty;
 
-    private void HandlePreSubmit()
+    private async Task HandlePreSubmit()
     {
+        error = string.Empty;
+        if (tipoUsuarioId == 4)
+        {
+            if (string.IsNullOrWhiteSpace(formData.Cuit) || string.IsNullOrWhiteSpace(formData.RazonSocial))
+            {
+                error = "CUIT y Razón Social son obligatorios para Dueños";
+                return;
+            }
+        }
+        else if (tipoUsuarioId == 2)
+        {
+            // Encargado no requiere campos adicionales obligatorios
+        }
+
         mostrarModal = true;
     }
 
@@ -102,9 +131,17 @@
         try
         {
             string? cuitAsociado = null;
+            string? dniAsociado = null;
 
             if (tipoUsuarioId == 4)
             {
+                // Dueño - requiere CUIT y Razón Social
+                if (string.IsNullOrWhiteSpace(formData.Cuit) || string.IsNullOrWhiteSpace(formData.RazonSocial))
+                {
+                    error = "CUIT y Razón Social son obligatorios para Dueños";
+                    return;
+                }
+
                 cuitAsociado = formData.Cuit;
 
                 try
@@ -120,6 +157,11 @@
                     Console.WriteLine("Persona jurídica ya registrada previamente, asociando CUIT directamente.");
                 }
             }
+            else if (tipoUsuarioId == 2)
+            {
+                // Encargado - DNI opcional
+                dniAsociado = formData.Dni;
+            }
 
             var payloadUsuario = new UsuarioCrearDTO
             {
@@ -127,8 +169,8 @@
                 Telefono = formData.Telefono ?? string.Empty,
                 Password = formData.Password ?? string.Empty,
                 TipoUsuarioId = tipoUsuarioId,
-                PersonaJuridicaCuit = cuitAsociado ?? string.Empty,
-                PersonaFisicaDni = string.Empty
+                PersonaJuridicaCuit = tipoUsuarioId == 4 ? (cuitAsociado ?? string.Empty) : null,
+                PersonaFisicaDni = (tipoUsuarioId == 2 && !string.IsNullOrWhiteSpace(dniAsociado)) ? dniAsociado : null
             };
 
             await UsuarioApiClient.CrearUsuarioAsync(payloadUsuario);
@@ -155,5 +197,6 @@
         public string? Password { get; set; }
         public string? Cuit { get; set; }
         public string? RazonSocial { get; set; }
+        public string? Dni { get; set; }
     }
 }

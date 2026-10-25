@@ -1,6 +1,8 @@
 @page "/administrar-usuarios"
 @using DTOs
 @using API
+@attribute [Authorize(Roles = "Administrador")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 

@@ -62,6 +62,9 @@ namespace Data.Migrations
                     b.Property<int>("EncargadoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImagenUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LocalidadId")
                         .HasColumnType("int");
 
@@ -1354,10 +1357,13 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApellidoClienteExterno")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CanchaNro")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClienteId")
+                    b.Property<int?>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<int>("ComplejoId")
@@ -1377,6 +1383,9 @@ namespace Data.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("MotivoCancelacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreClienteExterno")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TipoTurnoId")
@@ -1437,7 +1446,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Email = "admin@gmail.com",
-                            Password = "$2a$11$jun95TTLoS5js710EgaZoeXX3tLSWxmyD3YLCN5EKYyQZ2p/Cx3pK",
+                            Password = "$2a$11$S17lj6sQd/nGwj0ml6u0v.VPyonCGUNtIIw4UbFzlmxlnimJzq0EW",
                             Telefono = "12345678",
                             TipoUsuarioId = 1
                         },
@@ -1445,7 +1454,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             Email = "encargado@gmail.com",
-                            Password = "$2a$11$FY6yO2.rhgBfyHmijurc8.9xjbsaX.p6uy/nXRap23lEYYAr1IETO",
+                            Password = "$2a$11$ssXeZC.f5TYRqRRnK0CiPO1MhfloxAlq4cajj3KBpSudOVPhEsG8i",
                             Telefono = "987654321",
                             TipoUsuarioId = 2
                         },
@@ -1453,7 +1462,7 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             Email = "encargado2@gmail.com",
-                            Password = "$2a$11$iC0uyQgaESKPi4eqOhOVw.d8Tc8H.yPbGgeEqQ6rVo/JyozTFYdeG",
+                            Password = "$2a$11$smm4h1bmUq4zuoW/5xyKyuqWvzckEIHDG7LeRovTfdCkkvfUDyn32",
                             Telefono = "113355799",
                             TipoUsuarioId = 2
                         },
@@ -1461,7 +1470,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             Email = "dueno@gmail.com",
-                            Password = "$2a$11$VLqd0K/bGUq21tC.tyVfZ.Jhp5QJZxGARAJSqMNS9YdMMDlH8AP8C",
+                            Password = "$2a$11$EoQLvpFirFXvczgmc5ZQCezC8tbTinvzOQoVmOYphZ/l01eTgb0ri",
                             PersonaJuridicaCuit = "20123456789",
                             Telefono = "22446688",
                             TipoUsuarioId = 4
@@ -1552,8 +1561,7 @@ namespace Data.Migrations
                     b.HasOne("Modelo.Dominio.Usuario", "Cliente")
                         .WithMany("Turnos")
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Modelo.Dominio.Complejo", "Complejo")
                         .WithMany()

@@ -26,14 +26,14 @@
     list-style: none;
 }
 
-    .contactos-list li {
-        margin: 5px 0;
-    }
+.contactos-list li {
+    margin: 5px 0;
+}
 
-        .contactos-list li a:hover {
-            color: #ee5801;
-            transition-duration: 0.3s;
-        }
+.contactos-list li a:hover {
+    color: #ee5801;
+    transition-duration: 0.3s;
+}
 
 .redes {
     margin-top: 10px;
@@ -42,14 +42,14 @@
     justify-content: center;
 }
 
-    .redes svg {
-        stroke: white;
-        fill: white;
-    }
+.redes svg {
+    stroke: white;
+    fill: white;
+}
 
-        .redes svg:hover {
-            stroke: #ee5801;
-        }
+.redes svg:hover {
+    stroke: #ee5801;
+}
 
 .titulo-footer {
     font-size: 20px;

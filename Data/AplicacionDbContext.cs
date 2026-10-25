@@ -373,7 +373,8 @@ namespace Data
                 .HasOne(t => t.Cliente)
                 .WithMany(u => u.Turnos)
                 .HasForeignKey(t => t.ClienteId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false); 
 
             modelBuilder.Entity<Turno>()
                 .HasOne(t => t.Cancha)

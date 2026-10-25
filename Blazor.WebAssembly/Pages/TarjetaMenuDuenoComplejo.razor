@@ -13,7 +13,7 @@
     <div class="complejo-contenido">
         <div>
             <h3 class="complejo-nombre">@Nombre</h3>
-            <p class="complejo-direccion">📍 @Direccion @Ciudad</p>
+            <p class="complejo-direccion">📍 @Direccion @NombreLocalidad</p>
             <p class="complejo-detalles">
                 🎾 @(Deportes != null && Deportes.Any() ? string.Join(", ", Deportes) : "Sin deportes") &bull; <strong>@CanchasDisponibles canchas</strong>
             </p>
@@ -27,17 +27,18 @@
 </div>
 
 @code {
-    [Parameter] public int Id { get; set; }
+    [Parameter] public int ComplejoId { get; set; }
     [Parameter] public string Nombre { get; set; } = string.Empty;
     [Parameter] public string Direccion { get; set; } = string.Empty;
-    [Parameter] public string Ciudad { get; set; } = string.Empty;
+    [Parameter] public string NombreLocalidad { get; set; } = string.Empty;
     [Parameter] public List<string> Deportes { get; set; } = new();
     [Parameter] public int CanchasDisponibles { get; set; }
-    
+    [Parameter] public int CantidadCanchas { get; set; }
+
     [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private void NavegarAComplejo()
     {
-        Navigation.NavigateTo($"/complejo/{Id}");
+        Navigation.NavigateTo($"/complejo/{ComplejoId}");
     }
 }

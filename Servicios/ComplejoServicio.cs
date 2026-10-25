@@ -14,6 +14,13 @@ namespace Servicios
         }
         public async Task<ComplejoDTO> AddAsync(ComplejoCrearDTO dto)
         {
+            // Validar que el encargado no tenga ya un complejo asignado (globalmente)
+            var encargadoYaTieneComplejo = await complejoRepositorio.EncargadoTieneComplejoAsync(dto.EncargadoId);
+            
+            if (encargadoYaTieneComplejo)
+            {
+                throw new InvalidOperationException("El encargado seleccionado ya tiene un complejo asignado. Un encargado solo puede tener un complejo asignado.");
+            }
             
             Complejo complejo = new Complejo(0, dto.Direccion, dto.Nombre, dto.DueñoId, dto.EncargadoId, dto.LocalidadId);
 
@@ -53,6 +60,7 @@ namespace Servicios
                 NombreLocalidad = complejo.Localidad.Nombre,
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
                 NombreEncargado = complejo.Encargado?.Email ?? string.Empty,
+                ImagenUrl = complejo.ImagenUrl,
                 Canchas = complejo.Canchas?.Select(ca => new CanchaDTO
                 {
                     Nro = ca.Nro,
@@ -77,7 +85,16 @@ namespace Servicios
                     {
                         Id = ca.TipoCancha.Id,
                         Deporte = ca.TipoCancha.Deporte
-                    } : null
+                    } : null,
+                    Turnos = ca.Turnos?.Select(t => new TurnoDTO
+                    {
+                        Id = t.Id,
+                        Fecha = t.Fecha,
+                        HoraInicio = t.HoraInicio,
+                        HoraFin = t.HoraFin,
+                        Estado = t.Estado,
+                        ClienteId = t.ClienteId
+                    }).ToList() ?? new List<TurnoDTO>()
                 }).ToList() ?? new List<CanchaDTO>(),
 
                 // Mapeo de Horarios
@@ -105,7 +122,8 @@ namespace Servicios
             .Where(ca => ca.TipoCancha != null)
             .Select(ca => ca.TipoCancha.Deporte)
             .Distinct()
-            .ToList()
+            .ToList(),
+                ImagenUrl = c.ImagenUrl
             }).ToList();
         }
 
@@ -124,7 +142,8 @@ namespace Servicios
                 LocalidadId = complejo.LocalidadId,
                 DueñoId = complejo.DueñoId,
                 EncargadoId = complejo.EncargadoId,
-                NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty
+                NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
+                ImagenUrl = complejo.ImagenUrl
             };
         }
         public async Task<List<LocalidadRankingDTO>> GetRankingLocalidadesAsync()
@@ -151,7 +170,8 @@ namespace Servicios
                 EncargadoId = complejo.EncargadoId,
                 NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
-                NombreEncargado = complejo.Encargado?.Email ?? string.Empty
+                NombreEncargado = complejo.Encargado?.Email ?? string.Empty,
+                ImagenUrl = complejo.ImagenUrl,
             }).ToList();
         }
 
@@ -159,6 +179,8 @@ namespace Servicios
         {   
         
             Complejo complejo = new Complejo(dto.Id, dto.Direccion, dto.Nombre, dto.DueñoId, dto.EncargadoId, dto.LocalidadId);
+
+            complejo.SetImagenUrl(dto.ImagenUrl); // (Si en tu modelo de Dominio usas un método Set, pon: complejo.SetImagenUrl(dto.ImagenUrl);)
 
             return await complejoRepositorio.UpdateAsync(complejo);
         }
@@ -178,6 +200,7 @@ namespace Servicios
                 NombreLocalidad = complejo.Localidad?.Nombre ?? string.Empty,
                 NombreDueño = complejo.Dueño?.PersonaJuridica?.RazonSocial ?? "Sin Razón Social",
                 NombreEncargado = complejo.Encargado?.Email ?? string.Empty,
+                ImagenUrl = complejo.ImagenUrl,
                 PrecioDesde = complejo.Canchas
                     .SelectMany(c => c.Precios)
                     .Where(p => p.PrecioBase > 0)

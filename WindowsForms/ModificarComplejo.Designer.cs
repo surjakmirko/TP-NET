@@ -35,6 +35,10 @@
             btnAceptar = new Button();
             btnCancelar = new Button();
             label1 = new Label();
+            picImagen = new PictureBox();
+            btnSeleccionarImagen = new Button();
+            lblImagen = new Label();
+            ((System.ComponentModel.ISupportInitialize)picImagen).BeginInit();
             SuspendLayout();
             // 
             // nombreActual
@@ -78,7 +82,7 @@
             // btnAceptar
             // 
             btnAceptar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAceptar.Location = new Point(242, 227);
+            btnAceptar.Location = new Point(242, 348);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(137, 29);
             btnAceptar.TabIndex = 4;
@@ -88,7 +92,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(144, 227);
+            btnCancelar.Location = new Point(144, 348);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(92, 29);
             btnCancelar.TabIndex = 5;
@@ -106,11 +110,43 @@
             label1.TabIndex = 6;
             label1.Text = "Modificar complejo";
             // 
+            // picImagen
+            // 
+            picImagen.BorderStyle = BorderStyle.FixedSingle;
+            picImagen.Location = new Point(12, 240);
+            picImagen.Name = "picImagen";
+            picImagen.Size = new Size(150, 100);
+            picImagen.SizeMode = PictureBoxSizeMode.Zoom;
+            picImagen.TabIndex = 10;
+            picImagen.TabStop = false;
+            // 
+            // btnSeleccionarImagen
+            // 
+            btnSeleccionarImagen.Location = new Point(168, 240);
+            btnSeleccionarImagen.Name = "btnSeleccionarImagen";
+            btnSeleccionarImagen.Size = new Size(100, 30);
+            btnSeleccionarImagen.TabIndex = 11;
+            btnSeleccionarImagen.Text = "Seleccionar imagen";
+            btnSeleccionarImagen.UseVisualStyleBackColor = true;
+            btnSeleccionarImagen.Click += btnSeleccionarImagen_Click;
+            // 
+            // lblImagen
+            // 
+            lblImagen.AutoSize = true;
+            lblImagen.Location = new Point(168, 280);
+            lblImagen.Name = "lblImagen";
+            lblImagen.Size = new Size(110, 15);
+            lblImagen.TabIndex = 12;
+            lblImagen.Text = "Sin imagen seleccionada";
+            // 
             // ModificarComplejo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(391, 268);
+            ClientSize = new Size(391, 380);
+            Controls.Add(lblImagen);
+            Controls.Add(btnSeleccionarImagen);
+            Controls.Add(picImagen);
             Controls.Add(label1);
             Controls.Add(btnCancelar);
             Controls.Add(btnAceptar);
@@ -137,5 +173,8 @@
         private Button btnAceptar;
         private Button btnCancelar;
         private Label label1;
+        private PictureBox picImagen;
+        private Button btnSeleccionarImagen;
+        private Label lblImagen;
     }
 }

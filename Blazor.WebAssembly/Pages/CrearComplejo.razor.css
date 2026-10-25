@@ -150,3 +150,51 @@
 }
 
 @media (max-width: 480px) { .crear-complejo-form { width: 100%; max-width: 320px; } input, select, textarea { font-size: 16px; } }
+
+.crear-complejo-campo input[type="file"] {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.imagen-preview {
+  position: relative;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.imagen-preview img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde, #e2e8f0);
+}
+
+.btn-eliminar-imagen {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-error-fondo, #fef2f2);
+  color: var(--color-error-fuerte, #dc2626);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-eliminar-imagen:hover {
+  background-color: var(--color-error-borde, #fee2e2);
+}
+
+.mensaje-error-imagen {
+  color: var(--color-error-fuerte, #dc2626);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}

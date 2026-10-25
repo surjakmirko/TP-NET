@@ -1,5 +1,13 @@
 ﻿@inject NavigationManager Navigation
+@inject BlazorWasmAuthService AuthService
+@using API
 @using DTOs
+@using Blazor.WebAssembly.Servicios
+
+@if (OnTurnoCreado.HasDelegate)
+{
+    // EventCallback is set by parent
+}
 
 <div class="contenedor-horarios-cancha">
     @if (!EsPanelEncargado)
@@ -70,7 +78,7 @@
                 <p>Horario: @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraInicio, true) ?? 0) a @FormatearHora(ExtraerMinutos(turnoSeleccionadoDetalle.Turno.HoraFin, true) ?? 0)</p>
                 <p>Estado: @turnoSeleccionadoDetalle.Turno.Estado</p>
                 <p>
-                    <strong>@ObtenerNombreCliente(turnoSeleccionadoDetalle.Turno)</strong>
+                    <strong>@ObtenerNombreClienteCompleto(turnoSeleccionadoDetalle.Turno)</strong>
                 </p>
                 <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Email</p>
                 <p>@turnoSeleccionadoDetalle.Turno.Cliente?.Telefono</p>
@@ -85,6 +93,26 @@
                     <button class="btn-pagar" @onclick="ConfirmarYPagar">Ir a pagar</button>
                 </div>
             }
+            else if (creandoTurnoEncargado != null)
+            {
+                <h3>Agendar turno para cliente</h3>
+                <p>Fecha: @creandoTurnoEncargado.Fecha</p>
+                <p>Horario: @creandoTurnoEncargado.HorarioInicio hs</p>
+                <p>Cancha: @creandoTurnoEncargado.CanchaNro</p>
+                <div style="margin-top: 15px; text-align: left;">
+                    <label>Nombre del cliente:</label>
+                    <input type="text" @bind="nombreClienteExterno" placeholder="Nombre" class="form-input" style="width: 100%; margin: 5px 0 10px; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" />
+                    <label>Apellido del cliente:</label>
+                    <input type="text" @bind="apellidoClienteExterno" placeholder="Apellido" class="form-input" style="width: 100%; margin: 5px 0 10px; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" />
+                    @if (!string.IsNullOrEmpty(errorCrearTurno))
+                    {
+                        <div style="color: red; font-size: 0.85rem; margin-bottom: 10px;">@errorCrearTurno</div>
+                    }
+                </div>
+                <div class="modal-botones" style="margin-top: 15px;">
+                    <button class="btn-pagar" @onclick="CrearTurnoEncargado">Crear turno</button>
+                </div>
+            }
             <button class="btn-cerrar-modal" style="margin-top: 10px;" @onclick="CerrarModal">Cerrar</button>
         </aside>
     </div>
@@ -94,9 +122,16 @@
     [Parameter] public ComplejoDTO Complejo { get; set; } = default!;
     [Parameter] public string? FechaActual { get; set; }
     [Parameter] public bool EsPanelEncargado { get; set; } = false;
+    [Parameter] public EventCallback OnTurnoCreado { get; set; }
     private ReservaPendienteModel? reservaPendiente;
     private TurnoDetalleModel? turnoSeleccionadoDetalle;
     private bool modalAbierto = false;
+
+    // Nuevo: modal para crear turno como encargado
+    private CrearTurnoEncargadoModel? creandoTurnoEncargado;
+    private string nombreClienteExterno = string.Empty;
+    private string apellidoClienteExterno = string.Empty;
+    private string errorCrearTurno = string.Empty;
 
     private string FechaAUsar => string.IsNullOrWhiteSpace(FechaActual) ? ObtenerFechaHoy() : FechaActual!;
 
@@ -109,6 +144,59 @@
     protected override void OnParametersSet()
     {
         CalcularHorariosGrilla();
+    }
+    
+    private void CancelarCrearTurnoEncargado()
+    {
+        creandoTurnoEncargado = null;
+        nombreClienteExterno = string.Empty;
+        apellidoClienteExterno = string.Empty;
+        errorCrearTurno = string.Empty;
+    }
+
+    private async Task CrearTurnoEncargado()
+    {
+        errorCrearTurno = string.Empty;
+        
+        if (string.IsNullOrWhiteSpace(nombreClienteExterno) || string.IsNullOrWhiteSpace(apellidoClienteExterno))
+        {
+            errorCrearTurno = "Nombre y apellido son obligatorios.";
+            return;
+        }
+
+        if (creandoTurnoEncargado == null) return;
+
+        try
+        {
+            var token = await AuthService.GetTokenAsync();
+            
+            var dto = new TurnoCrearEncargadoDTO
+            {
+                NombreCliente = nombreClienteExterno.Trim(),
+                ApellidoCliente = apellidoClienteExterno.Trim(),
+                TipoTurnoId = 1, // Normal
+                ComplejoId = creandoTurnoEncargado.ComplejoId,
+                CanchaNro = creandoTurnoEncargado.CanchaNro,
+                Fecha = DateOnly.Parse(creandoTurnoEncargado.Fecha),
+                HoraInicio = TimeOnly.Parse(creandoTurnoEncargado.HorarioInicio),
+                HoraFin = TimeOnly.Parse(creandoTurnoEncargado.HorarioInicio).AddMinutes(60) // Duración por defecto 60 min
+            };
+
+            await API.TurnoApiClient.CrearTurnoEncargadoAsync(dto, token);
+            
+            // Limpiar y cerrar modal
+            CerrarModal();
+            
+            // Notificar al padre para que recargue los datos
+            if (OnTurnoCreado.HasDelegate)
+            {
+                await OnTurnoCreado.InvokeAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorCrearTurno = ex.Message;
+        }
     }
     
 
@@ -227,8 +315,17 @@
 
     private void AgendarComoEncargado(CanchaDTO cancha, string horaString)
     {
-        var query = $"complejoId={Complejo.Id}&canchaNro={cancha.Nro}&fecha={FechaAUsar}&horarioInicio={horaString}&modo=encargado";
-        Navigation.NavigateTo($"/confirmar-reserva?{query}");
+        creandoTurnoEncargado = new CrearTurnoEncargadoModel
+        {
+            Fecha = FechaAUsar,
+            CanchaNro = cancha.Nro,
+            ComplejoId = Complejo.Id,
+            HorarioInicio = horaString
+        };
+        nombreClienteExterno = string.Empty;
+        apellidoClienteExterno = string.Empty;
+        errorCrearTurno = string.Empty;
+        modalAbierto = true;
     }
 
     // Sobrecargas para ExtraerMinutos: aceptar TimeOnly (y string para compatibilidad)
@@ -303,8 +400,15 @@
         return fecha;
     }
 
-    private string ObtenerNombreCliente(TurnoDTO turno)
+    private string ObtenerNombreClienteCompleto(TurnoDTO turno)
     {
+        // Cliente externo (encargado)
+        if (turno.EsClienteExterno)
+        {
+            return $"{turno.NombreClienteExterno} {turno.ApellidoClienteExterno}";
+        }
+        
+        // Cliente registrado
         var cliente = turno.Cliente;
         if (cliente == null) return "Cliente sin nombre";
 
@@ -313,7 +417,6 @@
             return $"{cliente.PersonaFisica.Nombre} {cliente.PersonaFisica.Apellido}";
         }
 
-        // DTO usa Razon_Social en lugar de RazonSocial
         return cliente.PersonaJuridica?.Razon_Social ?? "Cliente sin nombre";
     }
 
@@ -329,5 +432,13 @@
     {
         public int CanchaNro { get; set; }
         public TurnoDTO Turno { get; set; } = default!;
+    }
+
+    private class CrearTurnoEncargadoModel
+    {
+        public string Fecha { get; set; } = string.Empty;
+        public int CanchaNro { get; set; }
+        public int ComplejoId { get; set; }
+        public string HorarioInicio { get; set; } = string.Empty;
     }
 }

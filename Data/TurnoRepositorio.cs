@@ -78,5 +78,11 @@ namespace Data
                 .OrderByDescending(t => t.Fecha)        // Ordena por fecha más reciente
                 .ToListAsync();
         }
+
+        public async Task AddEncargadoAsync(Turno turno)
+        {
+            _context.Turnos.Add(turno);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,6 +1,8 @@
 @page "/administrar-complejos"
 @using DTOs
 @using API
+@attribute [Authorize(Roles = "Administrador")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
@@ -40,6 +42,7 @@
           <thead>
             <tr>
               <th>Nro.</th>
+              <th>Imagen</th>
               <th>Nombre</th>
               <th>Dirección</th>
               <th class="text-center">Acciones</th>
@@ -50,6 +53,16 @@
             {
               <tr @key="complejo.Id">
                 <td class="col-id">#@complejo.Id</td>
+                <td class="col-imagen">
+                    @if (!string.IsNullOrEmpty(complejo.ImagenUrl))
+                    {
+                        <img src="@complejo.ImagenUrl" alt="@complejo.Nombre" class="admin-complejo-imagen" />
+                    }
+                    else
+                    {
+                        <span class="sin-imagen">Sin imagen</span>
+                    }
+                </td>
                 <td class="col-nombre">@complejo.Nombre</td>
                 <td class="col-direccion">@complejo.Direccion</td>
                 <td class="col-acciones">

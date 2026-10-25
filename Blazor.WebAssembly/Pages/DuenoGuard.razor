@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@implements IDisposable
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+        await VerificarRuta(Navigation.Uri);
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await VerificarRuta(e.Location);
+    }
+
+    private async Task VerificarRuta(string url)
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
+        // Validamos exactamente el rol con tilde y mayúscula
+        if (authState.User.IsInRole("Dueño"))
+        {
+            // Limpiamos la ruta relativa para comparar sin barras al inicio y en minúsculas
+            var rutaRelativa = Navigation.ToBaseRelativePath(url).TrimStart('/').ToLower();
+
+            // Imprimimos en la consola del navegador (F12) para que veas qué ruta está leyendo exactamente
+            Console.WriteLine($"Ruta evaluada por el guard: {rutaRelativa}");
+
+            bool esMenuDueno = rutaRelativa.Equals("menu-dueno") || rutaRelativa.StartsWith("menu-dueno/");
+            bool esComplejoDueno = rutaRelativa.StartsWith("complejo/");
+            bool esReporteDueno = rutaRelativa.StartsWith("reporte-ocupacion/");
+
+            // Si no coincide con ninguna permitida, lo devolvemos al menú
+            if (!esMenuDueno && !esComplejoDueno && !esReporteDueno)
+            {
+                Navigation.NavigateTo("/menu-dueno");
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}

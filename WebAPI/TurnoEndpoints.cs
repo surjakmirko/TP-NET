@@ -96,6 +96,24 @@ namespace WebAPI
 
                 return Results.Ok(turnos);
             });
+
+            // Encargado crea turno para cliente externo (solo nombre + apellido)
+            app.MapPost("/turnos/encargado", async (TurnoCrearEncargadoDTO dto, ITurnoServicio turnoServicio) =>
+            {
+                try
+                {
+                    var turnoDTO = await turnoServicio.AddEncargadoAsync(dto);
+                    return Results.Created($"/turnos/{turnoDTO.Id}", turnoDTO);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            }).RequireAuthorization(); // Solo usuarios autenticados (encargados)
         }
     }
 }

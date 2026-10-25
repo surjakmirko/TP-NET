@@ -91,6 +91,7 @@ builder.Services.AddScoped<IProvinciaServicio, ProvinciaServicio>();
 var app = builder.Build();
 
 app.UseCors(corsPolicy);
+app.UseStaticFiles(); // Para servir imágenes desde wwwroot
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseAuthentication(); 

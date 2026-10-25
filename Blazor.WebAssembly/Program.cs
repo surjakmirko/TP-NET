@@ -1,3 +1,4 @@
+using API;
 using API.Client;
 using Blazor.WebAssembly;
 using Blazor.WebAssembly.Servicios;
@@ -14,20 +15,17 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri("https://localhost:7016")
 });
 
-// API Clients para Blazor (usan HttpClient inyectado, no estáticos)
 builder.Services.AddScoped<ComplejoApiClient>();
-builder.Services.AddScoped<TipoCanchaApiClient>();
-builder.Services.AddScoped<CanchaApiClient>();
 builder.Services.AddScoped<AutenticacionApi>();
 builder.Services.AddScoped<UsuarioApiClient>();
 builder.Services.AddScoped<PersonaFisicaApiClient>();
 builder.Services.AddScoped<TurnoApiClient>();
 
 
-// Habilita el sistema de autorizaci�n en Blazor
+// Habilita el sistema de autorización en Blazor
 builder.Services.AddAuthorizationCore();
 
-// Registra el proveedor de estado de autenticaci�n (usando tu CustomAuthenticationStateProvider)
+// Registra el proveedor de estado de autenticación (usando tu CustomAuthenticationStateProvider)
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IAutenticacionService, BlazorWasmAuthService>();

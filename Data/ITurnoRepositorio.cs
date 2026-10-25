@@ -12,5 +12,6 @@ namespace Data
         Task<bool> CancelarAsync(int id, string? motivoCancelacion);
 
         Task<List<Turno>> ObtenerPorClienteIdAsync(int idCliente);
+        Task AddEncargadoAsync(Turno turno);
     }
 }

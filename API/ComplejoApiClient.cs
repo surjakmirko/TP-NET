@@ -1,7 +1,9 @@
 ﻿using DTOs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace API
@@ -138,6 +140,24 @@ namespace API
 
             // Asegurate de que GetAsync espere una colección de DTOs
             return await GetAsync<IEnumerable<ComplejoDTO>>($"complejos/buscar{qs}") ?? new List<ComplejoDTO>();
+        }
+
+        public static async Task<string?> SubirImagenComplejoAsync(int idComplejo, MultipartFormDataContent formData)
+        {
+            using var client = await CreateHttpClientAsync();
+            var response = await client.PostAsync($"complejos/{idComplejo}/imagen", formData);
+            HandleResponseError(response);
+            
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            
+            if (root.TryGetProperty("imagenUrl", out var imagenUrlElement))
+            {
+                return imagenUrlElement.GetString();
+            }
+            
+            return null;
         }
     }
 }

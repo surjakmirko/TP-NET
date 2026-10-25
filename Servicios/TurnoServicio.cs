@@ -16,9 +16,10 @@ namespace Servicios
         }
         public async Task<TurnoDTO> AddAsync(TurnoCrearDTO dto)
         {
+            if (!dto.ClienteId.HasValue)
+                throw new ArgumentException("ClienteId es requerido para turnos de cliente.");
 
-            Turno turno = new Turno(dto.HoraInicio, dto.HoraFin,dto.ClienteId,dto.TipoTurnoId,dto.ComplejoId,dto.CanchaNro,dto.Fecha);
-
+            Turno turno = new Turno(dto.HoraInicio, dto.HoraFin, dto.ClienteId.Value, dto.TipoTurnoId, dto.ComplejoId, dto.CanchaNro, dto.Fecha);
 
             await turnoRepositorio.AddAsync(turno);
 
@@ -86,11 +87,22 @@ namespace Servicios
 
         public async Task<bool> UpdateAsync(TurnoDTO dto)
         {
-
-            Turno turno = new Turno(dto.Id, dto.HoraInicio, dto.HoraFin, dto.ClienteId, dto.TipoTurnoId, dto.ComplejoId, dto.CanchaNro, dto.Fecha);
-            dto.Id = turno.Id;
-
-            return await turnoRepositorio.UpdateAsync(turno);
+            if (!dto.ClienteId.HasValue && !string.IsNullOrWhiteSpace(dto.NombreClienteExterno))
+            {
+                // Cliente externo - usar constructor sin ClienteId
+                Turno turno = new Turno(dto.Id, dto.HoraInicio, dto.HoraFin, dto.NombreClienteExterno!, dto.ApellidoClienteExterno!, dto.TipoTurnoId, dto.ComplejoId, dto.CanchaNro, dto.Fecha);
+                return await turnoRepositorio.UpdateAsync(turno);
+            }
+            else if (dto.ClienteId.HasValue)
+            {
+                // Cliente registrado
+                Turno turno = new Turno(dto.Id, dto.HoraInicio, dto.HoraFin, dto.ClienteId.Value, dto.TipoTurnoId, dto.ComplejoId, dto.CanchaNro, dto.Fecha);
+                return await turnoRepositorio.UpdateAsync(turno);
+            }
+            else
+            {
+                throw new ArgumentException("ClienteId es requerido para turnos de cliente registrado.");
+            }
         }
         public async Task<bool> CancelarAsync(int id, string? motivoCancelacion)
         {
@@ -126,7 +138,47 @@ namespace Servicios
                         Deporte = t.Cancha.TipoCancha.Deporte
                     } : null
                 } : null,
+                // Cliente externo
+                NombreClienteExterno = t.NombreClienteExterno,
+                ApellidoClienteExterno = t.ApellidoClienteExterno
             }).ToList();
+        }
+
+        public async Task<TurnoDTO> AddEncargadoAsync(TurnoCrearEncargadoDTO dto)
+        {
+            // Validar que no haya conflicto de horario en la misma cancha
+            var turnosExistentes = await turnoRepositorio.GetAllAsync();
+            bool conflicto = turnosExistentes.Any(t => 
+                t.ComplejoId == dto.ComplejoId && 
+                t.CanchaNro == dto.CanchaNro && 
+                t.Fecha == dto.Fecha &&
+                t.Estado == "Reservado" &&
+                t.HoraInicio < dto.HoraFin &&
+                t.HoraFin > dto.HoraInicio);
+
+            if (conflicto)
+            {
+                throw new InvalidOperationException("La cancha ya está reservada en ese horario.");
+            }
+
+            var turno = new Turno(dto.HoraInicio, dto.HoraFin, dto.NombreCliente, dto.ApellidoCliente, dto.TipoTurnoId, dto.ComplejoId, dto.CanchaNro, dto.Fecha);
+
+            await turnoRepositorio.AddEncargadoAsync(turno);
+
+            return new TurnoDTO
+            {
+                Id = turno.Id,
+                HoraInicio = turno.HoraInicio,
+                HoraFin = turno.HoraFin,
+                Estado = turno.Estado,
+                MotivoCancelacion = turno.MotivoCancelacion,
+                TipoTurnoId = turno.TipoTurnoId,
+                ComplejoId = turno.ComplejoId,
+                CanchaNro = turno.CanchaNro,
+                Fecha = turno.Fecha,
+                NombreClienteExterno = turno.NombreClienteExterno,
+                ApellidoClienteExterno = turno.ApellidoClienteExterno
+            };
         }
     }
 }

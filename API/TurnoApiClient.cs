@@ -16,5 +16,9 @@ namespace API
             await PutAsync($"turnos/{id}/cancelar", new CancelarTurnoDTO { MotivoCancelacion = motivoCancelacion });
         }
 
+        public static async Task<TurnoDTO> CrearTurnoEncargadoAsync(TurnoCrearEncargadoDTO dto, string? token = null)
+        {
+            return await PostAsync<TurnoCrearEncargadoDTO, TurnoDTO>("turnos/encargado", dto, token);
+        }
     }
 }

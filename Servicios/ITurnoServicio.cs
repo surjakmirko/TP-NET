@@ -12,6 +12,7 @@ namespace Servicios
         Task<bool> UpdateAsync(TurnoDTO dto);
         Task<bool> CancelarAsync(int id, string? motivoCancelacion);
         Task<List<TurnoDTO>> ObtenerPorClienteIdAsync(int idCliente);
+        Task<TurnoDTO> AddEncargadoAsync(TurnoCrearEncargadoDTO dto);
     }
 }
         

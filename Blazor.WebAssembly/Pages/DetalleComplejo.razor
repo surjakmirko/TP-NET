@@ -15,8 +15,7 @@ else if (complejo != null)
 {
     <main class="detalle-complejo">
         <!-- Imagen del complejo -->
-        <img class="detalle-complejo-imagen"
-             alt="Imagen de @complejo.Nombre" />
+        <img src="@(string.IsNullOrEmpty(complejo.ImagenUrl) ? "/images/placeholder.jpg" : $"https://localhost:7016{complejo.ImagenUrl}")" alt="@complejo.Nombre" class="detalle-complejo-imagen" />
 
         <!-- Nombre -->
         <h1 class="detalle-complejo-nombre">@complejo.Nombre</h1>

@@ -11,10 +11,10 @@ namespace Modelo.Dominio
         public int Id { get; private set; }
         public TimeOnly HoraInicio { get; private set; }
         public TimeOnly HoraFin { get; private set; }
-        public string Estado { get; private set; }
+        public string Estado { get; private set; } = "Reservado";
         public string? MotivoCancelacion { get; private set; }
 
-        public int ClienteId { get; private set; }
+        public int? ClienteId { get; private set; }
         public Usuario Cliente { get;  set; }
         public int TipoTurnoId { get; private set; }
         public TipoTurno TipoTurno { get; set; }
@@ -24,29 +24,51 @@ namespace Modelo.Dominio
         public Cancha Cancha { get; set; }
         public DateOnly Fecha { get; private set; }
 
+        // Cliente externo (para turnos creados por encargado)
+        public string? NombreClienteExterno { get; private set; }
+        public string? ApellidoClienteExterno { get; private set; }
 
-        public Turno(TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
+        public bool EsClienteExterno => !string.IsNullOrWhiteSpace(NombreClienteExterno);
+
+        public Turno(TimeOnly HoraInicio, TimeOnly HoraFin, int? ClienteId, int TipoTurnoId, int ComplejoId, int CanchaNro, DateOnly Fecha)
         {
-            SetHoraInicio(horaInicio);
-            SetHoraFin(horaFin);
+            SetHoraInicio(HoraInicio);
+            SetHoraFin(HoraFin);
             SetEstado("Reservado");
-            SetClienteId(clienteId);
-            SetTipoTurnoId(tipoTurnoId);      
-            SetCanchaId(complejoId, canchaNro); 
-            SetFecha(fecha);
+            SetClienteId(ClienteId);
+            SetTipoTurnoId(TipoTurnoId);      
+            SetCanchaId(ComplejoId, CanchaNro); 
+            SetFecha(Fecha);
+        }
+ 
+        public Turno(int Id, TimeOnly HoraInicio, TimeOnly HoraFin, int? ClienteId, int TipoTurnoId, int ComplejoId, int CanchaNro, DateOnly Fecha)
+            : this(HoraInicio, HoraFin, ClienteId, TipoTurnoId, ComplejoId, CanchaNro, Fecha)
+        {
+            SetId(Id);
+        }
+        
+        // Constructor para turnos de encargado (cliente externo)
+        public Turno(TimeOnly HoraInicio, TimeOnly HoraFin, string NombreClienteExterno, string ApellidoClienteExterno, int TipoTurnoId, int ComplejoId, int CanchaNro, DateOnly Fecha)
+        {
+            SetHoraInicio(HoraInicio);
+            SetHoraFin(HoraFin);
+            SetEstado("Reservado");
+            SetClienteExterno(NombreClienteExterno, ApellidoClienteExterno);
+            SetTipoTurnoId(TipoTurnoId);      
+            SetCanchaId(ComplejoId, CanchaNro); 
+            SetFecha(Fecha);
         }
 
- 
-        public Turno(int id, TimeOnly horaInicio, TimeOnly horaFin, int clienteId, int tipoTurnoId, int complejoId, int canchaNro, DateOnly fecha)
-            : this(horaInicio, horaFin, clienteId, tipoTurnoId, complejoId, canchaNro, fecha)
+        public Turno(int Id, TimeOnly HoraInicio, TimeOnly HoraFin, string NombreClienteExterno, string ApellidoClienteExterno, int TipoTurnoId, int ComplejoId, int CanchaNro, DateOnly Fecha)
+            : this(HoraInicio, HoraFin, NombreClienteExterno, ApellidoClienteExterno, TipoTurnoId, ComplejoId, CanchaNro, Fecha)
         {
-            SetId(id);
+            SetId(Id);
         }
         public void SetId(int id)
         {
             if (id < 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
-            Id = id;
+            this.Id = id;
         }
         public void SetCanchaId(int complejoId, int canchaNro)
         {
@@ -55,43 +77,53 @@ namespace Modelo.Dominio
 
             if (canchaNro <= 0)
                 throw new ArgumentException("El CanchaNro debe ser mayor que 0.", nameof(canchaNro));
-            ComplejoId = complejoId;
-            CanchaNro = canchaNro;
+            this.ComplejoId = complejoId;
+            this.CanchaNro = canchaNro;
         }
 
         public void SetHoraInicio(TimeOnly horaInicio)
         {
-            HoraInicio = horaInicio;
+            this.HoraInicio = horaInicio;
         }
 
         public void SetHoraFin(TimeOnly horaFin)
         {
-            HoraFin = horaFin;
+            this.HoraFin = horaFin;
         }
 
         public void SetEstado(string estado)
         {
-            Estado = estado;
+            this.Estado = estado;
         }
 
         public void SetMotivoCancelacion(string motivoCancelacion)
         {
-            MotivoCancelacion = motivoCancelacion;
+            this.MotivoCancelacion = motivoCancelacion;
         }
 
         public void Cancelar(string? motivoCancelacion = null)
         {
-            if (!string.Equals(Estado, "Reservado", StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(this.Estado, "Reservado", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Solo se pueden cancelar turnos en estado 'Reservado'.");
 
-            Estado = "Cancelado";
-            MotivoCancelacion = motivoCancelacion;
+            this.Estado = "Cancelado";
+            this.MotivoCancelacion = motivoCancelacion;
         }
-        public void SetClienteId(int id)
+        public void SetClienteId(int? id)
         {
-            if (id <= 0)
+            if (id.HasValue && id.Value <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
-            ClienteId = id;
+            this.ClienteId = id;
+        }
+
+        public void SetClienteExterno(string nombreClienteExterno, string apellidoClienteExterno)
+        {
+            if (string.IsNullOrWhiteSpace(nombreClienteExterno))
+                throw new ArgumentException("El nombre no puede estar vacío.", nameof(nombreClienteExterno));
+            if (string.IsNullOrWhiteSpace(apellidoClienteExterno))
+                throw new ArgumentException("El apellido no puede estar vacío.", nameof(apellidoClienteExterno));
+            this.NombreClienteExterno = nombreClienteExterno.Trim();
+            this.ApellidoClienteExterno = apellidoClienteExterno.Trim();
         }
 
 
@@ -99,13 +131,13 @@ namespace Modelo.Dominio
         {
             if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
-            TipoTurnoId = id;
+            this.TipoTurnoId = id;
 
         }
 
         public void SetFecha(DateOnly fecha)
         {
-            Fecha = fecha;
+            this.Fecha = fecha;
         }
     }
 }

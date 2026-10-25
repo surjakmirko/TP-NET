@@ -1,14 +1,13 @@
 ﻿@page "/perfil"
+@using API
+@using API.Client
 @using DTOs
-@using Blazor.WebAssembly.Servicios
 @using System.Security.Claims
+@using Blazor.WebAssembly.Servicios
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 @inject BlazorWasmAuthService AuthService
-@inject UsuarioApiClient UsuarioApi
-@inject PersonaFisicaApiClient PersonaFisicaApi
-@inject TurnoApiClient TurnoApi
 
 <PageTitle>Mi Perfil</PageTitle>
 
@@ -42,7 +41,7 @@
                     <label for="telefono">Teléfono</label>
                     <input type="tel" id="telefono" class="input-forum" @bind-value="usuario.Telefono" readonly="@(!isEditing)" />
                 </div>
-    
+        
                 <div class="campo-grupo">
                     <label for="fechaNacimiento">Fecha de Nacimiento</label>
                     <input type="date" id="fechaNacimiento" class="input-forum" @bind-value="persona.Fecha_Nacimiento" readonly="@(!isEditing)" />
@@ -72,7 +71,7 @@
             <div class="grid-turnos">
                 @foreach (var turno in turnos.Take(3))
                 {
-                    <TarjetaTurno Turno="@turno" OnSolicitarCancelacion="SolicitarCancelacion" />
+                    <TarjetaTurno Turno="@turno" />
                 }
             </div>
         }
@@ -85,36 +84,6 @@
     <button type="button" class="btn-primario" @onclick="CerrarSesion">Cerrar Sesión</button>
 </section>
 
-@if (turnoACancelar != null)
-{
-    <div class="modal-cancelacion-overlay" @onclick="CerrarModalCancelacion">
-        <div class="modal-cancelacion-contenido" @onclick:stopPropagation="true">
-            <h2>Cancelar turno</h2>
-            <p>¿Estás seguro que querés cancelar este turno?</p>
-
-            <div class="modal-cancelacion-detalle">
-                <p><strong>@turnoACancelar.Complejo?.Nombre</strong></p>
-                <p>Cancha N° @turnoACancelar.CanchaNro</p>
-                <p>@FormatearFecha(turnoACancelar.Fecha) · @FormatearHora(turnoACancelar.HoraInicio) hs</p>
-            </div>
-
-            @if (!string.IsNullOrWhiteSpace(errorCancelacion))
-            {
-                <p class="modal-cancelacion-error">@errorCancelacion</p>
-            }
-
-            <div class="modal-cancelacion-botones">
-                <button type="button" class="btn-confirmar-cancelacion" disabled="@cancelandoTurno" @onclick="ConfirmarCancelacion">
-                    @(cancelandoTurno ? "Cancelando..." : "Sí, cancelar")
-                </button>
-                <button type="button" class="btn-volver-cancelacion" disabled="@cancelandoTurno" @onclick="CerrarModalCancelacion">
-                    Volver
-                </button>
-            </div>
-        </div>
-    </div>
-}
-
 @code {
     private UsuarioDTO usuario = new();
     private int clienteId;
@@ -123,9 +92,9 @@
     private PersonaFisicaDTO originalPersona = new();
     private List<TurnoDTO> turnos = new();
     private bool isEditing = false;
-    private TurnoDTO? turnoACancelar;
-    private bool cancelandoTurno;
-    private string? errorCancelacion;
+    private bool cancelandoTurno = false;
+    private string errorCancelacion = null;
+    private TurnoDTO turnoACancelar = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -141,8 +110,7 @@
                 clienteId = idParsed;
                 try
                 {
-                    // Traemos la información fresca directamente de la base de datos
-                    var usuarioCompleto = await UsuarioApi.GetByIdAsync(clienteId);
+                    var usuarioCompleto = await UsuarioApiClient.GetByIdAsync(clienteId);
 
                     if (usuarioCompleto != null)
                     {
@@ -180,12 +148,11 @@
     {
         try
         {
-            var listaTurnos = await TurnoApi.GetAllAsync();
+            var listaTurnos = await TurnoApiClient.ObtenerTurnosCliente(clienteId);
 
             if (listaTurnos != null && listaTurnos.Any())
             {
                 turnos = listaTurnos
-                    .Where(t => t.ClienteId == clienteId)
                     .OrderByDescending(t => t.Fecha) 
                     .Take(3)
                     .ToList();
@@ -205,65 +172,19 @@
         }
     }
 
-    private void SolicitarCancelacion(TurnoDTO turno)
-    {
-        errorCancelacion = null;
-        turnoACancelar = turno;
-    }
-
-    private void CerrarModalCancelacion()
-    {
-        if (cancelandoTurno) return;
-
-        turnoACancelar = null;
-        errorCancelacion = null;
-    }
-
-    private async Task ConfirmarCancelacion()
-    {
-        if (turnoACancelar == null || cancelandoTurno) return;
-
-        cancelandoTurno = true;
-        errorCancelacion = null;
-
-        try
-        {
-            await TurnoApiClient.CancelarTurnoAsync(turnoACancelar.Id);
-            turnoACancelar = null;
-            await BuscarTurnos();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error al cancelar el turno: {ex.Message}");
-            errorCancelacion = "No se pudo cancelar el turno. Intentá nuevamente.";
-        }
-        finally
-        {
-            cancelandoTurno = false;
-        }
-    }
-
-    private string FormatearFecha(DateOnly fecha)
-    {
-        return fecha.ToString("dd/MM/yyyy");
-    }
-
-    private string FormatearHora(TimeOnly hora)
-    {
-        return hora.ToString("HH:mm");
-    }
-
     private async Task ActualizarCambios()
     {
         try
         {
-            // Construimos o actualizamos los DTOs para enviar al backend
-            await UsuarioApi.ActualizarUsuarioAsync(usuario);
-            await PersonaFisicaApi.ActualizarAsync(persona);
+            await UsuarioApiClient.ActualizarAsync(usuario);
+            await PersonaFisicaApiClient.ActualizarAsync(persona);
 
-            ClonarDatosOriginales(); // Actualizamos la copia de respaldo
+
+            ClonarDatosOriginales();
             isEditing = false;
             StateHasChanged();
+
+
         }
         catch (Exception ex)
         {
@@ -272,6 +193,7 @@
             Console.WriteLine(persona.Nombre);
             Console.WriteLine(persona.Apellido);
             Console.WriteLine(persona.Fecha_Nacimiento);
+
 
         }
        
@@ -298,7 +220,36 @@
     private async Task CerrarSesion()
     {
         await AuthService.LogoutAsync();
-        Navigation.NavigateTo("/", true); // O a la ruta raíz "/"
+        Navigation.NavigateTo("/");
+    }
+
+    private async Task ConfirmarCancelacion(TurnoDTO turno)
+    {
+        turnoACancelar = turno;
+    }
+
+    private async Task CancelarTurnoConfirmado()
+    {
+        if (turnoACancelar == null) return;
+
+        cancelandoTurno = true;
+        errorCancelacion = null;
+
+        try
+        {
+            await TurnoApiClient.CancelarTurnoAsync(turnoACancelar.Id);
+            turnoACancelar = null;
+            await BuscarTurnos();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cancelar el turno: {ex.Message}");
+            errorCancelacion = "No se pudo cancelar el turno. Intentá nuevamente.";
+        }
+        finally
+        {
+            cancelandoTurno = false;
+        }
     }
 
     private void ClonarDatosOriginales()
@@ -318,4 +269,3 @@
         };
     }
 }
-

@@ -1,0 +1,92 @@
+﻿.reporte-page {
+    padding: 2rem;
+    background-color: #f4f6f9;
+    min-height: 85vh;
+}
+
+.reporte-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.reporte-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.reporte-titulo-box h2 {
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-volver {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-volver:hover {
+    background-color: #5a6268;
+}
+
+.reporte-estado {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    padding: 3rem;
+}
+
+.reporte-grafico {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.reporte-tabla-container {
+    overflow-x: auto;
+}
+
+.reporte-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.reporte-tabla th, 
+.reporte-tabla td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.reporte-tabla th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+}
+
+.col-pos {
+    width: 60px;
+    font-weight: bold;
+    color: #555;
+}
+
+.col-cantidad {
+    font-weight: 600;
+    color: #2b8a3e;
+}

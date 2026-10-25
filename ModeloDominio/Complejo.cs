@@ -15,6 +15,8 @@
 
         public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();
         public ICollection<Horario> Horarios { get; set; } = new List<Horario>();
+        public string? ImagenUrl { get; private set; }
+
         public decimal PrecioDesde
         {
             get
@@ -109,6 +111,11 @@
                 throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
             LocalidadId = id;
 
+        }
+
+        public void SetImagenUrl(string? imagenUrl)
+        {
+            ImagenUrl = imagenUrl;
         }
     }
 }

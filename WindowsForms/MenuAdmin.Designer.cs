@@ -41,17 +41,18 @@
             // 
             tituloMenuAdmin.AutoSize = true;
             tituloMenuAdmin.Font = new Font("Segoe UI", 15F);
-            tituloMenuAdmin.Location = new Point(99, 18);
+            tituloMenuAdmin.Location = new Point(113, 24);
             tituloMenuAdmin.Name = "tituloMenuAdmin";
-            tituloMenuAdmin.Size = new Size(125, 28);
+            tituloMenuAdmin.Size = new Size(158, 35);
             tituloMenuAdmin.TabIndex = 0;
             tituloMenuAdmin.Text = "Menu Admin";
             // 
             // btnVerComplejos
             // 
-            btnVerComplejos.Location = new Point(25, 123);
+            btnVerComplejos.Location = new Point(29, 164);
+            btnVerComplejos.Margin = new Padding(3, 4, 3, 4);
             btnVerComplejos.Name = "btnVerComplejos";
-            btnVerComplejos.Size = new Size(115, 35);
+            btnVerComplejos.Size = new Size(131, 47);
             btnVerComplejos.TabIndex = 1;
             btnVerComplejos.Text = "Ver Complejos";
             btnVerComplejos.UseVisualStyleBackColor = true;
@@ -61,9 +62,9 @@
             // 
             complejoTitulo.AutoSize = true;
             complejoTitulo.Font = new Font("Segoe UI", 15F);
-            complejoTitulo.Location = new Point(34, 68);
+            complejoTitulo.Location = new Point(39, 91);
             complejoTitulo.Name = "complejoTitulo";
-            complejoTitulo.Size = new Size(97, 28);
+            complejoTitulo.Size = new Size(122, 35);
             complejoTitulo.TabIndex = 2;
             complejoTitulo.Text = "Complejo";
             // 
@@ -71,17 +72,18 @@
             // 
             duenoTitulo.AutoSize = true;
             duenoTitulo.Font = new Font("Segoe UI", 15F);
-            duenoTitulo.Location = new Point(206, 68);
+            duenoTitulo.Location = new Point(235, 91);
             duenoTitulo.Name = "duenoTitulo";
-            duenoTitulo.Size = new Size(70, 28);
+            duenoTitulo.Size = new Size(89, 35);
             duenoTitulo.TabIndex = 5;
             duenoTitulo.Text = "Dueño";
             // 
             // btnVerDuenos
             // 
-            btnVerDuenos.Location = new Point(184, 123);
+            btnVerDuenos.Location = new Point(210, 164);
+            btnVerDuenos.Margin = new Padding(3, 4, 3, 4);
             btnVerDuenos.Name = "btnVerDuenos";
-            btnVerDuenos.Size = new Size(115, 35);
+            btnVerDuenos.Size = new Size(131, 47);
             btnVerDuenos.TabIndex = 4;
             btnVerDuenos.Text = "Ver Dueños";
             btnVerDuenos.UseVisualStyleBackColor = true;
@@ -90,9 +92,10 @@
             // btnCerrarSesion
             // 
             btnCerrarSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCerrarSesion.Location = new Point(215, 258);
+            btnCerrarSesion.Location = new Point(246, 344);
+            btnCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             btnCerrarSesion.Name = "btnCerrarSesion";
-            btnCerrarSesion.Size = new Size(95, 26);
+            btnCerrarSesion.Size = new Size(109, 35);
             btnCerrarSesion.TabIndex = 7;
             btnCerrarSesion.Text = "Cerrar Sesión";
             btnCerrarSesion.UseVisualStyleBackColor = true;
@@ -100,9 +103,10 @@
             // 
             // btnRanking
             // 
-            btnRanking.Location = new Point(25, 164);
+            btnRanking.Location = new Point(29, 219);
+            btnRanking.Margin = new Padding(3, 4, 3, 4);
             btnRanking.Name = "btnRanking";
-            btnRanking.Size = new Size(115, 35);
+            btnRanking.Size = new Size(131, 47);
             btnRanking.TabIndex = 8;
             btnRanking.Text = "Ver Ranking";
             btnRanking.UseVisualStyleBackColor = true;
@@ -110,9 +114,9 @@
             // 
             // MenuAdmin
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(322, 296);
+            ClientSize = new Size(368, 395);
             Controls.Add(btnRanking);
             Controls.Add(btnCerrarSesion);
             Controls.Add(duenoTitulo);
@@ -121,8 +125,10 @@
             Controls.Add(btnVerComplejos);
             Controls.Add(tituloMenuAdmin);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             Name = "MenuAdmin";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Menu Admin";
             ResumeLayout(false);
             PerformLayout();

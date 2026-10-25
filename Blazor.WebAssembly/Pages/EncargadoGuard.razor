@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@implements IDisposable
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // 1. Suscribirse al evento que detecta cuando el usuario cambia de página
+        Navigation.LocationChanged += OnLocationChanged;
+
+        // Verificar la ruta actual al cargar la app por primera vez
+        await VerificarRuta(Navigation.Uri);
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Verificar la ruta cada vez que hace clic en un enlace o cambia la URL
+        await VerificarRuta(e.Location);
+    }
+
+    private async Task VerificarRuta(string url)
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
+        // 2. Si el usuario actual es un Encargado...
+        if (authState.User.IsInRole("Encargado"))
+        {
+            var rutaRelativa = Navigation.ToBaseRelativePath(url).ToLower();
+
+            // 3. Y la ruta NO es su menú, lo forzamos a volver
+            if (!rutaRelativa.StartsWith("menu-encargado"))
+            {
+                Navigation.NavigateTo("/menu-encargado");
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        // Limpiar el evento cuando se destruye el componente para evitar fugas de memoria
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}

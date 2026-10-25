@@ -30,9 +30,13 @@
             nudIdEncargado = new NumericUpDown();
             nudIdLocalidad = new NumericUpDown();
             nudIdDueno = new NumericUpDown();
+            picImagen = new PictureBox();
+            btnSeleccionarImagen = new Button();
+            lblImagen = new Label();
             ((System.ComponentModel.ISupportInitialize)nudIdEncargado).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudIdLocalidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudIdDueno).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picImagen).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
@@ -107,7 +111,7 @@
             // btnGuardar
             // 
             btnGuardar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnGuardar.Location = new Point(243, 258);
+            btnGuardar.Location = new Point(243, 358);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(95, 30);
             btnGuardar.TabIndex = 11;
@@ -117,7 +121,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(142, 258);
+            btnCancelar.Location = new Point(142, 358);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(95, 30);
             btnCancelar.TabIndex = 12;
@@ -149,9 +153,41 @@
             nudIdDueno.Size = new Size(133, 23);
             nudIdDueno.TabIndex = 15;
             // 
+            // picImagen
+            // 
+            picImagen.BorderStyle = BorderStyle.FixedSingle;
+            picImagen.Location = new Point(12, 240);
+            picImagen.Name = "picImagen";
+            picImagen.Size = new Size(150, 100);
+            picImagen.SizeMode = PictureBoxSizeMode.Zoom;
+            picImagen.TabIndex = 16;
+            picImagen.TabStop = false;
+            // 
+            // btnSeleccionarImagen
+            // 
+            btnSeleccionarImagen.Location = new Point(168, 240);
+            btnSeleccionarImagen.Name = "btnSeleccionarImagen";
+            btnSeleccionarImagen.Size = new Size(100, 30);
+            btnSeleccionarImagen.TabIndex = 17;
+            btnSeleccionarImagen.Text = "Seleccionar imagen";
+            btnSeleccionarImagen.UseVisualStyleBackColor = true;
+            btnSeleccionarImagen.Click += btnSeleccionarImagen_Click;
+            // 
+            // lblImagen
+            // 
+            lblImagen.AutoSize = true;
+            lblImagen.Location = new Point(168, 280);
+            lblImagen.Name = "lblImagen";
+            lblImagen.Size = new Size(110, 15);
+            lblImagen.TabIndex = 18;
+            lblImagen.Text = "Sin imagen seleccionada";
+            // 
             // AgregarComplejo
             // 
-            ClientSize = new Size(350, 300);
+            ClientSize = new Size(350, 410);
+            Controls.Add(lblImagen);
+            Controls.Add(btnSeleccionarImagen);
+            Controls.Add(picImagen);
             Controls.Add(nudIdDueno);
             Controls.Add(nudIdLocalidad);
             Controls.Add(nudIdEncargado);
@@ -173,6 +209,7 @@
             ((System.ComponentModel.ISupportInitialize)nudIdEncargado).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudIdLocalidad).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudIdDueno).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picImagen).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -192,5 +229,8 @@
         private NumericUpDown nudIdEncargado;
         private NumericUpDown nudIdLocalidad;
         private NumericUpDown nudIdDueno;
+        private PictureBox picImagen;
+        private Button btnSeleccionarImagen;
+        private Label lblImagen;
     }
 }

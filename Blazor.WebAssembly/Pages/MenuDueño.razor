@@ -5,6 +5,8 @@
 @using System.Security.Claims
 @using Blazor.WebAssembly.Servicios
 @using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize(Roles = "Dueño")]
+@using Microsoft.AspNetCore.Authorization
 @inject AuthenticationStateProvider AuthStateProvider
 
 @inject NavigationManager Navigation;
@@ -27,51 +29,63 @@
                 Valor="@FormatearMoneda(datos.IngresosEstimados)" 
                 Icono="💵" 
                 EsVerde="true" />
-
-            @* Tarjeta 2: Reservas Totales *@
+            
+            @* Tarjeta 2: Reservas Hoy *@
             <TarjetaMenuDueno 
-                Titulo="Reservas Totales" 
+                Titulo="Reservas Hoy" 
                 Valor="@datos.CantidadTurnos.ToString()" 
-                Subtitulo="@($"En {datos.CantidadCanchas} canchas disponibles")" 
-                Icono="📅" />
-
-            @* Tarjeta 3: Ocupación Promedio *@
+                Icono="📅" 
+                EsVerde="false" />
+            
+            @* Tarjeta 3: Canchas Activas *@
+            <TarjetaMenuDueno 
+                Titulo="Canchas Activas" 
+                Valor="@datos.CantidadCanchas.ToString()" 
+                Icono="🟢" 
+                EsVerde="true" />
+            
+            @* Tarjeta 4: Ocupación Promedio *@
             <TarjetaMenuDueno 
                 Titulo="Ocupación Promedio" 
-                Valor="@FormatearPorcentaje(datos.OcupacionPorcentaje)" 
-                Progreso="@datos.OcupacionPorcentaje" 
-                Icono="🔥" 
-                EsVerde="true" />
-
-            @* Tarjeta 4: Deporte Top *@
-            <TarjetaMenuDueno 
-                Titulo="Deporte top" 
-                Valor="@(string.IsNullOrWhiteSpace(datos.DeporteEstrellaNombre) ? "Sin reservas" : datos.DeporteEstrellaNombre)" 
-                Subtitulo="@(string.IsNullOrWhiteSpace(datos.DeporteEstrellaNombre) ? "0 reservas hoy" : $"{datos.DeporteEstrellaReservas} reservas hoy")" 
-                Icono="⚽" />
+                Valor="@(datos.OcupacionPorcentaje.ToString("F1") + "%")" 
+                Icono="📊" 
+                EsVerde="false" />
         </div>
 
-        <div class="infoComplejos">
-            <div class="seccion-header">
-                <h2>Mis Complejos</h2>
+        <div class="listaComplejos">
+            <div class="listaComplejos-header">
+                <h2>Mis complejos</h2>
                 <span class="sub-hint">Selecciona uno para gestionar horarios y detalles</span>
             </div>
 
-            <div class="grilla-complejos">
-                @if (complejos != null)
-                {
+            @if (cargandoComplejos)
+            {
+                <p class="cargando">Cargando tus complejos...</p>
+            }
+            else if (!string.IsNullOrEmpty(error))
+            {
+                <p class="error">@error</p>
+            }
+            else if (complejos.Any())
+            {
+                <div class="grid-complejos">
                     @foreach (var complejo in complejos)
                     {
                         <TarjetaMenuDuenoComplejo 
-                            Id="@complejo.Id"
+                            ComplejoId="@complejo.Id"
                             Nombre="@complejo.Nombre"
                             Direccion="@complejo.Direccion"
-                            Ciudad="@complejo.NombreLocalidad"
+                            NombreLocalidad="@complejo.NombreLocalidad"
+                            CantidadCanchas="@complejo.CantidadCanchas"
                             Deportes="complejo.Deportes"
                             CanchasDisponibles="@complejo.CantidadCanchas" />
                     }
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <p class="sin-complejos">No tenés complejos registrados aún.</p>
+            }
         </div>
 
         <div class="reportesFinancieros">
@@ -88,6 +102,7 @@
     private List<ComplejoTarjetaDTO> complejos = new();
     private DashboardDuenoDTO datos = new();
     private bool cargando = true;
+    private bool cargandoComplejos = true;
     private string error = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -132,16 +147,12 @@
         finally
         {
             cargando = false;
+            cargandoComplejos = false;
         }
     }
 
-    private static string FormatearMoneda(decimal valor)
+    private string FormatearMoneda(decimal valor)
     {
-        return $"${valor.ToString("N0", CultureInfo.GetCultureInfo("es-AR"))}";
-    }
-
-    private static string FormatearPorcentaje(double valor)
-    {
-        return $"{valor.ToString("0.#", CultureInfo.GetCultureInfo("es-AR"))}%";
+        return valor.ToString("C", new CultureInfo("es-AR"));
     }
 }

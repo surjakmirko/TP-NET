@@ -1,8 +1,7 @@
 ﻿@using DTOs
-@using Blazor.WebAssembly.Servicios
+@using API
 
 @inject NavigationManager NavigationManager
-@inject TipoCanchaApiClient TipoCanchaApi
 
 
 <div class="barraBusqueda-contenedor">
@@ -103,7 +102,9 @@
     {
         try
         {
-            deportes = await TipoCanchaApi.ObtenerTodosAsync() ?? new();
+            // NOTA: Lo ideal en Blazor es inyectar un Servicio en vez de usar HttpClient directo,
+            // pero mantenemos la lógica de tu fetch original.
+            deportes = await TipoCanchaApiClient.ObtenerTodosAsync() ?? new();
         }
         catch (Exception ex)
         {

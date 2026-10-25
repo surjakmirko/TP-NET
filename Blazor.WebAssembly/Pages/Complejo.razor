@@ -2,6 +2,8 @@
 @using System.Globalization
 @using DTOs
 @using API
+@attribute [Authorize(Roles = "Dueño")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
@@ -117,7 +119,11 @@ else
 
             <div class="grilla-reportes-propios"></div>
         </div>
-
+        <div class="complejoDueño-header">
+            <button type="button" class="btn-reporte" @onclick='() => Navigation.NavigateTo($"/reporte-ocupacion/{Id}")'>
+                📊 Ver Reporte de Ocupación
+            </button>
+        </div>
         <NavLink href="/menu-dueno" class="link-volver">&larr; Volver</NavLink>
 
         @* Modal de Cancha *@
@@ -131,7 +137,6 @@ else
                           OnConfirmar="HandleConfirmarModalCancha" />
     </div>
 }
-
 @code {
     [Parameter] public int Id { get; set; }
 

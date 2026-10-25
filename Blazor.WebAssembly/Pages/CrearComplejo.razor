@@ -1,8 +1,11 @@
 @page "/crear-complejo"
 @using DTOs
 @using API
+@attribute [Authorize(Roles = "Administrador")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@inject HttpClient Http
 
 <main class='crear-complejo-contenedor'>
     <h2 class='crear-complejo-titulo'>Crear nuevo complejo</h2>
@@ -38,6 +41,17 @@
         <div class='crear-complejo-campo'>
             <label>ID encargado:</label>
             <InputText @bind-Value="formData.EncargadoIdStr" placeholder="ID del encargado" />
+        </div>
+        <div class='crear-complejo-campo'>
+            <label>Imagen del complejo:</label>
+            <InputFile OnChange="OnImageSelected" accept="image/*" maxFileSize="2097152" />
+            @if (imagenPreview != null)
+            {
+                <div class="imagen-preview">
+                    <img src="@imagenPreview" alt="Vista previa" />
+                    <button type="button" class="btn-eliminar-imagen" @onclick="EliminarImagen">Eliminar</button>
+                </div>
+            }
         </div>
         <button class="crear-complejo-boton" type="submit" disabled="@cargando">
             @(cargando ? "Verificando..." : "Crear Complejo")
@@ -82,6 +96,11 @@
     private DatosConfirmacion? datosConfirmacion;
     private bool cargando = false;
     private string error = string.Empty;
+    
+    // Imagen
+    private string? imagenPreview = null;
+    private IBrowserFile? imagenFile = null;
+    private string errorImagen = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,6 +120,40 @@
         {
             Console.WriteLine($"Error cargando localidades: {ex.Message}");
         }
+    }
+
+    private void OnImageSelected(InputFileChangeEventArgs e)
+    {
+        errorImagen = string.Empty;
+        imagenFile = e.File;
+
+        if (imagenFile.Size > 2 * 1024 * 1024) // 2MB
+        {
+            errorImagen = "La imagen no puede superar 2MB";
+            imagenFile = null;
+            imagenPreview = null;
+            return;
+        }
+
+        var allowedTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/webp" };
+        if (!allowedTypes.Contains(imagenFile.ContentType))
+        {
+            errorImagen = "Formato no permitido. Use JPG, PNG o WebP.";
+            imagenFile = null;
+            imagenPreview = null;
+            return;
+        }
+
+        var buffer = new byte[imagenFile.Size];
+        imagenFile.OpenReadStream(2 * 1024 * 1024).Read(buffer);
+        imagenPreview = $"data:{imagenFile.ContentType};base64,{Convert.ToBase64String(buffer)}";
+    }
+
+    private void EliminarImagen()
+    {
+        imagenFile = null;
+        imagenPreview = null;
+        errorImagen = string.Empty;
     }
 
     private async Task HandleSubmit()
@@ -172,7 +225,21 @@
                 EncargadoId = int.Parse(formData.EncargadoIdStr ?? "0")
             };
 
-            await ComplejoApiClient.CrearComplejoAsync(payload);
+            var complejoCreado = await ComplejoApiClient.CrearComplejoAsync(payload);
+
+            // Subir imagen si hay una seleccionada
+            if (imagenFile != null)
+            {
+                var formData = new MultipartFormDataContent();
+                var buffer = new byte[imagenFile.Size];
+                await imagenFile.OpenReadStream(2 * 1024 * 1024).ReadAsync(buffer);
+                var fileContent = new ByteArrayContent(buffer);
+                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(imagenFile.ContentType);
+                formData.Add(fileContent, "imagen", imagenFile.Name);
+
+                await ComplejoApiClient.SubirImagenComplejoAsync((int)complejoCreado.Id, formData);
+            }
+
             mostrarModal = false;
             await JSRuntime.InvokeVoidAsync("alert", "¡Complejo registrado con éxito!");
             Navigation.NavigateTo("/administrar-complejos");

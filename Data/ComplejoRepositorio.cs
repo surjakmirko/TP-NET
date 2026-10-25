@@ -46,6 +46,8 @@ namespace Data
                     .ThenInclude(ca => ca.TipoCancha)        // Relación con TipoCancha
         .Include(c => c.Canchas)
             .ThenInclude(ca => ca.Precios)           // Relación con Precios
+        .Include(c => c.Canchas)
+            .ThenInclude(ca => ca.Turnos)
         .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -68,6 +70,7 @@ namespace Data
             complejoBuscado.SetDueñoId(complejo.DueñoId);
             complejoBuscado.SetEncargadoId(complejo.EncargadoId);
             complejoBuscado.SetLocalidadId(complejo.LocalidadId);
+            complejoBuscado.SetImagenUrl(complejo.ImagenUrl);
 
             await _context.SaveChangesAsync();
             return true;
@@ -163,6 +166,11 @@ namespace Data
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<bool> EncargadoTieneComplejoAsync(int encargadoId)
+        {
+            return await _context.Complejos.AnyAsync(c => c.EncargadoId == encargadoId);
         }
     }
 }

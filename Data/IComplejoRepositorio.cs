@@ -16,8 +16,8 @@ namespace Data
         Task<IEnumerable<(string Localidad, int Cantidad)>> GetRankingLocalidadesAsync();
         Task<bool> UpdateAsync(Complejo complejo);
         Task<IEnumerable<Complejo>> GetComplejosByIdDueno(int idDueno);
-        Task<Complejo> GetComplejosByIdEncargado(int idEncargado);
+        Task<Complejo?> GetComplejosByIdEncargado(int idEncargado);
         Task<IEnumerable<Complejo>> BuscarAsync(string? ciudad, string? deporte, string? fecha, string? hora, decimal? min, decimal? max);
-
+        Task<bool> EncargadoTieneComplejoAsync(int encargadoId);
     }
 }

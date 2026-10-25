@@ -4,8 +4,7 @@
 <div class="tarjeta-complejo" @onclick="ManejarClic" style="cursor: pointer;">
     <div class="complejo-media">
         @* Asegúrate de tener una imagen o un placeholder en tu entidad Complejo *@
-        @* <img src="@(string.IsNullOrEmpty(Complejo.ImagenUrl) ? "/images/placeholder.jpg" : Complejo.ImagenUrl)" alt="@Complejo.Nombre" class="complejo-imagen" /> *@
-
+        <img src="@(string.IsNullOrEmpty(Complejo.ImagenUrl) ? "/images/placeholder.jpg" : $"https://localhost:7016{Complejo.ImagenUrl}")" alt="@Complejo.Nombre" class="complejo-imagen" />
         <div class="precio-overlay">
             @if (Complejo.PrecioDesde > 0)
             {
