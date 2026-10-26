@@ -11,7 +11,7 @@
         private DataGridViewTextBoxColumn colTipoDeporte;
         private DataGridViewButtonColumn colEditar;
         private DataGridViewButtonColumn colPrecio;
-        private DataGridViewButtonColumn colEliminar;
+        private DataGridViewButtonColumn colDesactivar;
         private Button btnVolver;
 
         protected override void Dispose(bool disposing)
@@ -27,9 +27,12 @@
         {
             lblTitulo = new Label();
             dgvCanchas = new DataGridView();
+            colNumero = new DataGridViewTextBoxColumn();
+            colTipoDeporte = new DataGridViewTextBoxColumn();
+            var colEstado = new DataGridViewTextBoxColumn();
             colEditar = new DataGridViewButtonColumn();
             colPrecio = new DataGridViewButtonColumn();
-            colEliminar = new DataGridViewButtonColumn();
+            colDesactivar = new DataGridViewButtonColumn();
             btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCanchas).BeginInit();
             SuspendLayout();
@@ -50,7 +53,14 @@
             dgvCanchas.AllowUserToDeleteRows = false;
             dgvCanchas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvCanchas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanchas.Columns.AddRange(new DataGridViewColumn[] { colEditar, colPrecio, colEliminar });
+            dgvCanchas.Columns.AddRange(new DataGridViewColumn[] {
+                colNumero,
+                colTipoDeporte,
+                colEstado,
+                colEditar,
+                colPrecio,
+                colDesactivar
+                 });
             dgvCanchas.Location = new Point(20, 50);
             dgvCanchas.MultiSelect = false;
             dgvCanchas.Name = "dgvCanchas";
@@ -58,6 +68,29 @@
             dgvCanchas.Size = new Size(600, 280);
             dgvCanchas.TabIndex = 1;
             dgvCanchas.CellClick += dgvCanchas_CellClick;
+            // 
+            // colNumero (Vinculado a 'Nro' del DTO)
+            // 
+            colNumero.HeaderText = "N° Cancha";
+            colNumero.Name = "colNumero";
+            colNumero.ReadOnly = true;
+            colNumero.DataPropertyName = "Nro";
+
+            // 
+            // colTipoDeporte (Vinculado a 'NombreTipoCancha' del DTO)
+            // 
+            colTipoDeporte.HeaderText = "Deporte";
+            colTipoDeporte.Name = "colTipoDeporte";
+            colTipoDeporte.ReadOnly = true;
+            colTipoDeporte.DataPropertyName = "Deporte";
+
+            // 
+            // colEstado (Vinculado a 'Estado' del DTO)
+            // 
+            colEstado.HeaderText = "Estado";
+            colEstado.Name = "colEstado";
+            colEstado.ReadOnly = true;
+            colEstado.DataPropertyName = "Estado";
             // 
             // colEditar
             // 
@@ -77,11 +110,11 @@
             // 
             // colEliminar
             // 
-            colEliminar.HeaderText = "";
-            colEliminar.Name = "colEliminar";
-            colEliminar.ReadOnly = true;
-            colEliminar.Text = "Eliminar";
-            colEliminar.UseColumnTextForButtonValue = true;
+            colDesactivar.HeaderText = "";
+            colDesactivar.Name = "colEliminar";
+            colDesactivar.ReadOnly = true;
+            colDesactivar.Text = "Desactivar";
+            colDesactivar.UseColumnTextForButtonValue = true;
             // 
             // btnVolver
             // 

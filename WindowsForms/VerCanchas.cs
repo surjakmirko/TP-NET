@@ -33,11 +33,12 @@ namespace WindowsForms
 
                 if (listaCanchas != null && listaTipos != null)
                 {
-                    var listaParaGrilla = listaCanchas.Select(c => new CanchaMostrarDTO
+                    var listaParaGrilla = listaCanchas.Select(c => new CanchaDTO
                     {
                         Nro = c.Nro,
                         TipoCanchaId = c.TipoCanchaId,
-                        NombreTipoCancha = listaTipos.FirstOrDefault(t => t.Id == c.TipoCanchaId)?.Deporte ?? "Desconocido"
+                        Deporte = listaTipos.FirstOrDefault(t => t.Id == c.TipoCanchaId)?.Deporte ?? "Desconocido",
+                        Estado = c.Estado
                     }).ToList();
 
                     dgvCanchas.AutoGenerateColumns = false;
@@ -58,7 +59,7 @@ namespace WindowsForms
             var row = dgvCanchas.Rows[e.RowIndex];
             int nroCancha = 0;
 
-            if (row.DataBoundItem is CanchaMostrarDTO cancha)
+            if (row.DataBoundItem is CanchaDTO cancha)
             {
                 nroCancha = cancha.Nro;
             }
@@ -84,15 +85,15 @@ namespace WindowsForms
             else if (nombreColumna == "colEliminar")
             {
                 var confirm = MessageBox.Show(
-                    $"¿Estás seguro de que deseas eliminar la Cancha N° {nroCancha}?",
-                    "Confirmar eliminación",
+                    $"¿Estás seguro de que deseas desactivar la Cancha N° {nroCancha}?",
+                    "Confirmar desacticacion",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning
                 );
 
                 if (confirm == DialogResult.Yes)
                 {
-                    await EjecutarEliminacionCanchaAsync(nroCancha);
+                    await EjecutarDesactivacionCanchaAsync(nroCancha);
                 }
             }
             else if (nombreColumna == "colPrecio")
@@ -107,18 +108,18 @@ namespace WindowsForms
                 }
             }
         }
-        private async Task EjecutarEliminacionCanchaAsync(int nroCancha)
+        private async Task EjecutarDesactivacionCanchaAsync(int nroCancha)
         {
             try
             {
-                await ComplejoApiClient.EliminarCanchaAsync(_idComplejo, nroCancha);
-                MessageBox.Show($"La Cancha N° {nroCancha} fue eliminada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await ComplejoApiClient.InactivarCanchaAsync(_idComplejo, nroCancha);
+                MessageBox.Show($"La Cancha N° {nroCancha} fue desactivada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 await CargarCanchasPorComplejoAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al intentar eliminar la cancha: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al intentar desactivar la cancha: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void botonVolver_Click(object sender, EventArgs e)

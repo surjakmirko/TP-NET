@@ -27,10 +27,11 @@ namespace DTOs
     }
 
     //DTO PARA MOSTRAR EN WINDOWS FORM VER CANCHAS
-    public class CanchaMostrarDTO
-    {
-        public int Nro { get; set; }
-        public int TipoCanchaId { get; set; }
-        public string NombreTipoCancha { get; set; }
-    }
+    //public class CanchaMostrarDTO
+    //{
+    //    public int Nro { get; set; }
+    //    public int TipoCanchaId { get; set; }
+    //    public string NombreTipoCancha { get; set; }
+    //    public string Estado { get; set; }
+    //}
 }
