@@ -29,6 +29,10 @@ namespace WindowsForms
                 var listaDuenos = await UsuarioApiClient.GetAllDueno();
                 dgvDuenos.DataSource = null;
                 dgvDuenos.DataSource = listaDuenos;
+                if (dgvDuenos.Columns["Password"] != null)
+                {
+                    dgvDuenos.Columns["Password"].Visible = false;
+                }
                 if (dgvDuenos.Columns["colEliminar"] != null)
                 {
                     dgvDuenos.Columns["colEliminar"].DisplayIndex = dgvDuenos.Columns.Count - 1;
