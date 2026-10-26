@@ -45,12 +45,15 @@
                     .OrderByDescending(p => p.FechaDesde) 
                     .FirstOrDefault();
 
+            
+
                 return new CanchaDTO
                 {
                     Nro = cancha.Nro,
                     ComplejoId = cancha.ComplejoId,
                     Estado = cancha.Estado,
                     Deporte = cancha.TipoCancha?.Deporte,
+                    PrecioSena = ultimoPrecio?.PrecioSena ?? 0,
                     Precio = ultimoPrecio?.PrecioBase ?? 0
                 };
             }

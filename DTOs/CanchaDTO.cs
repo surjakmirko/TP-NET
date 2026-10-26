@@ -11,6 +11,7 @@ namespace DTOs
         public string Estado { get; set; }
 
         public decimal Precio { get; set; }
+        public decimal PrecioSena { get; set; }
 
         public PrecioDTO? PrecioDTO { get; set; }
 
