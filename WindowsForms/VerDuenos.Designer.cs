@@ -19,6 +19,10 @@
         {
             lblTitulo = new Label();
             dgvDuenos = new DataGridView();
+            colEmail = new DataGridViewTextBoxColumn();
+            colId = new DataGridViewTextBoxColumn();
+            colRazonSocial = new DataGridViewTextBoxColumn();
+            colCuit = new DataGridViewTextBoxColumn();
             colEliminar = new DataGridViewButtonColumn();
             btnVolver = new Button();
             btnAgregarDueno = new Button();
@@ -39,9 +43,10 @@
             // 
             dgvDuenos.AllowUserToAddRows = false;
             dgvDuenos.AllowUserToDeleteRows = false;
+            dgvDuenos.AutoGenerateColumns = false;
             dgvDuenos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDuenos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDuenos.Columns.AddRange(new DataGridViewColumn[] { colEliminar });
+            dgvDuenos.Columns.AddRange(new DataGridViewColumn[] { colId, colRazonSocial, colCuit, colEmail, colEliminar });
             dgvDuenos.Location = new Point(20, 50);
             dgvDuenos.MultiSelect = false;
             dgvDuenos.Name = "dgvDuenos";
@@ -49,6 +54,34 @@
             dgvDuenos.Size = new Size(892, 465);
             dgvDuenos.TabIndex = 1;
             dgvDuenos.CellClick += dgvDuenos_CellClick;
+            // 
+            // colId
+            // 
+            colId.HeaderText = "Id";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.DataPropertyName = "Id";
+            // 
+            // colRazonSocial
+            // 
+            colRazonSocial.HeaderText = "Razón Social";
+            colRazonSocial.Name = "colRazonSocial";
+            colRazonSocial.ReadOnly = true;
+            colRazonSocial.DataPropertyName = "RazonSocial";
+            // 
+            // colCuit
+            // 
+            colCuit.HeaderText = "Cuit";
+            colCuit.Name = "colCuit";
+            colCuit.ReadOnly = true;
+            colCuit.DataPropertyName = "PersonaJuridicaCuit";
+            // 
+            // colEmail 
+            // 
+            colEmail.HeaderText = "Email";
+            colEmail.Name = "colEmail";
+            colEmail.ReadOnly = true;
+            colEmail.DataPropertyName = "Email";
             // 
             // colEliminar
             // 
@@ -102,8 +135,8 @@
         public System.Windows.Forms.DataGridView dgvDuenos;
         public System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colApellido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRazonSocial;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCuit;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEmail;
         private System.Windows.Forms.DataGridViewButtonColumn colEliminar;
         private System.Windows.Forms.Button btnVolver;

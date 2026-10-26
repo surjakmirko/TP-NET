@@ -17,26 +17,15 @@ namespace WindowsForms
             dgvDuenos.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvDuenos.ReadOnly = false;
             await CargarDuenosAsync();
-            if (dgvDuenos.Columns["colEliminar"] != null)
-            {
-                dgvDuenos.Columns["colEliminar"].DisplayIndex = dgvDuenos.Columns.Count - 1;
-            }
         }
         private async Task CargarDuenosAsync()
         {
             try
             {
                 var listaDuenos = await UsuarioApiClient.GetAllDueno();
+                dgvDuenos.AutoGenerateColumns = false;
                 dgvDuenos.DataSource = null;
                 dgvDuenos.DataSource = listaDuenos;
-                if (dgvDuenos.Columns["Password"] != null)
-                {
-                    dgvDuenos.Columns["Password"].Visible = false;
-                }
-                if (dgvDuenos.Columns["colEliminar"] != null)
-                {
-                    dgvDuenos.Columns["colEliminar"].DisplayIndex = dgvDuenos.Columns.Count - 1;
-                }
                 dgvDuenos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
             catch (Exception ex)

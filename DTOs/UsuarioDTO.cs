@@ -14,6 +14,7 @@
         public PersonaJuridicaDTO? PersonaJuridica { get; set; }
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
+        public string? RazonSocial { get; set; }
 
         public DateOnly? Fecha_Nacimiento { get; set; }
 

@@ -131,7 +131,8 @@ namespace Servicios
                 Password = usuario.Password,
                 TipoUsuarioId = usuario.TipoUsuarioId,
                 PersonaFisicaDni = usuario.PersonaFisicaDni,
-                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit
+                PersonaJuridicaCuit = usuario.PersonaJuridicaCuit,
+                RazonSocial = usuario.PersonaJuridica?.RazonSocial ?? string.Empty
             }).ToList();
         }
     }
