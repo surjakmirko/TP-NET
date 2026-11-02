@@ -76,6 +76,8 @@
                         HoraInicio = t.HoraInicio,
                         HoraFin = t.HoraFin,
                         Estado = t.Estado,
+                        NombreClienteExterno = t.NombreClienteExterno,      // agregar
+                        ApellidoClienteExterno = t.ApellidoClienteExterno,
                         ClienteId = t.ClienteId,
                         Cliente = t.Cliente != null ? new UsuarioDTO
                         {

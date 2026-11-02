@@ -71,7 +71,7 @@
             <div class="grid-turnos">
                 @foreach (var turno in turnos.Take(3))
                 {
-                    <TarjetaTurno Turno="@turno" />
+                    <TarjetaTurno Turno="@turno" OnSolicitarCancelacion="ConfirmarCancelacion" />
                 }
             </div>
         }
@@ -80,6 +80,37 @@
             <p class="turnos-vacio">No tenés turnos registrados actualmente.</p>
         }
     </div>
+    @if (turnoACancelar != null)
+    {
+        <div class="modal-cancelacion-overlay" @onclick="CerrarModalCancelacion">
+            <div class="modal-cancelacion-contenido" @onclick:stopPropagation="true">
+                <h2>¿Cancelar este turno?</h2>
+                <p>Esta acción no se puede deshacer.</p>
+
+                <div class="modal-cancelacion-detalle">
+                    <p><strong>@turnoACancelar.Complejo?.Nombre</strong></p>
+                    <p>Cancha @turnoACancelar.CanchaNro</p>
+                    <p>@turnoACancelar.Fecha.ToString("dd/MM/yyyy") - @turnoACancelar.HoraInicio.ToString("HH:mm") hs</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(errorCancelacion))
+                {
+                    <div class="modal-cancelacion-error">@errorCancelacion</div>
+                }
+
+                <div class="modal-cancelacion-botones">
+                    <button type="button" class="btn-volver-cancelacion"
+                            @onclick="CerrarModalCancelacion" disabled="@cancelandoTurno">
+                        Volver
+                    </button>
+                    <button type="button" class="btn-confirmar-cancelacion"
+                            @onclick="CancelarTurnoConfirmado" disabled="@cancelandoTurno">
+                        @(cancelandoTurno ? "Cancelando..." : "Sí, cancelar")
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 
     <button type="button" class="btn-primario" @onclick="CerrarSesion">Cerrar Sesión</button>
 </section>
@@ -267,5 +298,13 @@
             Apellido = persona.Apellido,
             Fecha_Nacimiento = persona.Fecha_Nacimiento
         };
+    }
+   
+
+    private void CerrarModalCancelacion()
+    {
+        if (cancelandoTurno) return;
+        turnoACancelar = null;
+        errorCancelacion = null;
     }
 }
